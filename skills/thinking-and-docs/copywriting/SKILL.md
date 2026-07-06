@@ -50,6 +50,6 @@ David hard-rejects these patterns. They instantly read as ai-written:
 - github about: "access to david ondrej's personal agent skills"
 - casual dm: "yo, just made my agent skills public. steal whatever's useful"
 - readme opening: "skills my agents actually use, synced straight from my mac."
-- formal email opening: "Hello [Name], I've published the skills repository we discussed. Here is the link:"
+- formal email opening: "Hello there, I've published the skills repository we discussed. Here is the link:"
 
 why they win: plain statement of what happened, concrete facts, casual and honest, not try-hard, no pitch.

@@ -1,6 +1,6 @@
 ---
 name: anti-sleep
-description: Keep David's MacBook awake with macOS caffeinate — prevent sleep, screen dimming, or both, for a set duration or while a process runs. Use when the user says "don't let my mac sleep", "keep the screen on", "anti-sleep", "caffeinate", or wants the machine awake overnight / during a long build.
+description: Keep the user's MacBook awake with macOS caffeinate — prevent sleep, screen dimming, or both, for a set duration or while a process runs. Use when the user says "don't let my mac sleep", "keep the screen on", "anti-sleep", "caffeinate", or wants the machine awake overnight / during a long build.
 ---
 
 # Anti-Sleep (macOS caffeinate)
