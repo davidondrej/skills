@@ -6,7 +6,7 @@ version: b17ad5148ab7
 
 # DeepAPI
 
-Use this skill when David asks you to scrape public web data or draft/read/send email through DeepAPI.
+Use this skill when the user asks you to scrape public web data or draft/read/send email through DeepAPI.
 
 ## Staying Up To Date
 
@@ -20,7 +20,7 @@ Use this skill when David asks you to scrape public web data or draft/read/send 
 
 - Read `DEEPAPI_API_BASE_URL` from the environment.
 - Read `DEEPAPI_API_KEY` from the environment.
-- If either value is missing, stop and ask David for setup.
+- If either value is missing, stop and ask the user for setup.
 - Never commit, print, log, paste, or expose `DEEPAPI_API_KEY`.
 
 ## Request Rules
@@ -29,7 +29,7 @@ Use this skill when David asks you to scrape public web data or draft/read/send 
 - Send `Content-Type: application/json` when sending JSON.
 - Send a unique `Idempotency-Key` for every `POST`.
 - For scrape work, set explicit `maxCostUsd` or `maxCostMicrousd`.
-- Keep email as `send: false` or `mode: draft` unless David explicitly approves sending.
+- Keep email as `send: false` or `mode: draft` unless the user explicitly approves sending.
 - Do not pass inbox IDs. Use `emailIdentityId` or omit it.
 
 ## Execution Loop
@@ -39,36 +39,36 @@ Use this skill when David asks you to scrape public web data or draft/read/send 
 3. Run the request with the required headers.
 4. If the response has `status: running`, wait `next.afterSecs` and call `next.method` + `next.path` until `status` is `succeeded` or `failed`.
 5. If `error.retryable` is true, wait `error.retryAfterSecs` before retrying.
-6. If the response is HTTP 402 with `error.code: insufficient_credits`, stop and ask David to top up credits at https://deepapi.co/credits. After top-up, retry with the same `Idempotency-Key`.
+6. If the response is HTTP 402 with `error.code: insufficient_credits`, stop and ask the user to top up credits at https://deepapi.co/credits. After top-up, retry with the same `Idempotency-Key`.
 7. Report `requestId`, `status`, `debitMicrousd`, `costFinal`, and the useful part of `output`.
 
 ## Endpoints
 
 | Method | Path | Scope | Cost |
 | --- | --- | --- | --- |
-| POST | `/v1/scrape/website` | `scrape:website` | Set `maxCostUsd: "1.00"` unless David gives a different cap. The route requires maxCostUsd or maxCostMicrousd as the customer spend cap. The final debit is capped by that amount and reported as debitMicrousd. |
-| POST | `/v1/scrape/linkedin/profile` | `scrape:linkedin` | Set `maxCostUsd: "0.05"` unless David gives a different cap. The route requires maxCostUsd or maxCostMicrousd as the customer spend cap. The final debit is capped by that amount and reported as debitMicrousd. |
-| POST | `/v1/scrape/github/profile` | `scrape:github` | Set `maxCostUsd: "0.03"` unless David gives a different cap. The route requires maxCostUsd or maxCostMicrousd as the customer spend cap. The final debit is capped by that amount and reported as debitMicrousd. |
-| POST | `/v1/scrape/twitter/search` | `scrape:twitter` | Set `maxCostUsd: "0.03"` unless David gives a different cap. The route requires maxCostUsd or maxCostMicrousd as the customer spend cap. The final debit is capped by that amount and reported as debitMicrousd. |
-| POST | `/v1/scrape/linkedin/jobs` | `scrape:linkedin` | Set `maxCostUsd: "0.05"` unless David gives a different cap. The route requires maxCostUsd or maxCostMicrousd as the customer spend cap. The final debit is capped by that amount and reported as debitMicrousd. |
-| POST | `/v1/scrape/linkedin/company` | `scrape:linkedin` | Set `maxCostUsd: "0.05"` unless David gives a different cap. The route requires maxCostUsd or maxCostMicrousd as the customer spend cap. The final debit is capped by that amount and reported as debitMicrousd. |
-| POST | `/v1/scrape/linkedin/people` | `scrape:linkedin` | Set `maxCostUsd: "0.50"` unless David gives a different cap. The route requires maxCostUsd or maxCostMicrousd as the customer spend cap. The final debit is capped by that amount and reported as debitMicrousd. |
-| POST | `/v1/scrape/linkedin/posts` | `scrape:linkedin` | Set `maxCostUsd: "0.05"` unless David gives a different cap. The route requires maxCostUsd or maxCostMicrousd as the customer spend cap. The final debit is capped by that amount and reported as debitMicrousd. |
-| POST | `/v1/scrape/twitter/user` | `scrape:twitter` | Set `maxCostUsd: "0.05"` unless David gives a different cap. The route requires maxCostUsd or maxCostMicrousd as the customer spend cap. The final debit is capped by that amount and reported as debitMicrousd. |
-| POST | `/v1/scrape/twitter/replies` | `scrape:twitter` | Set `maxCostUsd: "0.20"` unless David gives a different cap. The route requires maxCostUsd or maxCostMicrousd as the customer spend cap. The final debit is capped by that amount and reported as debitMicrousd. |
-| POST | `/v1/scrape/youtube/transcript` | `scrape:youtube` | Set `maxCostUsd: "0.05"` unless David gives a different cap. The route requires maxCostUsd or maxCostMicrousd as the customer spend cap. The final debit is capped by that amount and reported as debitMicrousd. |
-| POST | `/v1/scrape/youtube/channel` | `scrape:youtube` | Set `maxCostUsd: "0.30"` unless David gives a different cap. The route requires maxCostUsd or maxCostMicrousd as the customer spend cap. The final debit is capped by that amount and reported as debitMicrousd. |
-| POST | `/v1/scrape/youtube/search` | `scrape:youtube` | Set `maxCostUsd: "0.10"` unless David gives a different cap. The route requires maxCostUsd or maxCostMicrousd as the customer spend cap. The final debit is capped by that amount and reported as debitMicrousd. |
-| POST | `/v1/scrape/linkedin` | `scrape:linkedin` | Set `maxCostUsd: "0.05"` unless David gives a different cap. The route requires maxCostUsd or maxCostMicrousd as the customer spend cap. The final debit is capped by that amount and reported as debitMicrousd. |
-| POST | `/v1/scrape/github` | `scrape:github` | Set `maxCostUsd: "0.03"` unless David gives a different cap. The route requires maxCostUsd or maxCostMicrousd as the customer spend cap. The final debit is capped by that amount and reported as debitMicrousd. |
-| POST | `/v1/scrape/twitter` | `scrape:twitter` | Set `maxCostUsd: "0.03"` unless David gives a different cap. The route requires maxCostUsd or maxCostMicrousd as the customer spend cap. The final debit is capped by that amount and reported as debitMicrousd. |
+| POST | `/v1/scrape/website` | `scrape:website` | Set `maxCostUsd: "1.00"` unless the user gives a different cap. The route requires maxCostUsd or maxCostMicrousd as the customer spend cap. The final debit is capped by that amount and reported as debitMicrousd. |
+| POST | `/v1/scrape/linkedin/profile` | `scrape:linkedin` | Set `maxCostUsd: "0.05"` unless the user gives a different cap. The route requires maxCostUsd or maxCostMicrousd as the customer spend cap. The final debit is capped by that amount and reported as debitMicrousd. |
+| POST | `/v1/scrape/github/profile` | `scrape:github` | Set `maxCostUsd: "0.03"` unless the user gives a different cap. The route requires maxCostUsd or maxCostMicrousd as the customer spend cap. The final debit is capped by that amount and reported as debitMicrousd. |
+| POST | `/v1/scrape/twitter/search` | `scrape:twitter` | Set `maxCostUsd: "0.03"` unless the user gives a different cap. The route requires maxCostUsd or maxCostMicrousd as the customer spend cap. The final debit is capped by that amount and reported as debitMicrousd. |
+| POST | `/v1/scrape/linkedin/jobs` | `scrape:linkedin` | Set `maxCostUsd: "0.05"` unless the user gives a different cap. The route requires maxCostUsd or maxCostMicrousd as the customer spend cap. The final debit is capped by that amount and reported as debitMicrousd. |
+| POST | `/v1/scrape/linkedin/company` | `scrape:linkedin` | Set `maxCostUsd: "0.05"` unless the user gives a different cap. The route requires maxCostUsd or maxCostMicrousd as the customer spend cap. The final debit is capped by that amount and reported as debitMicrousd. |
+| POST | `/v1/scrape/linkedin/people` | `scrape:linkedin` | Set `maxCostUsd: "0.50"` unless the user gives a different cap. The route requires maxCostUsd or maxCostMicrousd as the customer spend cap. The final debit is capped by that amount and reported as debitMicrousd. |
+| POST | `/v1/scrape/linkedin/posts` | `scrape:linkedin` | Set `maxCostUsd: "0.05"` unless the user gives a different cap. The route requires maxCostUsd or maxCostMicrousd as the customer spend cap. The final debit is capped by that amount and reported as debitMicrousd. |
+| POST | `/v1/scrape/twitter/user` | `scrape:twitter` | Set `maxCostUsd: "0.05"` unless the user gives a different cap. The route requires maxCostUsd or maxCostMicrousd as the customer spend cap. The final debit is capped by that amount and reported as debitMicrousd. |
+| POST | `/v1/scrape/twitter/replies` | `scrape:twitter` | Set `maxCostUsd: "0.20"` unless the user gives a different cap. The route requires maxCostUsd or maxCostMicrousd as the customer spend cap. The final debit is capped by that amount and reported as debitMicrousd. |
+| POST | `/v1/scrape/youtube/transcript` | `scrape:youtube` | Set `maxCostUsd: "0.05"` unless the user gives a different cap. The route requires maxCostUsd or maxCostMicrousd as the customer spend cap. The final debit is capped by that amount and reported as debitMicrousd. |
+| POST | `/v1/scrape/youtube/channel` | `scrape:youtube` | Set `maxCostUsd: "0.30"` unless the user gives a different cap. The route requires maxCostUsd or maxCostMicrousd as the customer spend cap. The final debit is capped by that amount and reported as debitMicrousd. |
+| POST | `/v1/scrape/youtube/search` | `scrape:youtube` | Set `maxCostUsd: "0.10"` unless the user gives a different cap. The route requires maxCostUsd or maxCostMicrousd as the customer spend cap. The final debit is capped by that amount and reported as debitMicrousd. |
+| POST | `/v1/scrape/linkedin` | `scrape:linkedin` | Set `maxCostUsd: "0.05"` unless the user gives a different cap. The route requires maxCostUsd or maxCostMicrousd as the customer spend cap. The final debit is capped by that amount and reported as debitMicrousd. |
+| POST | `/v1/scrape/github` | `scrape:github` | Set `maxCostUsd: "0.03"` unless the user gives a different cap. The route requires maxCostUsd or maxCostMicrousd as the customer spend cap. The final debit is capped by that amount and reported as debitMicrousd. |
+| POST | `/v1/scrape/twitter` | `scrape:twitter` | Set `maxCostUsd: "0.03"` unless the user gives a different cap. The route requires maxCostUsd or maxCostMicrousd as the customer spend cap. The final debit is capped by that amount and reported as debitMicrousd. |
 | POST | `/v1/email/send` | `email:send` | Uses configured email unit pricing; the route does not accept maxCostUsd. Check debitMicrousd in the response. |
 | GET | `/v1/email/messages` | `email:read` | Read route returns debitMicrousd 0. |
 | GET | `/v1/email/drafts` | `email:read` | Read route returns debitMicrousd 0. |
 | POST | `/v1/email/drafts/{draftId}/send` | `email:send` | Uses configured email unit pricing; the route does not accept maxCostUsd. Check debitMicrousd in the response. |
-| POST | `/v1/research/deep` | `research:deep` | Set `maxCostUsd: "0.10"` unless David gives a different cap. Defaults to maxCostUsd 0.10. Pass maxCostUsd or maxCostMicrousd to choose a different customer spend cap. The final debit is capped and reported as debitMicrousd. |
-| POST | `/v1/generate/image` | `generate:image` | Set `maxCostUsd: "0.20"` unless David gives a different cap. Defaults to maxCostUsd 0.20. Pass maxCostUsd or maxCostMicrousd to choose a different customer spend cap. The final debit is capped and reported as debitMicrousd. |
-| POST | `/v1/search/web` | `search:web` | Set `maxCostUsd: "0.05"` unless David gives a different cap. Defaults to maxCostUsd 0.05. Pass maxCostUsd or maxCostMicrousd to choose a different customer spend cap. The final debit is capped and reported as debitMicrousd. |
+| POST | `/v1/research/deep` | `research:deep` | Set `maxCostUsd: "0.10"` unless the user gives a different cap. Defaults to maxCostUsd 0.10. Pass maxCostUsd or maxCostMicrousd to choose a different customer spend cap. The final debit is capped and reported as debitMicrousd. |
+| POST | `/v1/generate/image` | `generate:image` | Set `maxCostUsd: "0.20"` unless the user gives a different cap. Defaults to maxCostUsd 0.20. Pass maxCostUsd or maxCostMicrousd to choose a different customer spend cap. The final debit is capped and reported as debitMicrousd. |
+| POST | `/v1/search/web` | `search:web` | Set `maxCostUsd: "0.05"` unless the user gives a different cap. Defaults to maxCostUsd 0.05. Pass maxCostUsd or maxCostMicrousd to choose a different customer spend cap. The final debit is capped and reported as debitMicrousd. |
 | GET | `/v1/requests/{requestId}` | `same key` | Status polling does not create a new debit. |
 
 ## Endpoint Details
@@ -491,7 +491,7 @@ Polling: This route returns a terminal envelope directly.
 Safety:
 - Send Authorization: Bearer $DEEPAPI_API_KEY and never expose the key.
 - Send a unique Idempotency-Key for every POST.
-- Keep send=false or mode=draft unless David explicitly approves sending.
+- Keep send=false or mode=draft unless the user explicitly approves sending.
 - Do not pass inboxId or inbox_id; use emailIdentityId or the workspace default.
 - Attachments, hidden HTML, image HTML, URL shorteners, and high-risk direct sends are blocked by policy.
 
@@ -537,7 +537,7 @@ Polling: This route returns a terminal envelope directly.
 Safety:
 - Send Authorization: Bearer $DEEPAPI_API_KEY and never expose the key.
 - Send a unique Idempotency-Key for every POST.
-- Only send a draft after David explicitly approves that draft.
+- Only send a draft after the user explicitly approves that draft.
 - Do not pass inboxId or inbox_id; use emailIdentityId or the workspace default.
 - Sending re-checks recipient and content policy against the stored draft; blocked drafts stay drafts.
 

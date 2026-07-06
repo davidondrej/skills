@@ -9,7 +9,7 @@ The `pi-web-access` package is installed globally. Zero-config via Exa MCP (no A
 
 ## CRITICAL: always pass `workflow: "none"`
 
-Every `web_search` call MUST include `workflow: "none"`. This skips the interactive browser curator popup (David does not want it opening). No exceptions — single query or batched `queries`, always set `workflow: "none"`.
+Every `web_search` call MUST include `workflow: "none"`. This skips the interactive browser curator popup (the user does not want it opening). No exceptions — single query or batched `queries`, always set `workflow: "none"`.
 
 ```
 web_search({ queries: ["query 1", "query 2"], workflow: "none" })

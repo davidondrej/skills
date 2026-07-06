@@ -1,6 +1,6 @@
 ---
 name: deep-research
-description: Run a deep, source-backed research query via DeepAPI (David's own product) POST /v1/research/deep. Builds a rigorous one-paragraph research prompt (per research-prompt rules), fires it, and saves a cited markdown report. Use when David asks for "deep research", "deepapi research", "perplexity deep research" (legacy trigger), or any deep source-backed research run. Differentiator vs the deepapi skill: this is the full research workflow (prompt + run + report file), not raw endpoint access.
+description: Run a deep, source-backed research query via DeepAPI (David's own product) POST /v1/research/deep. Builds a rigorous one-paragraph research prompt (per research-prompt rules), fires it, and saves a cited markdown report. Use when the user asks for "deep research", "deepapi research", "perplexity deep research" (legacy trigger), or any deep source-backed research run. Differentiator vs the deepapi skill: this is the full research workflow (prompt + run + report file), not raw endpoint access.
 disable-model-invocation: true
 ---
 
@@ -18,7 +18,7 @@ KEY=${DEEPAPI_API_KEY:-$(rg -o 'DEEPAPI_API_KEY=\S+' ~/.zshrc | head -1 | cut -d
 BASE=${DEEPAPI_API_BASE_URL:-https://deepapi.co}
 ```
 
-- Key missing → stop and ask David. Never print or log the key.
+- Key missing → stop and ask the user. Never print or log the key.
 
 ## Step 1 — Build the research prompt
 
@@ -45,7 +45,7 @@ curl -s --max-time 120 "$BASE/v1/research/deep" \
   -d @/tmp/dr_body.json > /tmp/dr_result.json
 ```
 
-Default spend cap is `maxCostUsd: "0.10"` per call; raise it only if David approves.
+Default spend cap is `maxCostUsd: "0.10"` per call; raise it only if the user approves.
 
 ## Step 3 — Read the report + sources
 
@@ -56,9 +56,9 @@ jq -r '.output.sources[]?.url'     /tmp/dr_result.json   # source URLs
 jq -r '.debitMicrousd'             /tmp/dr_result.json   # cost in micro-USD (100000 = $0.10)
 ```
 
-Save the report to a markdown file for David, list citation URLs beneath it, and report the cost in dollars.
+Save the report to a markdown file for the user, list citation URLs beneath it, and report the cost in dollars.
 
-If `output.sources` comes back empty while the answer shows `[n]` citation markers, that's a DeepAPI regression (fixed 2026-07-05) — still deliver the report, but tell David.
+If `output.sources` comes back empty while the answer shows `[n]` citation markers, that's a DeepAPI regression (fixed 2026-07-05) — still deliver the report, but tell the user.
 
 ## Bigger topics — multi-call reports
 
@@ -66,8 +66,8 @@ One call is capped at ~700 words. For a full deep-research report, fire one call
 
 ## Failure modes
 
-- HTTP 402 `insufficient_credits` → stop; David tops up at deepapi.co/credits; then retry with the SAME `Idempotency-Key` (safe — replays don't double-charge).
+- HTTP 402 `insufficient_credits` → stop; the user tops up at deepapi.co/credits; then retry with the SAME `Idempotency-Key` (safe — replays don't double-charge).
 - HTTP 429 `rate_limit_exceeded` → wait `Retry-After` seconds, retry once.
-- `status: failed` / HTTP 502 → report `requestId` + `error.message` to David. Do not retry in a loop.
+- `status: failed` / HTTP 502 → report `requestId` + `error.message` to the user. Do not retry in a loop.
 - Replayed request (same Idempotency-Key) returns HTTP 200 with `replayed: true` and no new charge.
 - Envelope/auth mechanics and all other endpoints: see the `deepapi` skill.

@@ -5,7 +5,7 @@ description: Distribute a skill across the 4 agent skill folders (Codex, Claude 
 
 # Distribute a Skill Across All Agents
 
-David has 4 agent skill locations on his MacBook. A skill must exist in each (or via symlink) to be discoverable by every agent.
+The user has 4 agent skill locations on their MacBook. A skill must exist in each (or via symlink) to be discoverable by every agent.
 
 ## The 4 Canonical Locations
 
@@ -48,10 +48,10 @@ rsync -a --delete ~/.agents/skills/$SKILL/ ~/.hermes/skills/$SKILL/
 
 ## Pitfalls
 
-- **`~/.pi/skills/` is the wrong location.** Pi Agent loads from `~/.pi/agent/skills/` only. A skill placed in `~/.pi/skills/` is invisible. If you find skills already there, they're orphans — confirm with David before deleting.
+- **`~/.pi/skills/` is the wrong location.** Pi Agent loads from `~/.pi/agent/skills/` only. A skill placed in `~/.pi/skills/` is invisible. If you find skills already there, they're orphans — confirm with the user before deleting.
 - **`~/.claude/skills` is a symlink, not a folder.** `cp -r ~/.agents/skills/foo ~/.claude/skills/` will error with "are identical". Skip the explicit Claude copy.
 - **Project-local skills exist too** — `./.pi/agent/skills/` (or `.pi/skills/`) inside a repo overrides the global one on collision (later-discovered wins). This skill only handles GLOBAL distribution.
-- **`.pi/agent/skills` is a symlink → `.agents/skills`.** Don't `cp` into it (errors "are identical"); it auto-syncs. Only `.hermes/skills` is an independent copy — don't unilaterally consolidate Hermes into a symlink unless David asks.
+- **`.pi/agent/skills` is a symlink → `.agents/skills`.** Don't `cp` into it (errors "are identical"); it auto-syncs. Only `.hermes/skills` is an independent copy — don't unilaterally consolidate Hermes into a symlink unless the user asks.
 - **Hermes snapshots skills at session start.** A newly-distributed skill won't appear inside a running Hermes session until restart (it works fine for future sessions and for the other 3 agents immediately).
 - **Filename casing matters on case-sensitive volumes.** `SKILL.md` must be uppercase.
 
@@ -59,4 +59,4 @@ rsync -a --delete ~/.agents/skills/$SKILL/ ~/.hermes/skills/$SKILL/
 
 - Skill is project-specific → put it in `./.claude/skills/`, `./.pi/agent/skills/`, etc. inside the repo, not globally.
 - Editing one agent's skill only (e.g. a Hermes-only workflow) → patch that file directly, don't propagate.
-- Removing a skill globally → `rm -rf` from `~/.agents/skills/` (covers `.claude` + `.pi` symlinks) and from `~/.hermes/skills/` (and confirm with David first; deletion is destructive).
+- Removing a skill globally → `rm -rf` from `~/.agents/skills/` (covers `.claude` + `.pi` symlinks) and from `~/.hermes/skills/` (and confirm with the user first; deletion is destructive).

@@ -1,6 +1,6 @@
 ---
 name: cyber-audit
-description: Read-only exposure audit of David's MacBook (and ~/Documents/ projects) for a CVE, breach, malicious package, or other security advisory, then write a structured report to ~/Documents/. Use when the user shares a breach/CVE/malware/supply-chain advisory and asks if they're affected, says "scan my system for X", "are we affected by Y", "check if I'm vulnerable to Z", or requests any hack/breach/cyber/vulnerability audit on this MacBook. Output matches the existing audit format in ~/Documents/.
+description: Read-only exposure audit of the user's MacBook (and local code projects) for a CVE, breach, malicious package, or other security advisory, then write a structured report to ~/Documents/audits/. Use when the user shares a breach/CVE/malware/supply-chain advisory and asks if they're affected, says "scan my system for X", "are we affected by Y", "check if I'm vulnerable to Z", or requests any hack/breach/cyber/vulnerability audit on this MacBook. Output matches the existing audit format in ~/Documents/audits/.
 disable-model-invocation: true
 ---
 
@@ -8,7 +8,7 @@ disable-model-invocation: true
 
 ## Hard rules
 
-- **Read-only.** No installs, removes, upgrades, restarts, network calls, or file modifications outside `~/Documents/`.
+- **Read-only.** No installs, removes, upgrades, restarts, network calls, or file modifications outside `~/Documents/audits/`.
 - **No `sudo`.** Never.
 - **One report per invocation.** Always end by writing the `.md` file (even if the verdict is "Not affected" — the audit trail matters).
 - If a check requires a state-changing command, **skip it and note "not checked (would require state change)"** in the table. Do not run it.
@@ -18,7 +18,7 @@ disable-model-invocation: true
 1. **Identify scope.** Extract from the advisory: package/binary name, affected versions, platform (macOS / Linux / Windows), attack vector (supply chain / RCE / local / network).
 2. **Run checks in parallel** (Bash tool, multiple calls in one message). Pick relevant checks for the advisory type — don't run all of them.
 3. **Build the table** as you go. Each row = one check + concrete result (version number, path, "None", "N/A").
-4. **Write the report** to `~/Documents/YYYY-MM-DD-<short-kebab-slug>.md`. Use today's date from the environment header.
+4. **Write the report** to `~/Documents/audits/YYYY-MM-DD-<short-kebab-slug>.md`. Use today's date from the environment header.
 5. **Tell the user** the verdict in one line + path to the report.
 
 ## Check menu (pick what's relevant)
@@ -63,13 +63,13 @@ If the advisory mentions an ecosystem not above (Rust cargo, Go modules, Ruby ge
 
 ## Report template
 
-File: `~/Documents/YYYY-MM-DD-<short-kebab-slug>.md`
+File: `~/Documents/audits/YYYY-MM-DD-<short-kebab-slug>.md`
 
 ```markdown
 # <Subject> — Audit
 
 **Date:** YYYY-MM-DD
-**Host:** David's MacBook
+**Host:** <hostname and model>
 
 ## <CVEs | Advisory> in scope
 
@@ -98,7 +98,7 @@ None — diagnostic only, no files modified, no <packages installed/removed | se
 - <Actionable item, or "None" if truly nothing>
 ```
 
-Match the tone of the existing reports in `~/Documents/` — terse, factual, bulleted, no hedging.
+Match the tone of the existing reports in `~/Documents/audits/` — terse, factual, bulleted, no hedging.
 
 ## Verdict wording
 
@@ -112,6 +112,6 @@ Never on your own. If the verdict is "Affected", list the remediation command in
 
 ## Reference
 
-Existing reports in `~/Documents/` show the expected style:
-- The long-form baseline audit file (different format, do not mimic)
+Existing reports in `~/Documents/audits/` show the expected style:
+- The long-form baseline audit (different format, do not mimic)
 - Any `YYYY-MM-DD-*.md` files (this is the format to match)

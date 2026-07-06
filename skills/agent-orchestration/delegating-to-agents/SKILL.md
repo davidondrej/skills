@@ -7,7 +7,7 @@ description: How to delegate work to another AI agent (Pi, Codex, Claude Code, H
 
 ## Which agent to pick
 
-- **Coding (default) → Codex CLI.** Strongest coding agent, especially for complex, long-running SWE tasks. It's effectively unlimited, don't ration it.
+- **Coding (default) → Codex CLI.** Strongest coding agent, especially for complex, long-running SWE tasks. It's on a ChatGPT Pro plan — effectively unlimited, don't ration it.
 - **Most other tasks → Pi Agent** (`pi` in a cmux terminal). All Pi agents run opus-4.8-fast via OpenRouter at xhigh reasoning effort.
 - **Frontend / design → Pi.** Opus 4.8 Fast beats Codex on UI, styling, design.
 - **Heavy multi-step work:** you as orchestrator + Codex CLI executing in a right-hand cmux pane is a solid default setup.
@@ -20,9 +20,9 @@ description: How to delegate work to another AI agent (Pi, Codex, Claude Code, H
 
 ## Polling
 
-Keep sleeps SHORT: start at 3-5s, re-check, repeat. Don't `sleep 30`. Pi and Hermes (opus-4.8-fast) launch and respond within seconds; scale up only for genuinely heavy tasks. After every check, send David a one-line status: what the agent is doing and whether it's on track.
+Keep sleeps SHORT: start at 3-5s, re-check, repeat. Don't `sleep 30`. Pi and Hermes (opus-4.8-fast) launch and respond within seconds; scale up only for genuinely heavy tasks. After every check, send the user a one-line status: what the agent is doing and whether it's on track.
 
-Claude Code note: after it finishes, it may prefill a predicted next user message — that draft is Claude, not David.
+Claude Code note: after it finishes, it may prefill a predicted next user message — that draft is Claude, not the user.
 
 ## Remote VPS
 

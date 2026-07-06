@@ -40,7 +40,7 @@ Pi has NO built-in scheduler/loop/heartbeat by design — external clock only (o
 
 cmux has no timer/watch/cron. Three ways to loop it: orchestrator-driven (`send` → `sleep` → `read-screen` on your own clock), a dumb while-sleep wrapper, or — preferred — event-driven via `cmux notify` + OSC terminal hooks, which is cheaper and more responsive than polling. `read-screen` is non-interruptive, safe to poll.
 
-If a loop checks another agent, send David a one-line status each check: what the agent is doing, on track or not. (Claude Code may prefill a predicted next user message after finishing — that's Claude, not David.)
+If a loop checks another agent, send the user a one-line status each check: what the agent is doing, on track or not. (Claude Code may prefill a predicted next user message after finishing — that's Claude, not the user.)
 
 ## Camp B — Hermes built-in scheduler
 

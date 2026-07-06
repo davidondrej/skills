@@ -18,13 +18,13 @@ echo "OPENROUTER_API_KEY set? ${OPENROUTER_API_KEY:+YES}"
 
 **Docker must be running** — Pier sandboxes each task in Docker by default (`--env modal` for cloud instead).
 
-David has a dedicated OpenRouter key for this benchmark exported globally in `~/.zshrc` (weekly hard spend limit set as a safeguard). A fresh shell already has `OPENROUTER_API_KEY` available. If it's somehow not set, re-source the shell:
+The user has a dedicated OpenRouter key for this benchmark exported globally in `~/.zshrc`. A fresh shell already has `OPENROUTER_API_KEY` available. If it's somehow not set, re-source the shell:
 
 ```bash
 source ~/.zshrc && echo "key loaded? ${OPENROUTER_API_KEY:+YES}"
 ```
 
-If still unset, ask David — never invent a key.
+If still unset, ask the user — never invent a key.
 
 ## Setup
 
@@ -91,7 +91,7 @@ pier run -p deep-swe/tasks --agent mini-swe-agent \
 
 - Trials land in `jobs/<run>/<trial_id>/`. Inspect with `pier view jobs/<run>`, `pier analyze jobs/<run>`, or `pier critique run jobs/<run>`.
 - Report: the exact command used, pass/fail, score, and any blockers.
-- Submit results for the official leaderboard to: **<email-address>**
+- Submit results for the official leaderboard to the DeepSWE leaderboard contact.
 
 ## Failure modes
 

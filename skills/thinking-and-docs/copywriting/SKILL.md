@@ -11,7 +11,7 @@ How David Ondrej likes his copy written.
 
 For authentic copy, always write in all lowercase. No capital letters, not even at sentence starts or in "david ondrej".
 
-Not all copy is authentic copy. When unsure whether a piece should be authentic-style or standard, ask David.
+Not all copy is authentic copy. When unsure whether a piece should be authentic-style or standard, ask the user.
 
 ## principles
 

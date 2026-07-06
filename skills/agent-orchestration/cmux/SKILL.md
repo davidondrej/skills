@@ -53,9 +53,9 @@ cmux close-surface --surface surface:7
 
 When launching a Pi Agent inside a cmux pane and polling for output, use **short `sleep` intervals (2–5s)**. Pi is fast and minimal, and David runs it on Opus 4.8 Fast via OpenRouter, which streams tokens extremely quickly. Do NOT use `sleep 15` unless genuinely needed (a big build/refactor) — most of the time `sleep 2`–`sleep 5` is more than enough.
 
-After every agent check, send David a one-line status update: what the agent is doing and whether it is on track. Keep it extremely concise.
+After every agent check, send the user a one-line status update: what the agent is doing and whether it is on track. Keep it extremely concise.
 
-Claude Code cmux note: after Claude finishes, it may prefill a predicted next user message; that draft is Claude, not David speaking.
+Claude Code cmux note: after Claude finishes, it may prefill a predicted next user message; that draft is Claude, not the user speaking.
 
 ## Send Input
 

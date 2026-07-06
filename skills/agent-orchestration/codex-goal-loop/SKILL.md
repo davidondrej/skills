@@ -13,7 +13,7 @@ Key difference from a normal prompt: when a turn ends but the goal isn't met, Co
 
 **Lifecycle states:** `pursuing`, `paused`, `achieved`, `unmet`, `budget-limited`.
 
-When monitoring a running `/goal`, every check should include a one-line update to David: what Codex is doing and whether it is on track. Keep it extremely concise.
+When monitoring a running `/goal`, every check should include a one-line update to the user: what Codex is doing and whether it is on track. Keep it extremely concise.
 
 **Not:** a budget command, a safety boundary, "run forever", or a replacement for `/plan`. It's a contract enforcer with a verification loop.
 
@@ -46,7 +46,7 @@ Plus: tell Codex what to read first, ask it to work in checkpoints with a short 
 
 ## Writing a goal (the core deliverable)
 
-When the user wants a quick `/goal` instruction, produce a structured markdown block with one line per contract item (proper newlines, not flowing prose). **Do not prefix the output with `/goal`** — David adds the slash command himself in the composer. Emit only the contract body. Template:
+When the user wants a quick `/goal` instruction, produce a structured markdown block with one line per contract item (proper newlines, not flowing prose). **Do not prefix the output with `/goal`** — the user adds the slash command himself in the composer. Emit only the contract body. Template:
 
 ```
 **Objective:** <one-sentence objective>
@@ -83,7 +83,7 @@ When the user wants a quick `/goal` instruction, produce a structured markdown b
 ### Writing rules
 - **One objective, one stop condition.** Not a backlog.
 - **Documentation is mandatory.** Every `/goal` prompt must include a single sentence committing the agent to concise, targeted docs — new `.md` files or focused updates to existing docs.
-- **Never instruct the agent to create new ADRs** — ADRs require David's explicit approval, so goal prompts must not pre-approve or encourage them.
+- **Never instruct the agent to create new ADRs** — ADRs require the user's explicit approval, so goal prompts must not pre-approve or encourage them.
 - **Forbid reward-hacking explicitly:** "Do not delete, skip, weaken, or narrow tests to make the goal pass." Otherwise Codex may game the stop condition.
 - **4,000-char limit** on the objective. If longer, put detail in a file (`PLAN.md`/`GOAL_BRIEF.md`) and make the goal point to it — keep the goal itself compact.
 - Use **literal strings** for paths, commands, issue numbers — exact.
@@ -95,7 +95,7 @@ When the user wants a quick `/goal` instruction, produce a structured markdown b
 
 Hand-written goals under-specify. Ask a second AI session (Claude with the codebase loaded, ChatGPT with project connected, or a separate Codex thread in the same dir) to: (1) inspect the codebase, (2) surface hidden assumptions/constraints/edge cases, (3) emit a structured `/goal` markdown block using the 4-part contract. Paste that into Codex. Order-of-magnitude better runs.
 
-Claude Code cmux note: after Claude finishes, it may prefill a predicted next user message; that draft is Claude, not David speaking.
+Claude Code cmux note: after Claude finishes, it may prefill a predicted next user message; that draft is Claude, not the user speaking.
 
 ### Self-goal setting
 
