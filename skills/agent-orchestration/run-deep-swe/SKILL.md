@@ -18,7 +18,7 @@ echo "OPENROUTER_API_KEY set? ${OPENROUTER_API_KEY:+YES}"
 
 **Docker must be running** — Pier sandboxes each task in Docker by default (`--env modal` for cloud instead).
 
-The user's OpenRouter key for this benchmark is exported globally in `~/.zshrc`. A fresh shell already has `OPENROUTER_API_KEY` available. If it's somehow not set, re-source the shell:
+The user has a dedicated OpenRouter key for this benchmark exported globally in `~/.zshrc`. A fresh shell already has `OPENROUTER_API_KEY` available. If it's somehow not set, re-source the shell:
 
 ```bash
 source ~/.zshrc && echo "key loaded? ${OPENROUTER_API_KEY:+YES}"
