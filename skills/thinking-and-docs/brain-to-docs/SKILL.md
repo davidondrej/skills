@@ -30,4 +30,4 @@ decisions.
   PLAIN ENGLISH.
 - ADRs: short, numbered `NNNN-slug.md`, Status + Context + Decision + Consequences.
 - README: vision only. Decisions go in ADRs.
-- Don't challenge the user's thinking unless the user asks, or the user is making a severe mistake.
+- Don't challenge the user's thinking unless he asks, or he's making a severe mistake.
