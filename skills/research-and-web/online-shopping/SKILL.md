@@ -49,9 +49,11 @@ Use your judgment. The goal is a confident answer, not a fixed procedure.
 Scale research effort to the item's price. A cheap item researched for minutes is this skill failing its purpose:
 
 - **Obvious call** — the screenshot or conversation already gives you enough to judge: answer right away. Zero searches, zero scrapes.
-- **Cheap (roughly under $50)**: answer from your own knowledge — you already know what everyday items cost. At most ONE quick web search, and only if genuinely unsure. Scraping and deep research are forbidden in this tier.
+- **Cheap (roughly under $50)**: answer from your own knowledge — you already know what everyday items cost. At most ONE quick web search, and only if genuinely unsure. Scraping and deep research are forbidden in this tier. Respect the user's time above all: answer even more quickly, clearly, and concisely than usual.
 - **Mid-range**: a few searches, scrape the listing and a top competitor or two.
 - **Expensive ($1,000+)**: full depth — deep research, many search variants, scrape several shops and buyer reviews.
+
+For mid-range and expensive items, give first impressions BEFORE any deep research or scraping: a sentence or two from your own knowledge — the typical price range for this kind of item and whether the deal looks good or bad so far. For example: "Cars of this brand and year usually go for €18-25k, so this looks slightly high — running a deep check to verify." Then start the research. Never leave the user waiting minutes with nothing to read.
 
 Then, as needed for the price tier:
 
