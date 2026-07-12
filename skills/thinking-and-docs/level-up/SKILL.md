@@ -19,7 +19,7 @@ State-check first: read both files in full if they exist. If previous rounds exi
 
 - 7 questions, strictly one at a time, plain text — never the questions UI.
 - Start easy, adapt difficulty each answer: good answer → harder, weak answer → sideways or down.
-- Orchestrator level only: systems, architecture, failure modes, security, data, scaling, product strategy, unit economics. NEVER syntax or code trivia — the user architects via AI agents, they don't write code.
+- Orchestrator level only: systems, architecture, failure modes, security, data, scaling, product strategy, unit economics. NEVER syntax or code trivia — the user architects via AI agents, not by writing code.
 - Anchor questions in the current project's real stack and features. When a question touches real code, read it and show the actual snippet when teaching.
 - Cover different territory across rounds (e.g. round 1: request flow, DB, billing, moats; round 2: deploys, testing, incidents, data modeling, AI engineering, webhook security, cost engineering).
 
@@ -30,7 +30,7 @@ State-check first: read both files in full if they exist. If previous rounds exi
 3. Immediately save the verbatim answer + rating + gap notes to `david-knowledge.md`.
 4. If a genuine gap surfaced, append one concise bullet to `LEARNING-PLAN.md`. Skip minor misses.
 5. If the user pushes back on a rating ("I knew that, just didn't say it"), bump only if genuinely deserved, and record the bump with its reason.
-6. When the user says he has since learned a plan item, mark its bullet: strikethrough + `✓ learned YYYY-MM-DD`.
+6. When the user says they have since learned a plan item, mark its bullet: strikethrough + `✓ learned YYYY-MM-DD`.
 
 ## After question 7
 

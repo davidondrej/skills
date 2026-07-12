@@ -1,0 +1,43 @@
+---
+name: delegating-to-agents
+description: How to delegate work to another AI agent (Pi, Codex, Claude Code, Hermes) — picking the right agent, sending prompts to TUI agents, polling progress. Read BEFORE any `cmux send`/`tmux send-keys` to an agent, or whenever delegating, relaying, spawning, or orchestrating agent-to-agent work.
+---
+
+# Delegating to Agents
+
+## Which agent to pick
+
+- **Coding (default) → Codex CLI.** Strongest coding agent, especially for complex, long-running SWE tasks. Effectively unlimited, don't ration it.
+- **Most other tasks → Pi Agent** (`pi` in a cmux terminal). All Pi agents run opus-4.8-fast via OpenRouter at xhigh reasoning effort.
+- **Frontend / design → Pi.** Opus 4.8 Fast beats Codex on UI, styling, design.
+- **Heavy multi-step work:** you as orchestrator + Codex CLI executing in a right-hand cmux pane is a solid default setup.
+
+## Sending prompts to a TUI agent
+
+1. **ONE single line — never newlines in the message body.** In a TUI, newline = Enter: a multi-line prompt submits at the first line and the rest arrives as fragmented mid-turn steering messages. Use ". " or "; " instead of line breaks, then one explicit enter. For long instructions, write them to a file and send: `read /tmp/task.md and follow it`.
+2. **Wrap the prompt in plain double quotes — NEVER escaped.** `cmux send --surface surface:N "your prompt"`. The recurring bug is emitting `\"` — in bash that's literal-broken and dies with `unexpected EOF`. Inside the prompt, avoid apostrophes and literal double quotes (write "dont", "wont", "lets"); rephrase instead of escaping. If a send failed, the cause was the escaped `\"`, not the quote type.
+3. **Exact command names:** `cmux send --surface surface:N` then `cmux send-key --surface surface:N enter`. There is NO `send-surface` or `send-key-surface`.
+
+## Polling
+
+Keep sleeps SHORT: start at 3-5s, re-check, repeat. Don't `sleep 30`. Pi and Hermes (opus-4.8-fast) launch and respond within seconds; scale up only for genuinely heavy tasks. After every check, send the user a one-line status: what the agent is doing and whether it's on track.
+
+Claude Code note: after it finishes, it may prefill a predicted next user message — that draft is Claude, not the user.
+
+## Remote VPS
+
+SSH in first and launch the agent ON the VPS (e.g. `codex --yolo`), then drive that on-box agent. Don't run an agent locally and have it SSH for every step.
+
+## The 4 agents (background reference)
+
+All four use the portable SKILL.md standard; project skills win over global.
+
+- **Pi** (pi.dev, open-source TS): minimal read/write/edit/bash core, self-extends via TS extensions; true BYOK; best-in-class session branch/fork/resume. Skills: `~/.pi/agent/skills/`.
+- **Codex CLI** (OpenAI, Rust): fastest startup; kernel-level sandboxing; `codex exec` for CI; reads AGENTS.md. Skills: `~/.codex/skills/`.
+- **Claude Code** (Anthropic, TS): deepest Claude integration, `.claude/` conventions, live skill hot-reload. Skills: `~/.claude/skills/`.
+- **Hermes** (Nous Research, Python): persistent autonomous agent — cross-session memory, built-in scheduler, 40+ tools; can orchestrate the other CLIs as workers. Skills: `~/.hermes/skills/`.
+
+## Driving interactive CLIs
+
+- Codex, Pi, OpenCode: need `pty=true`.
+- Claude Code: prefer `claude --print --permission-mode bypassPermissions` (no PTY).

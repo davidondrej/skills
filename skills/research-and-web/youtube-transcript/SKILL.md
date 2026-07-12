@@ -53,7 +53,7 @@ For the `Channel_Title` filename, get metadata with a quick `yt-dlp --print "%(c
 - HTTP 402 `insufficient_credits` (tell the user to top up at deepapi.co/credits first; fall back only if they're unavailable).
 - DeepAPI request `failed` twice.
 
-Tell the user whenever you fall back — a fallback means their product missed a real use case.
+Tell the user whenever you fall back — a fallback means DeepAPI missed a real use case.
 
 ## Fallback path — yt-dlp (local)
 

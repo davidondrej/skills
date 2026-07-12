@@ -1,0 +1,48 @@
+# Global agent command guard — dangerous command denylist.
+# One POSIX-ERE regex (grep -E) per line. Blank lines and # comments are ignored.
+# Shared by ALL agents: Cursor, Claude Code, Codex, OpenCode, Pi, Hermes.
+# Edit this file to tune; changes apply immediately (no restarts needed).
+# Adapters for Pi/OpenCode/Hermes convert [:space:] to \s automatically.
+
+# 1. rm aimed at root, the whole home folder, or the whole /Users tree
+(^|[;&|[:space:]])rm[[:space:]]+((-[a-zA-Z]+|--[a-z-]+)[[:space:]]+)*["']?/["']?[[:space:]]*($|[;&|])
+(^|[;&|[:space:]])rm[[:space:]]+((-[a-zA-Z]+|--[a-z-]+)[[:space:]]+)*["']?/\*
+(^|[;&|[:space:]])rm[[:space:]]+((-[a-zA-Z]+|--[a-z-]+)[[:space:]]+)*["']?(~|\$HOME|\$\{HOME\})/?["']?[[:space:]]*($|[;&|])
+(^|[;&|[:space:]])rm[[:space:]]+((-[a-zA-Z]+|--[a-z-]+)[[:space:]]+)*["']?(~|\$HOME|\$\{HOME\})/\*
+(^|[;&|[:space:]])rm[[:space:]]+((-[a-zA-Z]+|--[a-z-]+)[[:space:]]+)*["']?/Users(/[^/[:space:]"']+)?/?["']?[[:space:]]*($|[;&|])
+--no-preserve-root
+
+# 2. disk destroyers (writing to raw disks, formatting, erasing)
+(^|[;&|[:space:]])dd[[:space:]][^;&|]*of=["']?/dev/
+>[[:space:]]*/dev/(r?disk|sd[a-z]|nvme)
+(^|[;&|[:space:]])mkfs(\.[A-Za-z0-9]+)?([[:space:]]|$)
+(^|[;&|[:space:]])diskutil[[:space:]]+(erase[A-Za-z]*|partitionDisk|zeroDisk|secureErase|apfs[[:space:]]+(delete|erase)[A-Za-z]*)
+
+# 3. deleting with admin power
+(^|[;&|[:space:]])sudo[[:space:]]+(-[a-zA-Z]+[[:space:]]+)*rm([[:space:]]|$)
+
+# 4. fork bomb (freezes the machine)
+:\(\)[[:space:]]*\{[[:space:]]*:[[:space:]]*\|[[:space:]]*:[[:space:]]*&[[:space:]]*\}[[:space:]]*;[[:space:]]*:
+
+# 5. piping the internet straight into a shell
+(^|[;&|[:space:]])(curl|wget)[[:space:]][^;&|]*\|[[:space:]]*(sudo[[:space:]]+)?(ba|z|da)?sh([[:space:]]|$)
+
+# 6. rewriting remote git history (--force-with-lease stays allowed)
+(^|[;&|[:space:]])git[[:space:]]+push[^;&|]*[[:space:]](-f|--force)([[:space:]]|$)
+(^|[;&|[:space:]])git[[:space:]]+push[^;&|]*[[:space:]]\+[A-Za-z0-9._/-]
+
+# 6b. deleting remote branches/tags (git push --delete, -d, or ":branch" refspec)
+(^|[;&|[:space:]])git[[:space:]]+push[^;&|]*[[:space:]](--delete|-d)([[:space:]]|$)
+(^|[;&|[:space:]])git[[:space:]]+push[^;&|]*[[:space:]]:[A-Za-z0-9._/-]
+
+# 7. breaking permissions/ownership on the whole system
+(^|[;&|[:space:]])chmod[[:space:]][^;&|]*777[[:space:]]+["']?/["']?[[:space:]]*($|[;&|])
+(^|[;&|[:space:]])chown[[:space:]]+-R[^;&|]*[[:space:]]+/["']?[[:space:]]*($|[;&|])
+
+# 8. GitHub CLI (gh): irreversible or account-level destruction + token exfil
+(^|[;&|[:space:]])gh[[:space:]]+repo[[:space:]]+delete([[:space:]]|$)
+(^|[;&|[:space:]])gh[[:space:]]+release[[:space:]]+delete([[:space:]]|$)
+(^|[;&|[:space:]])gh[[:space:]]+(secret|ssh-key|gpg-key)[[:space:]]+delete([[:space:]]|$)
+(^|[;&|[:space:]])gh[[:space:]]+api[[:space:]][^;&|]*(-X|--method)(=|[[:space:]]+)(DELETE|delete)
+(^|[;&|[:space:]])gh[[:space:]]+repo[[:space:]]+edit[^;&|]*--visibility(=|[[:space:]]+)public
+(^|[;&|[:space:]])gh[[:space:]]+auth[[:space:]]+token([[:space:]]|$)

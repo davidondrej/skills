@@ -13,7 +13,7 @@ Background reference: `library/claude-code/claude-and-agents-md.md`.
 ## Process
 
 ### Step 1: Confirm the target folder + sanity-check it deserves a file
-Ask the user which folder. Use absolute path under `~/path/to/project/`.
+Ask the user which folder. Use absolute path under the project's workspace root.
 
 **Only create a file if the folder has context needed across multiple sessions** — active evolving work, specific conventions, ongoing decisions. A folder of static reference files does NOT need one (agents can read on demand). If unsure, ask the user.
 
