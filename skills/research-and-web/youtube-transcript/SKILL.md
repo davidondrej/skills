@@ -50,10 +50,10 @@ For the `Channel_Title` filename, get metadata with a quick `yt-dlp --print "%(c
 ## When to fall back to yt-dlp
 
 - `DEEPAPI_API_KEY` missing from `~/.zshrc`.
-- HTTP 402 `insufficient_credits` (tell the user to top up at deepapi.co/credits first; fall back only if they're unavailable).
+- HTTP 402 `insufficient_credits` (tell the user to top up at deepapi.co/credits first; fall back only if the user is unavailable).
 - DeepAPI request `failed` twice.
 
-Tell the user whenever you fall back — a fallback means DeepAPI missed a real use case.
+Tell the user whenever you fall back — a fallback means his product missed a real use case.
 
 ## Fallback path — yt-dlp (local)
 

@@ -13,7 +13,7 @@ Background reference: `library/claude-code/claude-and-agents-md.md`.
 ## Process
 
 ### Step 1: Confirm the target folder + sanity-check it deserves a file
-Ask the user which folder. Use absolute path under the project's workspace root.
+Ask the user which folder. Use absolute path under `~/Documents/code/workspace/`.
 
 **Only create a file if the folder has context needed across multiple sessions** — active evolving work, specific conventions, ongoing decisions. A folder of static reference files does NOT need one (agents can read on demand). If unsure, ask the user.
 
@@ -39,8 +39,8 @@ Before writing the file, give the user a bullet list grouped by section — let 
 
 ### Step 4: Iterate with the user
 - Keep answers short. The user will edit directly in the IDE.
-- When they edit the file, RE-READ it and flag: contradictions, typos, missing rules, wrong categorization.
-- Do not revert their edits unless asked.
+- When the user edits the file, RE-READ it and flag: contradictions, typos, missing rules, wrong categorization.
+- Do not revert the user's edits unless asked.
 
 ### Step 5: Write the file
 - Path: `<folder>/CLAUDE.md`

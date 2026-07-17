@@ -7,7 +7,7 @@ description: How to delegate work to another AI agent (Pi, Codex, Claude Code, H
 
 ## Which agent to pick
 
-- **Coding (default) → Codex CLI.** Strongest coding agent, especially for complex, long-running SWE tasks. Effectively unlimited, don't ration it.
+- **Coding (default) → Codex CLI.** Strongest coding agent, especially for complex, long-running SWE tasks. It's effectively unlimited for the user, don't ration it.
 - **Most other tasks → Pi Agent** (`pi` in a cmux terminal). All Pi agents run opus-4.8-fast via OpenRouter at xhigh reasoning effort.
 - **Frontend / design → Pi.** Opus 4.8 Fast beats Codex on UI, styling, design.
 - **Heavy multi-step work:** you as orchestrator + Codex CLI executing in a right-hand cmux pane is a solid default setup.

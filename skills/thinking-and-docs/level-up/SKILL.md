@@ -19,7 +19,7 @@ State-check first: read both files in full if they exist. If previous rounds exi
 
 - 7 questions, strictly one at a time, plain text — never the questions UI.
 - Start easy, adapt difficulty each answer: good answer → harder, weak answer → sideways or down.
-- Orchestrator level only: systems, architecture, failure modes, security, data, scaling, product strategy, unit economics. NEVER syntax or code trivia — the user architects via AI agents, not by writing code.
+- Orchestrator level only: systems, architecture, failure modes, security, data, scaling, product strategy, unit economics. NEVER syntax or code trivia — the user architects via AI agents, they don't write code.
 - Anchor questions in the current project's real stack and features. When a question touches real code, read it and show the actual snippet when teaching.
 - Cover different territory across rounds (e.g. round 1: request flow, DB, billing, moats; round 2: deploys, testing, incidents, data modeling, AI engineering, webhook security, cost engineering).
 
