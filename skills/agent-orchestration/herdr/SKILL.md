@@ -93,6 +93,31 @@ Hard-won facts from driving herdr in production. Trust these over intuition.
 - For risky experiments use an isolated named session (never `default`), and re-check `herdr session list --json` immediately before any stop/delete.
 - `herdr integration install <harness>` (claude, codex, cursor, pi, ...) enables native status detection per agent. `herdr notification show <title>` fires a desktop-style alert.
 
+## Launching agents in new panes (when the user asks)
+
+ALWAYS launch agents with auto-approval — a worker in an unattended pane stalls forever on a y/n prompt nobody answers:
+
+- Cursor CLI: `cursor-agent --yolo "task"` (alias for `--force`)
+- Codex CLI: `codex --yolo "task"`
+- Claude Code: `claude --dangerously-skip-permissions "task"`
+
+This is safe only because the user's `global-agent-guardrails` deny-list hook is installed across all agents. First-run trust dialogs may still appear despite these flags — peek the pane after launch. `herdr integration install <cursor|codex|claude>` (once each) enables native agent-status detection.
+
+### Cursor CLI specifics
+
+The real binary is `cursor-agent` (`agent` is an alias/new docs name — don't rely on it in scripts). The user's shorthand `cur` = `cursor-agent --yolo`: fine to type into an interactive pane, but use the full binary in scripts — aliases don't expand there. Launch into an existing pane:
+
+```bash
+herdr pane run <pane-id> "cd <worktree> && cursor-agent --model gpt-5.3-codex-high --yolo 'fix the failing tests'"
+```
+
+- **Interactive:** `cursor-agent "task"` (or no arg for empty session). **Headless:** `cursor-agent -p "task" --output-format text|json|stream-json`.
+- **Permissions:** `--force` runs commands without per-command approval (alias `--yolo`); `--sandbox enabled|disabled`. Auth for scripts: `CURSOR_API_KEY` env var.
+- **Model:** `--model <slug>` at launch, `/model` in-session. Enumerate with `cursor-agent --list-models` — slugs are version/account-dependent, never hardcode from memory.
+- **Reasoning effort:** there is NO `--effort` flag — effort is baked into the slug suffix: `-low` / `-medium` / `-high` / `-xhigh` (e.g. `gpt-5.3-codex-xhigh`, `claude-opus-4-8-thinking-high`). `-fast` is speed, not effort. Bracket syntax `model[effort=high]` shown in `--help` is NOT actually supported — always use full slugs.
+- **Known bug (mid-2026):** some CLI builds silently drop the reasoning suffix passed via `--model` and fall back to default effort. Verify with `/model` after launch; `--disable-auto-update` keeps a working build stable.
+- **Resume:** `cursor-agent resume` (latest), `--resume <chatId>`, `cursor-agent ls` to list.
+
 ## Prompt patterns
 
 - **Inspect:** “Use the Herdr skill. Inspect every agent in this workspace, read its recent output, and summarize its task and status. Do not send anything.”
