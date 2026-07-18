@@ -1,6 +1,6 @@
 ---
 name: brain-to-docs
-description: Use when the user wants to extract project vision, decisions, and preferences from his head into clear documentation (README + ADRs) through a back-and-forth Q&A loop. Triggers on "brain-to-docs", "build out the docs", "extract the vision", "let's document this project".
+description: Use when the user wants to extract project vision, decisions, and preferences from their head into clear documentation (README + ADRs) through a back-and-forth Q&A loop. Triggers on "brain-to-docs", "build out the docs", "extract the vision", "let's document this project".
 ---
 
 # brain-to-docs
@@ -18,7 +18,7 @@ decisions.
    unless the user asks for a different number. Make them high-variety: a wide,
    creative spectrum of unique angles, not all the same type (e.g. not all "tech
    stack" or all "product" or all "monetization"). Exception: if the user asks for a
-   specific focus area, follow it. The user answers whichever he finds most useful.
+   specific focus area, follow it. The user answers whichever they find most useful.
 3. **Update docs after EVERY answer** — no exceptions. You decide whether it
    updates `README.md` or becomes a new ADR — whatever makes sense.
 4. Repeat until the user says "we're done" (or similar).
@@ -30,4 +30,4 @@ decisions.
   PLAIN ENGLISH.
 - ADRs: short, numbered `NNNN-slug.md`, Status + Context + Decision + Consequences.
 - README: vision only. Decisions go in ADRs.
-- Don't challenge the user's thinking unless he asks, or he's making a severe mistake.
+- Don't challenge the user's thinking unless they ask, or they're making a severe mistake.

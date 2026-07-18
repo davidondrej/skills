@@ -39,8 +39,8 @@ Before writing the file, give the user a bullet list grouped by section — let 
 
 ### Step 4: Iterate with the user
 - Keep answers short. The user will edit directly in the IDE.
-- When the user edits the file, RE-READ it and flag: contradictions, typos, missing rules, wrong categorization.
-- Do not revert the user's edits unless asked.
+- When they edit the file, RE-READ it and flag: contradictions, typos, missing rules, wrong categorization.
+- Do not revert their edits unless asked.
 
 ### Step 5: Write the file
 - Path: `<folder>/CLAUDE.md`

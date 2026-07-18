@@ -108,7 +108,7 @@ If you start struggling with a specific mechanic while navigating, look in inter
 
 ## Hermes Agent integration
 
-Installed as an editable `uv tool install -e .`. Binary on $PATH. Skill at `~/.hermes/skills/browser-harness/`.
+Installed at `~/Developer/browser-harness` as editable `uv tool install -e .`. Binary at `~/.local/bin/browser-harness`. Skill at `~/.hermes/skills/browser-harness/`.
 
 **Frontmatter pitfall:** The upstream SKILL.md ships with `name: browser` in frontmatter, which collides with Hermes's built-in `browser` toolset. When copying into `~/.hermes/skills/`, rename to `name: browser-harness` in the frontmatter or Hermes will shadow/conflict with its own browser tools.
 
@@ -143,7 +143,7 @@ print("Written", len(text), "chars")
 
 ## Hermes Agent integration
 
-Installed as an editable `uv tool install -e .`. Binary on $PATH. Skill at `~/.hermes/skills/browser-harness/`.
+Installed at `~/Developer/browser-harness` as editable `uv tool install -e .`. Binary at `~/.local/bin/browser-harness`. Skill at `~/.hermes/skills/browser-harness/`.
 
 **Frontmatter pitfall:** The upstream SKILL.md ships with `name: browser` in frontmatter, which collides with Hermes's built-in `browser` toolset. When copying into `~/.hermes/skills/`, rename to `name: browser-harness` in the frontmatter.
 

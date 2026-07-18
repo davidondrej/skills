@@ -5,21 +5,21 @@ description: Use when the user wants to manage his VPS servers and the AI agents
 
 # VPS Server Management
 
-Source of truth: `~/Documents/infrastructure.md` (read it for the latest — details change).
+Source of truth: your infrastructure docs (read them for the latest — IPs/expirations change).
 
 ## Servers (Hostinger VPS) — 3 total
 
-| Server | OS | Purpose |
-|---|---|---|
-| OpenClaw server | Ubuntu 24.04 (Dokploy) | OpenClaw — personal instance |
-| n8n server | Ubuntu 24.04 (n8n) | All n8n workflow automations (primary) |
-| Hermes server | Ubuntu 24.04 | Hermes Agent — Discord gateway |
+| Hostname | IP | OS | Purpose | Expires |
+|---|---|---|---|---|
+| <server-1> | <IP> | Ubuntu 24.04 (Dokploy) | OpenClaw — personal instance | <expiry> |
+| <server-2> | <IP> | Ubuntu 24.04 (n8n) | All n8n workflow automations (primary) | <expiry> |
+| <server-3> | <IP> | Ubuntu 24.04 | Hermes Agent — Discord gateway | <expiry> |
 
 SSH as `root@<IP>`.
 
 ## Access levels (never share higher than needed)
 
-1. **App login** — e.g. an app-specific subdomain login page. Build/edit workflows, no server access. Safest to share.
+1. **App login** — e.g. a hosted n8n login URL. Build/edit workflows, no server access. Safest to share.
 2. **VPS SSH** — `root@<IP>`. Docker, files, system config. Trusted technical people only.
 3. **Hostinger hPanel** — `hpanel.hostinger.com`. Billing, reboot, OS reinstall. Exposes SSH creds + browser terminal, so it grants server access too. The user only.
 
@@ -33,11 +33,11 @@ Claude Code cmux note: after Claude finishes, it may prefill a predicted next us
 
 ## Agents on servers
 
-- **OpenClaw** → the OpenClaw server (managed via Dokploy).
-- **Hermes** → the Hermes server (Discord gateway). Setup/config docs in the Hermes documentation folder.
-- **n8n** → the n8n server.
+- **OpenClaw** → <server-1> (managed via Dokploy).
+- **Hermes** → <server-3> (Discord gateway). Setup/config docs in your library docs.
+- **n8n** → <server-2>.
 
-## Hermes ops (on the Hermes server)
+## Hermes ops (on <server-3>)
 
 ```bash
 hermes --version            # shows version + commits behind
@@ -48,4 +48,4 @@ journalctl --user -u hermes-gateway --since '5 min ago' --no-pager   # gateway l
 
 - **Default model** lives in `~/.hermes/config.yaml` under `model.provider` + `model.default` — NOT in `.env`. Change via `hermes model` (interactive) or edit the yaml directly, then `hermes gateway restart` to propagate to gateways.
 - npm `EBADENGINE` warnings during update (deps want Node >=24, box runs v22) are non-blocking — do not "fix" them.
-- Deeper docs (Discord/Slack/WhatsApp setup, file structure, vision config): the Hermes documentation folder.
+- Deeper docs (Discord/Slack/WhatsApp setup, file structure, vision config): your library docs.
