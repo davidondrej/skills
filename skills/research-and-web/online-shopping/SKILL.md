@@ -48,6 +48,8 @@ Use your judgment. The goal is a confident answer, not a fixed procedure.
 
 ALWAYS open with first impressions — before ANY web search, scrape, or deep research, no matter the item or its price. In one or two sentences, react to whatever the user provided (screenshot, link, description) from your own knowledge: does it look like a good deal, is the seller reputable, what is the typical price range — anything useful that comes to mind. The user must never sit waiting with nothing to read.
 
+Extract the shopping intent early. Right after first impressions, make sure you know why the user is buying: what the item is for, who it's for, and what matters most to them (price, quality, delivery speed). Infer it from the conversation or screenshot when you can; if it's unclear and would change your recommendation, ask one short question. Knowing the real intent is how you help the user make the best possible purchase — not just find the lowest price.
+
 Then scale research effort to the item's price. A cheap item researched for minutes is this skill failing its purpose:
 
 - **Obvious call** — the screenshot or conversation already gives you enough to judge: answer right away. Zero searches, zero scrapes.
