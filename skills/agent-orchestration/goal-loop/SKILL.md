@@ -48,7 +48,7 @@ Plus: tell the agent what to read first, ask it to work in checkpoints with a sh
 
 ## Writing a goal (the core deliverable)
 
-When the user wants a quick `/goal` instruction, produce a structured markdown block with one line per contract item (proper newlines, not flowing prose). **Do not prefix the output with `/goal`** — the user adds the slash command themselves in the composer. Emit only the contract body. Template:
+When the user wants a quick `/goal` instruction, produce a structured markdown block with one line per contract item (proper newlines, not flowing prose). **Do not prefix the output with `/goal`** — the user adds the slash command himself in the composer. Emit only the contract body. Template:
 
 ```
 **Objective:** <one-sentence objective>

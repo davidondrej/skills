@@ -38,6 +38,6 @@ NNNN. Idea title exactly as the user said it
 
 - Append only. Never edit, reorder, or renumber existing entries.
 - Multiple ideas in one invocation → one numbered entry each.
-- Do NOT git commit or push `~/code/content` — the user does that themselves.
+- Do NOT git commit or push `~/code/content` — the user does that themself.
 - If `TOPICS.md` is missing, recreate it with its one-line header (topics + podcast material; video ideas live in VIDEO-IDEAS.md), then append entry 1.
 - Indent context lines with a real tab character, matching the existing files.
