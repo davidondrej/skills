@@ -5,7 +5,7 @@ description: Distribute a skill across the 4 agent skill folders (Codex, Claude 
 
 # Distribute a Skill Across All Agents
 
-David has 4 agent skill locations on his MacBook. A skill must exist in each (or via symlink) to be discoverable by every agent.
+The user has 4 agent skill locations on their MacBook. A skill must exist in each (or via symlink) to be discoverable by every agent.
 
 ## The 4 Canonical Locations
 

@@ -62,6 +62,7 @@ Hard-won facts from driving herdr in production. Trust these over intuition.
 ### Sending input
 
 - `pane send-text` types but does NOT submit — follow with `pane send-keys <pane> enter`. `pane run` = text + Enter in one call.
+- `pane run` is reliable into a shell prompt, but TUI agent composers (Claude Code, Cursor CLI) treat its text+Enter burst as a paste and swallow the Enter — text sits typed but unsubmitted. To message a TUI agent: `send-text`, sleep ~1s, then a separate `send-keys <pane> enter`.
 - C0 control bytes (e.g. ASCII 0x1f) are consumed as terminal control actions and can erase already-typed text. For invisible markers use U+2063 INVISIBLE SEPARATOR — it travels as text.
 - Slash commands open an autocomplete popup; the first Enter may only close the popup or fill an argument placeholder, not submit. `escape` dismisses the popup and keeps the text.
 - Never verify a submit by "pane content changed". Confirm via native agent status flipping to `working`/`blocked` after Enter.
@@ -101,7 +102,9 @@ ALWAYS launch agents with auto-approval — a worker in an unattended pane stall
 - Codex CLI: `codex --yolo "task"`
 - Claude Code: `claude --dangerously-skip-permissions "task"`
 
-This is safe only because the user's `global-agent-guardrails` deny-list hook is installed across all agents. First-run trust dialogs may still appear despite these flags — peek the pane after launch. `herdr integration install <cursor|codex|claude>` (once each) enables native agent-status detection.
+This is safe only if an equivalent deny-list guardrails hook is installed across all agents — verify one is in place before relying on auto-approval. First-run trust dialogs may still appear despite these flags — peek the pane after launch. `herdr integration install <cursor|codex|claude>` (once each) enables native agent-status detection.
+
+NEVER verify a launch with `sleep N && pane read` — that is a non-herdr antipattern. Use the native waits: `herdr agent wait <pane> --status working --timeout MS` (agent picked up the task) or `herdr wait output <pane> --match <text>`, then read the pane.
 
 ### Cursor CLI specifics
 

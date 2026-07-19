@@ -1,25 +1,25 @@
 ---
 name: vps-server-management
-description: Use when the user wants to manage his VPS servers and the AI agents running inside them — connecting, deploying, monitoring, restarting, and operating remote hosts and their agents. Triggers on VPS, server management, remote host, SSH into server, manage my servers, agents on the server.
+description: Use when the user wants to manage their VPS servers and the AI agents running inside them — connecting, deploying, monitoring, restarting, and operating remote hosts and their agents. Triggers on VPS, server management, remote host, SSH into server, manage my servers, agents on the server.
 ---
 
 # VPS Server Management
 
-Source of truth: your infrastructure notes file (read it for the latest — IPs/expirations change).
+Source of truth: `~/infrastructure.md` (read it for the latest — IPs/expirations change).
 
 ## Servers (Hostinger VPS) — 3 total
 
 | Hostname | IP | OS | Purpose | Expires |
 |---|---|---|---|---|
-| openclaw-host | \<IP\> | Ubuntu 24.04 (Dokploy) | OpenClaw — personal instance | \<expiry\> |
-| n8n-host | \<IP\> | Ubuntu 24.04 (n8n) | All n8n workflow automations (primary) | \<expiry\> |
-| hermes-host | \<IP\> | Ubuntu 24.04 | Hermes Agent — Discord gateway | \<expiry\> |
+| <hostname> | <IP> | Ubuntu 24.04 (Dokploy) | OpenClaw — personal instance | <expiry> |
+| <hostname> | <IP> | Ubuntu 24.04 (n8n) | All n8n workflow automations (primary) | <expiry> |
+| <hostname> | <IP> | Ubuntu 24.04 | Hermes Agent — Discord gateway (Vilnius, LT) | <expiry> |
 
 SSH as `root@<IP>`.
 
 ## Access levels (never share higher than needed)
 
-1. **App login** — e.g. your n8n instance's hosted login URL. Build/edit workflows, no server access. Safest to share.
+1. **App login** — e.g. `<n8n-login-hostname>`. Build/edit workflows, no server access. Safest to share.
 2. **VPS SSH** — `root@<IP>`. Docker, files, system config. Trusted technical people only.
 3. **Hostinger hPanel** — `hpanel.hostinger.com`. Billing, reboot, OS reinstall. Exposes SSH creds + browser terminal, so it grants server access too. The user only.
 
@@ -33,11 +33,11 @@ Claude Code cmux note: after Claude finishes, it may prefill a predicted next us
 
 ## Agents on servers
 
-- **OpenClaw** → openclaw-host (managed via Dokploy).
-- **Hermes** → hermes-host (Discord gateway). Setup/config docs in `library/hermes/`.
-- **n8n** → n8n-host.
+- **OpenClaw** → the OpenClaw server (managed via Dokploy).
+- **Hermes** → the Hermes server (Discord gateway). Setup/config docs in `library/hermes/`.
+- **n8n** → the n8n automations server.
 
-## Hermes ops (on the Hermes host)
+## Hermes ops (on the Hermes server)
 
 ```bash
 hermes --version            # shows version + commits behind
