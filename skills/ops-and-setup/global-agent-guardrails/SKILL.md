@@ -41,6 +41,14 @@ python3 -c 'import re,pathlib; [re.compile(l.strip().replace("[:space:]",r"\s"))
 
 Design rule: block only irreversible/catastrophic commands (data loss, disk wipe, repo deletion, token exfil). Local-destructive-but-recoverable commands (`git status`, `git clean -fdx`, `rm -rf node_modules`) stay ALLOWED — over-blocking kills agent usefulness.
 
+## Primary-checkout branch guard (script-level rule, not a pattern)
+
+Besides the regex denylist, `deny-dangerous.sh` enforces one cwd-aware rule: a **primary git checkout** (`.git` is a directory, not a worktree pointer file) **under `~/code` must stay on its default branch**. `git checkout` / `git switch` that would move HEAD off it — another branch, `-b/-B/-c/-C`, `--detach`, `--orphan`, `switch -`, tags/SHAs — is blocked. Still allowed: switching TO `main`/`master`/`HEAD` (recovery), file restores (`git checkout -- <paths>`, `git checkout <ref> <paths>`), everything inside linked worktrees, and every repo outside `~/code`. Born from the 2026-07-20 incident where an agent session in `~/code/DeepAPI` checked out a PR branch in the primary checkout instead of a worktree (the master-agent repo owns the worktree dispatch flow).
+
+- Target dir resolution: `git -C <path>` wins, else the last `cd <path>` before the git word, else hook JSON `.cwd`, else the hook process cwd. Anything unresolvable fails OPEN.
+- Coverage: shared-script consumers only (Claude Code, Codex, Cursor, Grok, Devin). The OpenCode/Pi/Hermes adapters and Droid's static blocklist only read the patterns file and can NOT express cwd-aware rules — they do not enforce this.
+- Testing: fixture-repo cases live in `test-guard.sh`; `GUARD_CODE_ROOT` overrides the `~/code` root, and `GUARD=/path/to/candidate.sh test-guard.sh` tests an edited copy before install.
+
 ## Per-agent wiring (user-global)
 
 | Agent | Config | Event | Blocks via |

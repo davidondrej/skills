@@ -3,27 +3,28 @@
 # Runs dangerous + safe commands through both payload shapes
 # (Claude/Codex exit-code mode and Cursor JSON mode).
 # Usage: ~/.agents/hooks/test-guard.sh
+#        GUARD=/path/to/candidate.sh ~/.agents/hooks/test-guard.sh  (pre-install test)
 
-GUARD="$HOME/.agents/hooks/deny-dangerous.sh"
+GUARD="${GUARD:-$HOME/.agents/hooks/deny-dangerous.sh}"
 pass=0
 fail=0
 
-check() { # $1 = expected: block|allow, $2 = command string
-  local expected="$1" cmd="$2" rc out verdict
+check() { # $1 = expected: block|allow, $2 = command string, $3 = cwd (default /tmp)
+  local expected="$1" cmd="$2" cwd="${3:-/tmp}" rc out verdict
 
   # Claude/Codex shape: .tool_input.command, block = exit 2
-  jq -cn --arg c "$cmd" '{tool_input:{command:$c},cwd:"/tmp"}' | "$GUARD" >/dev/null 2>&1
+  jq -cn --arg c "$cmd" --arg d "$cwd" '{tool_input:{command:$c},cwd:$d}' | "$GUARD" >/dev/null 2>&1
   rc=$?
   if [ "$rc" -eq 2 ]; then verdict="block"; else verdict="allow"; fi
   if [ "$verdict" = "$expected" ]; then
     pass=$((pass+1))
   else
     fail=$((fail+1))
-    echo "FAIL [claude/codex] expected=$expected got=$verdict : $cmd"
+    echo "FAIL [claude/codex] expected=$expected got=$verdict : $cmd (cwd=$cwd)"
   fi
 
   # Cursor shape: .command, block = {"permission":"deny"}
-  out=$(jq -cn --arg c "$cmd" '{command:$c,cwd:"/tmp"}' | "$GUARD" cursor 2>/dev/null)
+  out=$(jq -cn --arg c "$cmd" --arg d "$cwd" '{command:$c,cwd:$d}' | "$GUARD" cursor 2>/dev/null)
   case "$out" in
     *'"deny"'*) verdict="block" ;;
     *'"allow"'*) verdict="allow" ;;
@@ -130,6 +131,51 @@ check allow 'git reflog expire --expire=90.days.ago'
 check allow 'git gc'
 check allow 'git gc --aggressive'
 check allow 'git gc --prune=2.weeks.ago'
+
+# ---- primary-checkout branch guard ----
+# Fixtures: a fake ~/code holding a primary checkout with a linked worktree,
+# plus a repo outside the code root. GUARD_CODE_ROOT points the guard at it.
+FIX=$(mktemp -d)
+export GUARD_CODE_ROOT="$FIX/code"
+PRIMARY="$GUARD_CODE_ROOT/repo"
+mkdir -p "$GUARD_CODE_ROOT"
+git init -q -b main "$PRIMARY"
+git -C "$PRIMARY" -c user.email=t@t -c user.name=t commit -q --allow-empty -m init
+git -C "$PRIMARY" worktree add -q "$FIX/wt" -b agent/task
+mkdir -p "$PRIMARY/src"
+git init -q -b main "$FIX/outside"
+
+# blocked: anything that moves a primary checkout off its default branch
+check block 'git checkout -b agent/foo' "$PRIMARY"
+check block 'git checkout agent/foo' "$PRIMARY"
+check block 'git checkout v1.2.3' "$PRIMARY"
+check block 'git switch agent/foo' "$PRIMARY"
+check block 'git switch -c hotfix' "$PRIMARY"
+check block 'git switch -' "$PRIMARY"
+check block 'git checkout --detach' "$PRIMARY"
+check block 'git checkout agent/foo' "$PRIMARY/src"
+check block "git -C $PRIMARY checkout agent/foo"
+check block "cd $PRIMARY && git checkout agent/foo"
+check block 'git fetch origin && git checkout agent/foo' "$PRIMARY"
+
+# allowed: recovery to the default branch, file restores, non-branch git,
+# worktrees, repos outside the code root, unresolvable dirs (fail open)
+check allow 'git checkout main' "$PRIMARY"
+check allow 'git switch main' "$PRIMARY"
+check allow 'git checkout master' "$PRIMARY"
+check allow 'git checkout -- src/app.ts' "$PRIMARY"
+check allow 'git checkout main -- src/app.ts' "$PRIMARY"
+check allow 'git checkout agent/foo -- src/app.ts' "$PRIMARY"
+check allow 'git add -A && git commit -m "x" && git push origin main' "$PRIMARY"
+check allow 'git worktree add ../wt2 -b agent/next origin/main' "$PRIMARY"
+check allow 'git pull --rebase origin main' "$PRIMARY"
+check allow 'git checkout -b agent/foo' "$FIX/wt"
+check allow 'git switch anything' "$FIX/outside"
+check allow 'git checkout feature' "$FIX/nonexistent"
+check allow "cd $FIX/wt && git checkout -b agent/fix2" "$PRIMARY"
+
+unset GUARD_CODE_ROOT
+rm -rf "$FIX"
 
 echo ""
 echo "passed: $pass, failed: $fail"
