@@ -1,0 +1,7 @@
+interface:
+  display_name: "GitHub Outside Sandbox"
+  short_description: "Run Git and GitHub outside restricted sandboxes"
+  default_prompt: "Use $github-outside-sandbox to run this Git or GitHub CLI operation safely outside the sandbox."
+
+policy:
+  allow_implicit_invocation: true

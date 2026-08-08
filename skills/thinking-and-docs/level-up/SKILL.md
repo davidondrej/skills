@@ -30,7 +30,7 @@ State-check first: read both files in full if they exist. If previous rounds exi
 3. Immediately save the verbatim answer + rating + gap notes to `david-knowledge.md`.
 4. If a genuine gap surfaced, append one concise bullet to `LEARNING-PLAN.md`. Skip minor misses.
 5. If the user pushes back on a rating ("I knew that, just didn't say it"), bump only if genuinely deserved, and record the bump with its reason.
-6. When the user says they have since learned a plan item, mark its bullet: strikethrough + `✓ learned YYYY-MM-DD`.
+6. When the user says he has since learned a plan item, mark its bullet: strikethrough + `✓ learned YYYY-MM-DD`.
 
 ## After question 7
 

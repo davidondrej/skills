@@ -1,6 +1,6 @@
 ---
 name: read-prod-database
-description: 'Query the production Supabase Postgres read-only via psql using the SELECT-only agents_readonly role. Use when debugging prod issues, investigating a user report, checking real usage/billing/retention numbers, or verifying data actually landed in prod. Usage/PMF numbers default to customer-only scope (the user & team excluded, ADR 0175) and every answer must state which scope it used. Differentiator: this is LIVE prod data, read-only; for tests use the local Docker harness (npm run test:db) instead.'
+description: 'Query the production Supabase Postgres read-only via psql using the SELECT-only agents_readonly role. Use when debugging prod issues, investigating a user report, checking real usage/billing/retention numbers, or verifying data actually landed in prod. Usage/PMF numbers default to customer-only scope (David & team excluded, ADR 0175) and every answer must state which scope it used. Differentiator: this is LIVE prod data, read-only; for tests use the local Docker harness (npm run test:db) instead.'
 ---
 
 # Read Prod Database (read-only)
@@ -10,7 +10,7 @@ Sanctioned read-only access to the production DeepAPI Supabase Postgres (ADR 009
 ## Quick start
 
 ```bash
-# env var lives in the user's ~/.zshrc. NEVER `source ~/.zshrc` (breaks agent shells).
+# env var lives in David's ~/.zshrc. NEVER `source ~/.zshrc` (breaks agent shells).
 URL=${DEEPAPI_READONLY_DB_URL:-$(rg -o 'DEEPAPI_READONLY_DB_URL="([^"]+)"' -r '$1' ~/.zshrc)}
 
 psql "$URL" -X -c "select count(*) from public.workspaces;"
@@ -18,11 +18,11 @@ psql "$URL" -X -c "select count(*) from public.workspaces;"
 
 State-check: `select current_user;` must return `agents_readonly`. If the env var is missing entirely, stop and ask the user.
 
-## Scope: exclude the user & team by default (ADR 0175)
+## Scope: exclude David & team by default (ADR 0175)
 
 Every usage/customer/PMF query runs in one of two modes. Pick one, on purpose, every time:
 
-1. **Customer-only (DEFAULT)** — excludes the user, the `@davidondrej.com` team, and dogfood/test workspaces.
+1. **Customer-only (DEFAULT)** — excludes David, the `@davidondrej.com` team, and dogfood/test workspaces.
 2. **All workspaces** — includes internal usage. Only when the user explicitly asks, or for operational load / total-spend checks.
 
 A workspace is internal when its ID is in `src/config/internal-workspaces.ts` (copy the current UUID list from there) or any `dashboard_workspace_members` email is on `@davidondrej.com`. Bolt this onto any workspace-scoped query:
@@ -36,7 +36,7 @@ where sr.workspace_id <> all (array['<uuid-1>','<uuid-2>']::uuid[])
       and split_part(m.email, '@', 2) = 'davidondrej.com')
 ```
 
-ALWAYS tell the user which scope each number uses — label results "customer-only (user & team excluded)" or "all workspaces (internal included)". Never present unlabeled or mixed-scope numbers.
+ALWAYS tell the user which scope each number uses — label results "customer-only (David & team excluded)" or "all workspaces (internal included)". Never present unlabeled or mixed-scope numbers.
 
 ## What you can and cannot see
 

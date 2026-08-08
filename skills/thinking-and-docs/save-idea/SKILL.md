@@ -1,6 +1,6 @@
 ---
 name: save-idea
-description: 'Quickly capture a content idea into ~/content from any repo or chat. Video ideas go to VIDEO-IDEAS.md; smaller podcast topics, guest ideas, questions, and AI observations go to TOPICS.md. Every entry gets a source line referencing the chat and repo it came from. Use when the user says "/save-idea", "save this idea", "video idea", "add a topic", "write this down for a video/podcast". Differentiator: appends to the user''s content backlog — not a reminder, task, or general note tool.'
+description: 'Quickly capture a content idea into ~/code/content from any repo or chat. Video ideas go to VIDEO-IDEAS.md; smaller podcast topics, guest ideas, questions, and AI observations go to TOPICS.md. Every entry gets a source line referencing the chat and repo it came from. Use when the user says "/save-idea", "save this idea", "video idea", "add a topic", "write this down for a video/podcast". Differentiator: appends to the user''s content backlog — not a reminder, task, or general note tool.'
 ---
 
 # save-idea
@@ -9,8 +9,8 @@ Capture one thing fast, then get out of the way. Two buckets, two files:
 
 | Bucket | File | What belongs there |
 |---|---|---|
-| Video idea | `~/content/VIDEO-IDEAS.md` | A concept big enough for a full video |
-| Topic | `~/content/TOPICS.md` | Smaller stuff: podcast topics, guests, questions, AI observations |
+| Video idea | `~/code/content/VIDEO-IDEAS.md` | A concept big enough for a full video |
+| Topic | `~/code/content/TOPICS.md` | Smaller stuff: podcast topics, guests, questions, AI observations |
 
 ## Workflow
 
@@ -24,7 +24,7 @@ Capture one thing fast, then get out of the way. Two buckets, two files:
 
 ```
 NNNN. Idea title exactly as the user said it
-	source: ~/some-repo, Cursor chat "Chat title", 2026-07-15
+	source: ~/code/some-repo, Cursor chat "Chat title", 2026-07-15
 	any extra links or notes the user gave
 ```
 
@@ -38,6 +38,6 @@ NNNN. Idea title exactly as the user said it
 
 - Append only. Never edit, reorder, or renumber existing entries.
 - Multiple ideas in one invocation → one numbered entry each.
-- Do NOT git commit or push `~/content` — the user does that themselves.
+- Do NOT git commit or push `~/code/content` — the user does that himself.
 - If `TOPICS.md` is missing, recreate it with its one-line header (topics + podcast material; video ideas live in VIDEO-IDEAS.md), then append entry 1.
 - Indent context lines with a real tab character, matching the existing files.

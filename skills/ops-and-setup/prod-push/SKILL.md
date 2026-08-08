@@ -86,10 +86,10 @@ gh run watch "$RUN_ID" --exit-status
 # 4. CI green -> confirm Vercel promoted this exact commit.
 # EVERY main push deploys (ADR 0161), docs-only commits included — always
 # verify the deployment; never skip this on a "docs-only" judgment call.
-gh api "repos/<org>/<repo>/commits/$SHA/status" \
+gh api "repos/davidondrej/DeepAPI/commits/$SHA/status" \
   --jq '{state, vercel_logs: [.statuses[] | select(.context=="Vercel") | .target_url][0]}'
-DEP=$(gh api "repos/<org>/<repo>/deployments?sha=$SHA&environment=Production&per_page=1" --jq '.[0].id')
-gh api "repos/<org>/<repo>/deployments/$DEP/statuses" --jq '.[0].state'
+DEP=$(gh api "repos/davidondrej/DeepAPI/deployments?sha=$SHA&environment=Production&per_page=1" --jq '.[0].id')
+gh api "repos/davidondrej/DeepAPI/deployments/$DEP/statuses" --jq '.[0].state'
 # If promotion is still pending, poll every 10 seconds.
 
 # 5. confirm prod is serving
