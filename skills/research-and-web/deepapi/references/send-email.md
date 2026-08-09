@@ -1,6 +1,6 @@
 # Send Email — DeepAPI Endpoint Reference
 
-Generated endpoint reference for the `send-email` rows of the `deepapi` skill router. Bundle version: 4dbca805b9cf. This file is always managed — it is refreshed with the bundle even when `../SKILL.md` has been customized.
+Generated endpoint reference for the `send-email` rows of the `deepapi` skill router. Bundle version: ee61bded3e6a. This file is always managed — it is refreshed with the bundle even when `../SKILL.md` has been customized.
 
 Shared protocol (environment, auth, idempotency, dry-run, polling, and error handling) lives in `../SKILL.md`. This file carries the full per-endpoint detail.
 
@@ -81,7 +81,7 @@ Request body schema:
           "additionalProperties": true
         }
       ],
-      "description": "Recipient or recipients. Direct send policy currently allows one recipient."
+      "description": "One recipient or an array of recipients. Comma-separated strings are rejected. Direct sends allow one recipient."
     },
     "cc": {
       "anyOf": [
@@ -98,7 +98,8 @@ Request body schema:
           "type": "object",
           "additionalProperties": true
         }
-      ]
+      ],
+      "description": "Use an array for multiple recipients. Comma-separated strings are rejected."
     },
     "bcc": {
       "anyOf": [
@@ -115,7 +116,8 @@ Request body schema:
           "type": "object",
           "additionalProperties": true
         }
-      ]
+      ],
+      "description": "Use an array for multiple recipients. Comma-separated strings are rejected."
     },
     "replyTo": {
       "anyOf": [
@@ -168,7 +170,7 @@ Request body schema:
     },
     "sendAt": {
       "type": "string",
-      "description": "Optional scheduled send time."
+      "description": "Optional scheduled send time. Scheduled emails use the same safety and quota checks as direct sends."
     },
     "clientId": {
       "type": "string",
