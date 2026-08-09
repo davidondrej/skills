@@ -38,7 +38,7 @@ One call = one cited answer (~700 words max, finishes or fails within ~60s serve
 
 ```bash
 IDK=$(uuidgen)   # keep this; retries must reuse the SAME Idempotency-Key
-jq -n --rawfile p /tmp/dr_prompt.txt '{query:$p, maxCostUsd:"0.20"}' > /tmp/dr_body.json
+jq -n --rawfile p /tmp/dr_prompt.txt '{query:$p, maxCostUsd:"0.70"}' > /tmp/dr_body.json
 curl -s --max-time 120 "$BASE/v1/research/deep" \
   -H "Authorization: Bearer $KEY" \
   -H "Content-Type: application/json" \
@@ -46,7 +46,8 @@ curl -s --max-time 120 "$BASE/v1/research/deep" \
   -d @/tmp/dr_body.json > /tmp/dr_result.json
 ```
 
-Default spend cap is `maxCostUsd: "0.20"` per call — this is the API's minimum (lower values are rejected with `invalid_request`, confirmed 2026-07-21); raise it only if the user approves.
+The API minimum is `maxCostUsd: "0.35"` per call. Use the recommended
+`maxCostUsd: "0.70"` by default; raise it above $0.70 only if the user approves.
 
 ## Step 3 — Read the report + sources
 
