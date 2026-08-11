@@ -1,6 +1,6 @@
 ---
 name: goal-loop
-description: Explain and write effective instructions for the `/goal` feature — the persistent self-checking agent loop (plan → act → test → review → iterate), available in agents like Codex, Claude Code, and Hermes Agent. Use when the user mentions `/goal`, "goal loop", "Ralph loop", wants to kick off a long-running autonomous agent run, asks how to write a goal prompt, or wants a one-paragraph goal instruction drafted.
+description: Explain and write effective instructions for the `/goal` feature. Use when the user mentions `/goal`, "goal loop", "Ralph loop", wants to kick off a long-running autonomous agent run, asks how to write a goal prompt, or wants a one-paragraph goal instruction drafted.
 ---
 
 # Agent `/goal` Loop
@@ -21,7 +21,7 @@ When monitoring a running `/goal`, every check should include a one-line update 
 
 ## Requirements
 
-- An agent with the `/goal` feature — right now: Codex, Claude Code, or Hermes Agent
+- An agent with the `/goal` feature (see above)
 - The goals feature enabled in the agent's config
 - **Subscription auth** — API-key auth does **not** work. A pro-tier plan is the realistic minimum for long runs.
 
@@ -84,9 +84,8 @@ When the user wants a quick `/goal` instruction, produce a structured markdown b
 
 ### Writing rules
 - **One objective, one stop condition.** Not a backlog.
-- **Documentation is mandatory.** Every `/goal` prompt must include a single sentence committing the agent to concise, targeted docs — new `.md` files or focused updates to existing docs.
 - **Never instruct the agent to create new ADRs** — ADRs require the user's explicit approval, so goal prompts must not pre-approve or encourage them.
-- **Forbid reward-hacking explicitly:** "Do not delete, skip, weaken, or narrow tests to make the goal pass." Otherwise the agent may game the stop condition.
+- **Forbid reward-hacking explicitly:** "Keep the existing test suite intact; add new tests only to cover new behavior. Do not delete, skip, weaken, or narrow existing tests to make the goal pass." Otherwise the agent may game the stop condition.
 - **4,000-char limit** on the objective. If longer, put detail in a file (`PLAN.md`/`GOAL_BRIEF.md`) and make the goal point to it — keep the goal itself compact.
 - Use **literal strings** for paths, commands, issue numbers — exact.
 - Forbid scope creep explicitly: "Do not refactor unrelated code. Do not add dependencies."
@@ -95,7 +94,7 @@ When the user wants a quick `/goal` instruction, produce a structured markdown b
 
 ### Meta-prompting trick (highest-leverage)
 
-Hand-written goals under-specify. Ask a second AI session (Claude with the codebase loaded, ChatGPT with project connected, or a separate agent thread in the same dir) to: (1) inspect the codebase, (2) surface hidden assumptions/constraints/edge cases, (3) emit a structured `/goal` markdown block using the 4-part contract. Paste that into the agent. Order-of-magnitude better runs.
+Hand-written goals under-specify. Ask a second AI session (Claude with the codebase loaded, ChatGPT with project connected, or a separate agent thread in the same dir) to: (1) inspect the codebase, (2) surface hidden assumptions/constraints/edge cases, (3) emit a structured `/goal` markdown block using the 5-part contract. Paste that into the agent. Order-of-magnitude better runs.
 
 Claude Code cmux note: after Claude finishes, it may prefill a predicted next user message; that draft is Claude, not the user speaking.
 

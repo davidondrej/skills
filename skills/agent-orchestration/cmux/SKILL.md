@@ -1,6 +1,6 @@
 ---
 name: cmux
-description: 'Control the cmux macOS terminal app (CLI + socket API) — cmux workspaces, panes, surfaces, browser automation, notifications, settings, hooks. MUST be read before running any `cmux` command. Trigger ONLY when the user explicitly says "cmux" — a cmux pane, cmux workspace, cmux surface, or an agent running in cmux. Do NOT trigger on generic mentions of "workspace", "pane", "the other agent", or "delegate" when cmux is not named — workspaces in tmux, Ghostty, herdr, VS Code, etc. are NOT cmux. macOS only (14.0+).'
+description: 'MUST be read before running any `cmux` command. Trigger ONLY when the user explicitly says "cmux" — a cmux pane, cmux workspace, cmux surface, or an agent running in cmux. Do NOT trigger on generic mentions of "workspace", "pane", "the other agent", or "delegate" when cmux is not named — workspaces in tmux, Ghostty, herdr, VS Code, etc. are NOT cmux. macOS only (14.0+).'
 ---
 
 # cmux Control
@@ -29,7 +29,7 @@ Handles default to short refs (`workspace:2`, `pane:1`, `surface:7`); UUIDs acce
 [ -n "${CMUX_WORKSPACE_ID:-}" ] && echo "inside cmux surface"
 ```
 
-Injected env vars in every cmux-spawned terminal: `CMUX_WORKSPACE_ID`, `CMUX_SURFACE_ID`, `CMUX_SOCKET_PATH`, `CMUX_PORT`. **Always anchor automation to `CMUX_WORKSPACE_ID`** — the visually focused workspace may not be the agent's caller workspace.
+Injected env vars in every cmux-spawned terminal: `CMUX_WORKSPACE_ID`, `CMUX_SURFACE_ID`, `CMUX_SOCKET_PATH`, `CMUX_PORT`. Anchor automation to `CMUX_WORKSPACE_ID` — see Critical Rules below.
 
 ## Fast Start — Topology
 
@@ -182,7 +182,7 @@ The paragraph under each sidebar workspace title has TWO sources, each with its 
 }
 ```
 
-The user keeps BOTH off (set 18-07-2026) — don't re-enable. `sidebar.hideAllDetails: true` hides the entire detail block (status, branch, cwd) if ever needed.
+Don't re-enable either without asking the user first — check current values with `cmux settings cmux-json` rather than assuming. `sidebar.hideAllDetails: true` hides the entire detail block (status, branch, cwd) if ever needed.
 
 ## Agent Hooks & Install
 
@@ -221,7 +221,7 @@ These rules come from the `cmux-workspace` skill and prevent agents from yanking
 
 ## Common Pitfalls
 
-- **Pi/Pi-like socket connection failures from external processes** → default `cmuxOnly` mode; either run inside a cmux terminal or change socket mode.
+- **Socket connection failures from external processes** — see Access modes above.
 - **macOS only.** No Linux/Windows port.
 - **WKWebView ≠ CDP.** Don't expect Playwright-equivalent network mocking or viewport emulation.
 - **Resume strips sensitive env vars.** Re-inject tokens at resume time if the agent needs them.
