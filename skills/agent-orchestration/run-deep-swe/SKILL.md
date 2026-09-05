@@ -1,12 +1,12 @@
 ---
 name: run-deep-swe
-description: Score any AI model on the DeepSWE coding-agent benchmark via the OpenRouter API. Use when the user wants an independent, reproducible coding-agent eval — "run DeepSWE", "benchmark this model on DeepSWE", "score model X on the coding benchmark", "test a model via OpenRouter on DeepSWE", or to verify vendor-reported coding scores. Covers setup, the OpenRouter wiring for mini-swe-agent, single-task / subset / full 113-task runs, and leaderboard submission.
+description: Score any AI model on the DeepSWE coding-agent benchmark via the OpenRouter API or the OrcaRouter gateway. Use when the user wants an independent, reproducible coding-agent eval — "run DeepSWE", "benchmark this model on DeepSWE", "score model X on the coding benchmark", "test a model via OpenRouter on DeepSWE", or to verify vendor-reported coding scores. Covers setup, the OpenRouter/OrcaRouter wiring for mini-swe-agent, single-task / subset / full 113-task runs, and leaderboard submission.
 disable-model-invocation: true
 ---
 
 # Run DeepSWE via OpenRouter
 
-DeepSWE (deepswe.datacurve.ai) is a 113-task Harbor-compatible coding-agent benchmark. It runs via **Pier** (Harbor fork) driving **mini-swe-agent** (model-agnostic). Any model reachable through OpenRouter can be scored.
+DeepSWE (deepswe.datacurve.ai) is a 113-task Harbor-compatible coding-agent benchmark. It runs via **Pier** (Harbor fork) driving **mini-swe-agent** (model-agnostic). Any model reachable through OpenRouter — or through an OpenAI-compatible gateway that mirrors its slug namespace, like OrcaRouter — can be scored.
 
 ## Prerequisites — state-check first
 
@@ -57,6 +57,22 @@ Notes:
 - Slug = the exact OpenRouter slug. Verify it at openrouter.ai/models before running.
 - Free/zero-cost models: OpenRouter cost tracking can error. Set `export MSWEA_COST_TRACKING=ignore_errors`.
 - Flag spelling can vary by version — confirm with `pier run --help` and `mini --help`.
+
+## OrcaRouter wiring (drop-in, same slug namespace)
+
+[OrcaRouter](https://www.orcarouter.ai) exposes the same OpenAI-compatible endpoint and the same `vendor/model` slug namespace as OpenRouter, so the wiring above works against it by pointing the base URL at OrcaRouter:
+
+```bash
+export OPENROUTER_API_BASE=https://api.orcarouter.ai/v1   # OrcaRouter's OpenAI-compatible base
+export OPENROUTER_API_KEY=<orcarouter-key>                # same bearer format
+```
+
+- Route B (LiteLLM prefix): the standard `OPENROUTER_API_BASE` override routes `openrouter/<slug>` through OrcaRouter.
+- Route A (native openrouter class): if the installed version reads `OPENROUTER_API_BASE`, the native class routes through OrcaRouter too; otherwise fall back to Route B.
+- OrcaRouter mirrors OpenRouter slugs (`anthropic/claude-fable-5`, `deepseek/deepseek-v4-flash`, …) and adds routing models `orcarouter/auto`, `orcarouter/fusion`, `orcarouter/free`.
+- Verify a slug exists before running: `curl -s -H "Authorization: Bearer $OPENROUTER_API_KEY" https://api.orcarouter.ai/v1/models`.
+
+Failure modes are the same as the OpenRouter paths — HTTP 401 = bad/missing key, "LLM Provider NOT provided" = missing slug prefix (see the Failure modes table at the bottom).
 
 ## Smoke test FIRST (1 task — do this before any full run)
 
