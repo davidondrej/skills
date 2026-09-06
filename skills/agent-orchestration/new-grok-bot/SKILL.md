@@ -5,7 +5,7 @@ description: 'Design a new Grok Bot (SpaceXAI + Cursor AI teammate) with the use
 
 # New Grok Bot
 
-Help the user design a new Grok Bot and hand them one paste-ready prompt.
+Help the user design a new Grok Bot and hand the user one paste-ready prompt.
 The core value of this skill is the **unit-of-work test** — apply it before writing any prompt.
 
 ## What Grok Bot is (last verified 2026-08-30)

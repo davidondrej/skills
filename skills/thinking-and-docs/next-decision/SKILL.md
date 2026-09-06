@@ -10,5 +10,5 @@ Work through open decisions ONE at a time.
 3. Say which one you would prefer.
 4. Ask for the user's opinion. Then stop and wait.
 
-Be very concise. Once the user decides, record their answer (update the plan doc
+Be very concise. Once the user decides, record the user's answer (update the plan doc
 if one exists), then repeat with the next most important decision.

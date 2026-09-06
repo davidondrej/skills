@@ -16,7 +16,7 @@ The body of the ADR is the user's words, pasted exactly as given. Not one word a
 ```markdown
 # 0042 — short title
 
-Status: accepted (user, YYYY-MM-DD)
+Status: accepted (the user, YYYY-MM-DD)
 
 <the user's words, verbatim>
 ```

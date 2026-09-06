@@ -167,7 +167,7 @@ Always pass `--json` and `--title`.
 | `auto` | Sandbox on. Provider auto-approves. Codex/Claude have this. Cursor ACP does not. |
 | `full` | No sandbox. Needed for prod DB, many network tools, and "just go". |
 
-Default for the user's investigation/build workers: `full`, with the prompt forbidding writes when the job is read-only.
+Default for investigation/build workers: `full`, with the prompt forbidding writes when the job is read-only.
 
 **Cursor fallback.** bb does not pass `--force` to `cursor-agent`; in any non-`full` mode Cursor's own allowlist decides (`~/.cursor/cli-config.json` → `permissions.allow`). "Not in allowlist: git -C" means a subcommand-level entry like `Shell(git status)`. Fix once: use `Shell(git)` (any git subcommand) plus common read-only tools (`ls`, `find`, `stat`, `du`, `jq`, `sed`, `awk`). Trap: a project-level `.cursor/cli.json` overrides the global file and brings prompts back.
 

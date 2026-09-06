@@ -69,7 +69,7 @@
 - many other Humans/Agents are working in this repo
 - so DO NOT delete, revert or overwrite changes YOU did not make.
 - be aware that the user is also working on this computer
-- DO NOT open random browser tabs, or applications, without the user's explicit approval
+- DO NOT open random browser tabs, or applications, without his explicit approval
 - If unrelated changes appear, assume other actors made them
 - When writing commit messages, NEVER auto-add your agent name as co-author.
 
