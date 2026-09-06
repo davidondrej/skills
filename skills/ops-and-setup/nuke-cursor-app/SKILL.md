@@ -29,7 +29,7 @@ that all live under the `/Applications/Cursor.app` bundle path.
   system text-input service, not part of the Cursor app.
 - Warn the user first if you have reason to think an important agent run is
   in flight; killing Cursor kills its local agent sessions.
-- The metrics collector OWNS `cursor-metrics.sqlite3`. Read it
+- The macbook-metrics collector OWNS `cursor-metrics.sqlite3`. Read it
   ONLY with `sqlite3 -readonly`. Never write to it.
 - The snapshot is best-effort: if the DB is missing or a query fails,
   note that in the log and continue — never block the nuke on it.
@@ -39,8 +39,8 @@ that all live under the `/Applications/Cursor.app` bundle path.
 ### 1. Snapshot BEFORE killing
 
 ```bash
-DB="$HOME/Library/Application Support/<metrics-collector>/cursor-metrics.sqlite3"
-LOG_DIR="$HOME/Library/Application Support/<metrics-collector>/nuke-logs"
+DB="$HOME/Library/Application Support/macbook-metrics/cursor-metrics.sqlite3"
+LOG_DIR="$HOME/Library/Application Support/macbook-metrics/nuke-logs"
 mkdir -p "$LOG_DIR"
 LOG="$LOG_DIR/$(date +%Y-%m-%d-%H%M).md"
 

@@ -5,7 +5,7 @@ description: Prompt the user with pointed questions to extract what is in their 
 
 # prompt-me
 
-DRAFT — being refined with the user.
+DRAFT — being refined with David.
 
 Core idea: the agent interviews the user to extract priorities, avoided work, and importance from their head.
 

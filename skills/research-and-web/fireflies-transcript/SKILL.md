@@ -1,6 +1,6 @@
 ---
 name: fireflies-transcript
-description: 'Pull raw meeting transcripts from the user''s Fireflies.ai notetaker via its GraphQL API, using the key saved locally. Use when the user wants a call transcript, meeting notes, "what was said on the call", onboarding-call transcripts, or Fireflies data. Differentiator: Fireflies meeting recordings only — for YouTube videos use youtube-transcript.'
+description: 'Pull raw meeting transcripts from the user''s Fireflies.ai notetaker via its GraphQL API, using the key saved globally on this MacBook. Use when the user wants a call transcript, meeting notes, "what was said on the call", onboarding-call transcripts, or Fireflies data. Differentiator: Fireflies meeting recordings only — for YouTube videos use youtube-transcript.'
 ---
 
 # Fireflies Transcript
@@ -9,10 +9,10 @@ Fetch any meeting transcript from Fireflies.ai as raw text via GraphQL. Read-onl
 
 ## Auth (state-check first)
 
-The API key lives in a local env file (mode 600, never commit or print it):
+The API key lives in `~/.fireflies/env` (mode 600, never commit or print it):
 
 ```bash
-source /path/to/fireflies-env-file   # exports FIREFLIES_API_KEY
+source ~/.fireflies/env   # exports FIREFLIES_API_KEY
 [ -n "$FIREFLIES_API_KEY" ] || echo "MISSING KEY - stop and tell the user"
 ```
 
@@ -63,7 +63,7 @@ Optional extras on the same `transcript(id:)` query: `summary { overview short_s
 - `sentences: null` — recording still processing or no audio captured; nothing to pull.
 - `errors[]` in the response instead of `data` — usually a bad field name; fix the query.
 - 401/invalid key — key was rotated; ask the user for a new one (Fireflies dashboard:
-  Settings -> Developer settings), update the local env file.
+  Settings -> Developer settings), update `~/.fireflies/env`.
 
 ## Verify before reporting done
 

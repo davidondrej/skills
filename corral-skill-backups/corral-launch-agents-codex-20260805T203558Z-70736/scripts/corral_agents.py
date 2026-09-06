@@ -137,7 +137,7 @@ def find_plugin_root(override: str | None, explicit_corral_bin: str | None) -> P
     candidates: list[Path] = []
     for parent in (Path.cwd(), *Path.cwd().parents):
         candidates.extend((parent / "Design1/plugin", parent / "plugin"))
-    candidates.append(Path.home() / "path/to/corral/Design1/plugin")
+    candidates.append(Path.home() / "code/corral/Design1/plugin")
     for candidate in candidates:
         if (candidate / "bin/corral").is_file():
             return candidate.resolve()

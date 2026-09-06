@@ -51,7 +51,7 @@ cmux close-surface --surface surface:7
 
 ## Polling Panes for Output — Keep Sleeps Short
 
-When polling any cmux pane — a Pi Agent, an SSH login, a running command — use **short `sleep` intervals (1–3s)**. Pi is fast and minimal, and David runs it on Opus 4.8 Fast via OpenRouter, which streams tokens extremely quickly. Do NOT use `sleep 10`+ unless genuinely needed (a big build/refactor) — `sleep 1`–`sleep 3` is almost always enough.
+When polling any cmux pane — a Pi Agent, an SSH login, a running command — use **short `sleep` intervals (1–3s)**. Pi is fast and minimal, and the user runs it on Opus 4.8 Fast via OpenRouter, which streams tokens extremely quickly. Do NOT use `sleep 10`+ unless genuinely needed (a big build/refactor) — `sleep 1`–`sleep 3` is almost always enough.
 
 If the screen is not ready yet, just `read-screen` again instead of padding the sleep. A second 1s check costs less than one 7s guess, and long fixed sleeps waste the user's time on every step.
 

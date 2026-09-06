@@ -45,7 +45,7 @@ itself — URLs to cite, compare, or scrape — use DeepAPI instead. Also the pa
 take if the Exa → Perplexity → Gemini chain fails.
 
 ```bash
-# Authenticate with your DeepAPI API key (see `deepapi` skill)
+[ -n "$DEEPAPI_API_KEY" ] || . ~/.deepapi/env
 curl -s --max-time 60 "https://deepapi.co/v1/search/web" \
   -H "Authorization: Bearer $DEEPAPI_API_KEY" -H "Content-Type: application/json" \
   -H "Idempotency-Key: $(uuidgen)" \

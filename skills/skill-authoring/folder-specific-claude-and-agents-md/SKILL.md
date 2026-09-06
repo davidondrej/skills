@@ -13,7 +13,7 @@ Background reference: `library/claude-code/claude-and-agents-md.md`.
 ## Process
 
 ### Step 1: Confirm the target folder + sanity-check it deserves a file
-Ask the user which folder. Use the absolute path under the user's workspace folder.
+Ask the user which folder. Use absolute path under `<workspace-root>/`.
 
 **Only create a file if the folder has context needed across multiple sessions** — active evolving work, specific conventions, ongoing decisions. A folder of static reference files does NOT need one (agents can read on demand). If unsure, ask the user.
 
@@ -24,7 +24,7 @@ Ask the user which folder. Use the absolute path under the user's workspace fold
 - Do NOT skim. Do NOT skip. The user's later edits depend on you having full context.
 
 ### Step 3: Draft a bullet list of candidate content
-Before writing the file, give the user a bullet list grouped by section — let them react first. Candidate sections (skip any that don't apply):
+Before writing the file, give the user a bullet list grouped by section — let the user react first. Candidate sections (skip any that don't apply):
 
 - **Product / Purpose** — what this folder/project is, current state, key metrics
 - **Avatar / Audience** — who it's for (if applicable)
@@ -58,7 +58,7 @@ cd <folder> && ln -s CLAUDE.md AGENTS.md
 Verify with `ls -la CLAUDE.md AGENTS.md`.
 
 ### Step 7: Commit only when asked
-Do NOT stage or push unless the user says to. When they do: `git add -A`, commit with a `Day N:` style message, push.
+Do NOT stage or push unless the user says to. When the user does: `git add -A`, commit with a `Day N:` style message, push.
 
 ## Rules
 
@@ -72,4 +72,4 @@ Do NOT stage or push unless the user says to. When they do: `git add -A`, commit
 - **Maintenance loop.** When the user corrects the agent on something this file should have prevented, add the rule to the file immediately. Don't wait.
 - **No emojis unless the user uses them** (status markers ✅ 🟡 are the exception — they're already conventions).
 - **Symlink, not copy.** `AGENTS.md` must be a symlink so edits stay in sync.
-- **Flag gaps honestly.** If the user's edits introduce contradictions (e.g. "sell X" in one section and "never sell X" in another), call it out before they ask.
+- **Flag gaps honestly.** If the user's edits introduce contradictions (e.g. "sell X" in one section and "never sell X" in another), call it out before the user asks.

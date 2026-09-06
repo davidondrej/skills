@@ -17,7 +17,7 @@ Non-negotiable: every response to the user is very concise, clear, and formatted
 
 ## Setup
 
-- Read your DeepAPI API key and base URL from the environment. If unset, load your DeepAPI environment file; the default base URL is `https://deepapi.co`.
+- Read `DEEPAPI_API_KEY` and `DEEPAPI_API_BASE_URL` from the environment. If unset, try `source ~/.deepapi/env`; the default base URL is `https://deepapi.co`.
 - If the key is missing, stop and tell the user to get one at https://deepapi.co.
 - Never print, log, or expose the key.
 
@@ -32,11 +32,11 @@ Use DeepAPI for all shopping research — not built-in search tools. Mix the end
 | `POST /v1/research/deep` | pricing or market questions search cannot settle | `"0.10"` |
 | `POST /v1/scrape/twitter/search` | real buyer complaints about a shop | `"0.03"` |
 
-Every request: `Authorization: Bearer <your-deepapi-api-key>`, `Content-Type: application/json`, a unique `Idempotency-Key` per POST, and an explicit `maxCostUsd`.
+Every request: `Authorization: Bearer $DEEPAPI_API_KEY`, `Content-Type: application/json`, a unique `Idempotency-Key` per POST, and an explicit `maxCostUsd`.
 
 ```bash
-curl -sS -X POST "<your-deepapi-base-url>/v1/search/web" \
-  -H "Authorization: Bearer <your-deepapi-api-key>" \
+curl -sS -X POST "$DEEPAPI_API_BASE_URL/v1/search/web" \
+  -H "Authorization: Bearer $DEEPAPI_API_KEY" \
   -H "Content-Type: application/json" \
   -H "Idempotency-Key: shop-$(uuidgen)" \
   -d '{"query": "Sony WH-1000XM5 price Germany", "maxResults": 5, "maxCostUsd": "0.05"}'

@@ -138,7 +138,7 @@ Include:
 
 1. **Objective** — one sentence.
 2. **Constraints** — read-only vs implement; no git push; no prod writes.
-3. **Skills / files to use** — name them. Skills do not carry over. Example: prod reads → `~/.claude/skills/<read-prod-skill>/SKILL.md`.
+3. **Skills / files to use** — name them. Skills do not carry over. Example: prod reads → `~/.claude/skills/read-prod-database/SKILL.md`.
 4. **Deliverable** — what to return.
 5. **Validation** — how it knows it is done.
 6. **Report back** — concise report only, or diff + files changed.
