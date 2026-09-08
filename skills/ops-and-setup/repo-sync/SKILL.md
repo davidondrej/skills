@@ -1,6 +1,6 @@
 ---
 name: repo-sync
-description: Manage repo-sync on macOS for shared documents and team context. Use when asked what repo-sync does, to automatically sync a repo, add a repo to repo-sync, stop syncing or un-sync a repo, check sync health, configure repo-sync, or uninstall it. Ordinary one-time Git pulls and pushes do not need this skill.
+description: Manage repo-sync on macOS for shared documents and team context. Use when asked what repo-sync does, to automatically sync a repo, add a repo to repo-sync, stop syncing or un-sync a repo, check sync health, configure repo-sync, uninstall it, or install and maintain its bundled agent skill. Ordinary one-time Git pulls and pushes do not need this skill.
 ---
 
 # repo-sync
@@ -20,7 +20,7 @@ command -v repo-sync
 repo-sync help
 ```
 
-Use the installed help as the command contract. Older binaries may lack `remove`, `status`, or `version`. Run `repo-sync version` when listed. Installing this skill does not install or upgrade the binary.
+Use the installed help as the command contract. Older binaries may lack `skill`, `remove`, `status`, or `version`. Run `repo-sync version` when listed. Installing this skill does not install or upgrade the binary.
 
 The default config is `~/Library/Application Support/repo-sync/config.json`. Check the installed service's `ProgramArguments` in `~/Library/LaunchAgents/com.vectal-labs.repo-sync.plist` for a custom path. Use that config throughout. Put flags before positional arguments.
 
@@ -80,9 +80,15 @@ Verify that the registration is absent and the service applied the change. Remov
 
 If help lacks `remove`, follow **Legacy removal** in the reference. Do not substitute uninstall or delete the clone.
 
+## Install or maintain this skill
+
+When help lists `skill`, the binary includes this skill and its references. Use `repo-sync skill install`, then `repo-sync skill status`. No source checkout or download is needed. Setup also offers installation. Start a new agent session afterward.
+
+Homebrew upgrades refresh managed, unchanged copies. After a Go upgrade, rerun setup or `repo-sync skill refresh`. `repo-sync skill uninstall` removes unchanged managed copies while keeping the program and syncing service. Customized folders remain. See **Agent skill installation** in the reference for destinations and conflicts.
+
 ## Uninstall everything
 
-Use `repo-sync uninstall` only when the user requests uninstalling repo-sync. It removes the service, settings, logs, cache, and program after confirmation. Repositories, Git history, and shared Git credentials remain. `--keep-binary` keeps the program; `--yes` skips the CLI prompt when already authorized.
+Use `repo-sync uninstall` only when the user requests uninstalling repo-sync. It removes the service, settings, logs, cache, program, and unchanged managed skill copies after confirmation. Customized skill folders remain. Repositories, Git history, and shared Git credentials remain. `--keep-binary` keeps the program; `--yes` skips the CLI prompt when already authorized.
 
 ## Safety and verification
 

@@ -80,6 +80,25 @@ repo-sync updates on
 
 For older Homebrew installs, an authorized upgrade uses `brew upgrade --cask repo-sync`. For Go installs, update the binary through the original installation method, then rerun setup. After an upgrade, check help, version when available, and service status. If the needed command is still absent, explain the installed release's limitation.
 
+## Agent skill installation
+
+Use the installed `repo-sync help` and `repo-sync skill --help` as the contract. Releases that include `skill` support:
+
+```sh
+repo-sync skill install
+repo-sync skill status
+repo-sync skill refresh
+repo-sync skill uninstall
+```
+
+Installation uses `~/.agents/skills/repo-sync` for Codex, Pi, and Cursor. Detected Claude Code and Hermes installations also receive copies under `${CLAUDE_CONFIG_DIR:-~/.claude}/skills` and `${HERMES_HOME:-~/.hermes}/skills`. Existing native Pi or Cursor copies are checked so they do not silently hide the shared copy; Pi honors `PI_CODING_AGENT_DIR`. Check the actual paths reported by the command. Local installation does not configure cloud agents.
+
+Explicit installation can adopt a folder that exactly matches the bundled files. Other unowned folders, customized managed copies, extra files, and symlinked skill folders are preserved. Parent skill-directory aliases are deduplicated. Do not delete personal instructions to resolve a conflict; inspect the reported folder and use the user's authorization for any replacement.
+
+Refresh updates only previously managed copies. Missing copies require explicit `skill install`, except when resuming an interrupted installation. Failures retain ownership information for retry. `skill status` reports managed copies, customizations, and incomplete operations. A successful installation verifies files on disk, not whether a running agent has loaded them; start a new session.
+
+The installation receipt is `~/Library/Application Support/repo-sync/skill-install.json`. It is separate from sync configuration and must not be edited to claim ownership of personal files. Skill commands do not start, stop, or configure syncing. Full CLI uninstall and true Homebrew uninstall remove unchanged managed copies; upgrades and reinstalls preserve them for refresh.
+
 ## Sources
 
 - [Repository and installation](https://github.com/vectal-labs/repo-sync)
