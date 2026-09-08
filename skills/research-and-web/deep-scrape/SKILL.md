@@ -79,7 +79,7 @@ The initial response normally has HTTP **202**, `status: "running"`, `output: nu
 - Useful partial and low-confidence results are billable. No usable matching data means no customer charge. Do not rerun a useful dossier solely to remove a warning.
 - This is bounded collection, not an exhaustive crawl. Empty sections mean information was not returned, not that it does not exist. Do not promise every social account, exact private metrics, or complete historical coverage.
 
-Save the final response JSON in the run directory. Deliver the requested brief or analysis with source links, uncertainty, missing information, and `requestId`. Save a Markdown report when a reusable dossier would help. Keep raw responses out of version control. Report costs only when asked; relay low-balance notices using the shared `deepapi` rules.
+Save the final response JSON in the run directory. Deliver the requested brief or analysis with source links, uncertainty, and missing information. Save a Markdown report when a reusable dossier would help. Keep raw responses out of version control. Report costs only when asked; relay low-balance notices using the shared `deepapi` rules.
 
 For a consequential missing fact, make a targeted follow-up scrape. Use `deep-research` when the next task is answering a question or comparing options. Preserve the original dossier as evidence.
 
