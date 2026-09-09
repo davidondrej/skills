@@ -1,6 +1,6 @@
 # Browse Web — DeepAPI Endpoint Reference
 
-Generated endpoint reference for the `browse-web` rows of the `deepapi` skill router. Bundle version: e8dfb0e92258. This file is always managed — it is refreshed with the bundle even when `../SKILL.md` has been customized.
+Generated endpoint reference for the `browse-web` rows of the `deepapi` skill router. Bundle version: 23ca18726e47. This file is always managed — it is refreshed with the bundle even when `../SKILL.md` has been customized.
 
 Shared protocol (environment, auth, idempotency, dry-run, polling, and error handling) lives in `../SKILL.md`. This file carries the full per-endpoint detail.
 
