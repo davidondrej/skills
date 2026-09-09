@@ -179,7 +179,7 @@ message agents, or inspect projects, providers, and environments.
   without a remembered model, bb uses the explicitly requested provider or
   Codex and resolves its provider-reported default model on the target machine.
 - After spawn: do not `bb thread open`, split, or focus the new thread unless
-the user asks. Just launch and report the thread id.
+  the user asks. Just launch and report the thread id.
 - Add repeatable `--file <path>` / `--image <path>` flags for structured prompt
   attachments, and `--section <id>` to add the new thread to a section. These
   flags pass host-readable absolute paths (or relative server-upload tokens)

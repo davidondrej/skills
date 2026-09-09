@@ -25,16 +25,16 @@ ls ~/.agents/hooks/deny-dangerous.sh ~/.agents/hooks/dangerous-patterns.txt
 ~/.agents/hooks/test-guard.sh   # must end "failed: 0"
 ```
 
-If missing, rebuild from the wiring table below (full history: DeepAPI repo `docs/research/global-agent-command-guard-deep-research-2026-07-11.md`).
+If missing, rebuild from the wiring table below.
 
 ## Add or tune a pattern
 
-1. Edit `~/.agents/hooks/dangerous-patterns.txt`. Write POSIX ERE (`grep -E`). Use `[[:space:]]`, never `\s` — adapters auto-convert `[:space:]` to `\s` for JS/Python and compile in multiline mode.
+1. Edit `~/.agents/hooks/dangerous-patterns.txt`. Write POSIX ERE (`grep -E`). Use `[[:space:]]`, never `\\s` — adapters auto-convert `[:space:]` to `\\s` for JS/Python and compile in multiline mode.
 2. Add block + allow cases to `test-guard.sh`, then run it. Must pass 100%.
 3. Verify the new pattern compiles in the adapter engines:
 
 ```bash
-python3 -c 'import re,pathlib; [re.compile(l.strip().replace("[:space:]",r"\s"),re.M) for l in pathlib.Path.home().joinpath(".agents/hooks/dangerous-patterns.txt").read_text().splitlines() if l.strip() and not l.startswith("#")]; print("ok")'
+python3 -c 'import re,pathlib; [re.compile(l.strip().replace("[:space:]",r"\\s"),re.M) for l in pathlib.Path.home().joinpath(".agents/hooks/dangerous-patterns.txt").read_text().splitlines() if l.strip() and not l.startswith("#")]; print("ok")'
 ```
 
 4. Changes apply instantly everywhere (all consumers re-read the file per command). Exception: Droid uses its own `commandBlocklist` in `~/.factory/settings.json` — mirror the change there manually.
