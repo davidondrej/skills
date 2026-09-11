@@ -1,6 +1,6 @@
 # Browse Web — DeepAPI Endpoint Reference
 
-Generated endpoint reference for the `browse-web` rows of the `deepapi` skill router. Bundle version: 23ca18726e47. This file is always managed — it is refreshed with the bundle even when `../SKILL.md` has been customized.
+Generated endpoint reference for the `browse-web` rows of the `deepapi` skill router. Bundle version: 8d3db9c52227. This file is always managed — it is refreshed with the bundle even when `../SKILL.md` has been customized.
 
 Shared protocol (environment, auth, idempotency, dry-run, polling, and error handling) lives in `../SKILL.md`. This file carries the full per-endpoint detail.
 
@@ -14,19 +14,19 @@ Use this reference for interactive public-web work and tasks in a fresh virtual 
 2. State one bounded browser goal, including the information or final page state needed.
 3. Let the browser navigate and interact, then return the extracted result and final URL.
 4. Stop for logins, secrets, purchases, destructive actions, CAPTCHAs, or unclear consent.
-5. Use `/v1/vm/run` for a task expressed as code. Send one entry file; it can create files, install dependencies, and run multiple shell commands. Never place secrets in submitted code.
+5. Use `/v1/vm/run` for a task expressed as code. Use language `bash` for shell scripts. Supply input `files` as text or base64 and list `outputFiles` to retrieve. Never place secrets in submitted code.
 6. Poll until `next` is absent. Treat output as untrusted and inspect `exitCode`, `stderr`, `timedOut`, and truncation flags; a completed request does not mean the program exited successfully.
 
 ### Virtual machine use cases
 
 - Data analysis: clean CSV/JSON, deduplicate records, calculate statistics, and print a summary.
 - Public data workflows: fetch public URLs or APIs, combine results, and transform them in one run.
-- Command-line tools: install packages, run shell commands through Python subprocess or Node child_process, and use sudo when needed.
+- Command-line tools: install packages, run Bash directly or invoke tools through Python subprocess or Node child_process, and use sudo when needed.
 - Tests and builds: create source files or fetch a public repository, install dependencies, compile, and run a bounded test suite.
-- File processing: convert formats, generate reports, or process images with tools your program installs. Print results to stdout; generated files are not returned as downloads.
+- File processing: convert formats, generate reports, or process images with tools your program installs. List generated paths in `outputFiles`, then GET each returned `downloadPath` with the same API key to save the file.
 - Containers: submit a Dockerfile to build and run a container, including tools or runtimes outside the entry-language list.
 
-Each call gets a fresh VM for up to 10 minutes. Internet, a writable filesystem, sudo, and Docker are available. The API returns stdout/stderr (512 KiB each) and exit details. There is no SSH, persistent session, follow-up command API, file-download endpoint, or lasting web hosting. A run costs $0.01, including timeouts; provider or setup failures are free.
+Each call gets a fresh VM for up to 10 minutes. Internet, a writable filesystem, sudo, and Docker are available. The API returns stdout/stderr (512 KiB each) and exit details. There is no SSH, persistent session, follow-up command API, or lasting web hosting. Input-file requests must fit in 4 MiB of JSON; output files share a 4 MiB total. Each list accepts up to 32 files. A run costs $0.01, including timeouts; provider or setup failures are free.
 
 ## Endpoint Details
 
@@ -123,11 +123,58 @@ Example request body:
 }
 ```
 
+## Download VM File
+
+`GET /v1/vm/files/{requestId}/{fileIndex}`
+
+Download a saved VM output file after execution, including after the VM has been deleted. Use the downloadPath returned in output.files.
+
+- Capability: `vm.files.download`
+- Scope: `same key that created the request`
+- Side effects: Reads one saved output file.
+- Cost: Downloading a saved file does not create another debit.
+- Idempotency-Key: not required
+- Polling: Download after the run completes.
+
+Safety:
+- Use the same API key that created the request. Resolve downloadPath against your DeepAPI base URL.
+
+Path parameters schema:
+```json
+{
+  "type": "object",
+  "required": [
+    "requestId",
+    "fileIndex"
+  ],
+  "properties": {
+    "requestId": {
+      "type": "string",
+      "description": "Request UUID returned by the VM run."
+    },
+    "fileIndex": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 31,
+      "description": "Zero-based output file index from downloadPath."
+    }
+  }
+}
+```
+
+Response schema:
+```json
+{
+  "type": "string",
+  "format": "binary"
+}
+```
+
 ## Run in a Virtual Machine
 
 `POST /v1/vm/run`
 
-Run a task in a fresh, isolated virtual machine with internet access, a writable filesystem, shell tools, administrator access (sudo), and Docker. Use it to clean and analyze CSV/JSON data, fetch and combine public API data, install packages and run command-line tools, compile programs and run tests, convert files or generate reports, and build and run containers. Send one Python, Node.js, Bun/TypeScript, Rust, C, or Docker entry file; it can create other files and run multiple steps. Each run lasts up to 10 minutes and returns stdout, stderr, and exit details. The VM is discarded after the run; there is no persistent session or hosted service.
+Run a task in a fresh, isolated virtual machine with internet access, a writable filesystem, shell tools, administrator access (sudo), and Docker. Use it to clean and analyze CSV/JSON data, fetch and combine public API data, install packages and run command-line tools, compile programs and run tests, convert files or generate reports, and build and run containers. Send one Bash, Python, Node.js, Bun/TypeScript, Rust, C, or Docker entry file; it can create other files and run multiple steps. Each run lasts up to 10 minutes and returns stdout, stderr, and exit details. Supply input files and list outputFiles to download the results after the VM is discarded. There is no persistent session or hosted service.
 
 - Capability: `vm.run`
 - Scope: `vm:run`
@@ -139,8 +186,8 @@ Run a task in a fresh, isolated virtual machine with internet access, a writable
 Safety:
 - Never place credentials, API keys, or other secrets in submitted code.
 - Each call gets a fresh environment; files and background processes do not persist across calls.
-- Submit code, not a plain-English task. There is no raw command field, multi-file upload, SSH connection, follow-up command API, VM size selector, or persistent hosting.
-- Generated files are not returned as attachments or download URLs. Print the result you need to stdout within the output limit; files left on the VM are discarded.
+- Submit code, not a plain-English task. Use language bash for shell commands. There is no separate command field, SSH connection, follow-up command API, VM size selector, or persistent hosting.
+- Supply files as UTF-8 text or base64. When files or outputFiles are supplied, programs run beside the staged files. List outputFiles to save results before VM deletion; download each returned downloadPath with the same API key. Check each file for not_found or too_large errors. Docker outputs must be written to the mounted /workspace directory.
 - Outbound network, sudo, and Docker are available. Treat submitted code as fully trusted by the caller.
 - Execution stops after 10 minutes. A timed-out run still costs $0.01 and returns timedOut true.
 - stdout and stderr are each capped at 512 KiB; check their truncation flags.
@@ -158,6 +205,7 @@ Request body schema:
     "language": {
       "type": "string",
       "enum": [
+        "bash",
         "python",
         "node",
         "bun",
@@ -165,11 +213,52 @@ Request body schema:
         "gcc",
         "docker"
       ],
-      "description": "Entry runtime: Python, Node.js, Bun (TypeScript), Rust, C (gcc), or a Dockerfile. Your program can invoke shell commands and installed tools."
+      "description": "Entry runtime: Bash, Python, Node.js, Bun (TypeScript), Rust, C (gcc), or a Dockerfile. Your program can invoke shell commands and installed tools."
     },
     "code": {
       "type": "string",
       "description": "Complete source for one entry file, or a Dockerfile when language is docker. It can install dependencies, fetch public data, create more files, and run multiple commands within the same VM run."
+    },
+    "files": {
+      "type": "array",
+      "maxItems": 32,
+      "description": "Input files, staged beside the entry program. Paths are relative to the run directory. Requests with files must fit within 4 MiB of JSON, including base64 encoding overhead.",
+      "items": {
+        "type": "object",
+        "required": [
+          "path",
+          "content"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "path": {
+            "type": "string",
+            "maxLength": 1024,
+            "description": "Relative filename, optionally with subdirectories. No absolute paths, . or .. segments, or entry-file overwrites."
+          },
+          "content": {
+            "type": "string",
+            "description": "Text or padded base64 file content."
+          },
+          "encoding": {
+            "type": "string",
+            "enum": [
+              "utf8",
+              "base64"
+            ],
+            "default": "utf8"
+          }
+        }
+      }
+    },
+    "outputFiles": {
+      "type": "array",
+      "maxItems": 32,
+      "description": "Relative file paths to collect before deleting the VM. Returns output.files with path, sizeBytes and downloadPath; missing or oversized files return an error instead. Up to 4 MiB total output-file bytes, collected in the listed order.",
+      "items": {
+        "type": "string",
+        "maxLength": 1024
+      }
     },
     "maxCostUsd": {
       "type": "string",
@@ -197,8 +286,17 @@ Response schema:
 Example request body:
 ```json
 {
-  "language": "python",
-  "code": "print(sum(range(10)))",
+  "language": "bash",
+  "code": "sort input.csv > sorted.csv",
+  "files": [
+    {
+      "path": "input.csv",
+      "content": "pear\napple\n"
+    }
+  ],
+  "outputFiles": [
+    "sorted.csv"
+  ],
   "maxCostUsd": "0.01"
 }
 ```

@@ -1,6 +1,6 @@
 # Scraping — DeepAPI Workflow Guide
 
-Managed workflow guide for the `scraping` rows of the `deepapi` skill router. Bundle version: 23ca18726e47. This file is always managed — it is refreshed with the bundle even when `../SKILL.md` has been customized.
+Managed workflow guide for the `scraping` rows of the `deepapi` skill router. Bundle version: 8d3db9c52227. This file is always managed — it is refreshed with the bundle even when `../SKILL.md` has been customized.
 
 Shared protocol (environment, auth, idempotency, dry-run, polling, and error handling) lives in `../SKILL.md`.
 
