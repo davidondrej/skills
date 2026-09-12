@@ -1,11 +1,11 @@
 ---
 name: global-agent-guardrails
-description: 'One shared denylist of catastrophic shell commands (rm -rf on / or ~, dd/mkfs, sudo rm, fork bombs, curl|sh, git push --force, gh repo delete) enforced as a PreToolUse/pre-exec guard across every AI coding agent on the machine — Cursor, Claude Code, Codex, OpenCode, Pi, Hermes, Grok, Droid, Devin. Use when adding or tuning blocked-command patterns, wiring the guard into a new agent or a new machine, debugging why a command was (or was not) blocked, or when the user mentions command guard, guardrails, dangerous command hook, or PreToolUse safety.'
+description: "Configure the shared guard against catastrophic shell commands in local AI agents. Use when changing block patterns, adding an agent or machine, or investigating why a command was or wasn't blocked."
 ---
 
 # Global Agent Guardrails
 
-A "bouncer" that blocks catastrophic shell commands before any AI agent runs them. One patterns file is the single source of truth; every agent reads it via a shared hook script or a tiny native adapter. It is a seatbelt against accidents, NOT a sandbox against a malicious agent (obfuscation like `python -c "shutil.rmtree(...)"` can slip past regex).
+Block catastrophic shell commands before execution. One patterns file feeds a shared hook script or native adapter for each agent. This guards against accidents, not malicious agents (obfuscation like `python -c "shutil.rmtree(...)"` can slip past regex).
 
 ## File map
 
@@ -18,30 +18,34 @@ A "bouncer" that blocks catastrophic shell commands before any AI agent runs the
 ~/.hermes/plugins/command-guard/              # Hermes plugin (returns {"action":"block"})
 ```
 
-## State check (is it installed?)
+## Check installation
 
 ```bash
 ls ~/.agents/hooks/deny-dangerous.sh ~/.agents/hooks/dangerous-patterns.txt
 ~/.agents/hooks/test-guard.sh   # must end "failed: 0"
 ```
 
-If missing, rebuild from the wiring table below.
+If missing, rebuild from the wiring table (history: DeepAPI research notes).
 
 ## Add or tune a pattern
 
-1. Edit `~/.agents/hooks/dangerous-patterns.txt`. Write POSIX ERE (`grep -E`). Use `[[:space:]]`, never `\\s` — adapters auto-convert `[:space:]` to `\\s` for JS/Python and compile in multiline mode.
-2. Add block + allow cases to `test-guard.sh`, then run it. Must pass 100%.
+1. Edit `~/.agents/hooks/dangerous-patterns.txt`. Write POSIX ERE (`grep -E`). Use `[[:space:]]`, never `\s` — adapters auto-convert `[:space:]` to `\s` for JS/Python and compile in multiline mode.
+2. Add block and allow cases to `test-guard.sh`, then run it; all must pass.
 3. Verify the new pattern compiles in the adapter engines:
 
 ```bash
-python3 -c 'import re,pathlib; [re.compile(l.strip().replace("[:space:]",r"\\s"),re.M) for l in pathlib.Path.home().joinpath(".agents/hooks/dangerous-patterns.txt").read_text().splitlines() if l.strip() and not l.startswith("#")]; print("ok")'
+python3 -c 'import re,pathlib; [re.compile(l.strip().replace("[:space:]",r"\s"),re.M) for l in pathlib.Path.home().joinpath(".agents/hooks/dangerous-patterns.txt").read_text().splitlines() if l.strip() and not l.startswith("#")]; print("ok")'
 ```
 
-4. Changes apply instantly everywhere (all consumers re-read the file per command). Exception: Droid uses its own `commandBlocklist` in `~/.factory/settings.json` — mirror the change there manually.
+4. Consumers re-read patterns for every command. Exception: Droid uses `commandBlocklist` in `~/.factory/settings.json` — mirror changes there manually.
 
-Design rule: block only irreversible/catastrophic commands (data loss, disk wipe, repo deletion, token exfil). Local-destructive-but-recoverable commands (`git status`, `git clean -fdx`, `rm -rf node_modules`) stay ALLOWED — over-blocking kills agent usefulness.
+Block only catastrophic commands (irreversible data loss, disk wipes, repo deletion, token exfiltration). Recoverable local commands (`git status`, `git clean -fdx`, `rm -rf node_modules`) stay allowed; avoid over-blocking.
 
-Password managers are also a hard NO (pattern group 10): agents must never use their CLIs (`bw`, `bws`, `lpass`, `keepassxc-cli`, `rbw`, `nordpass` outright; `pass` with any argument at command position; `op` with its real subcommands — bare `op`/`pass` stay unblocked because they are common words), dump the macOS keychain (`security find-*-password`, `dump-keychain`), export gpg secret keys, touch vault data (`~/.password-store`, the `.app` bundles), or open/uninstall the apps.
+Password managers are forbidden (pattern group 10):
+
+- Never use `bw`, `bws`, `lpass`, `keepassxc-cli`, `rbw`, or `nordpass`; `pass` with any argument at command position; or `op` with real subcommands. Bare `op`/`pass` stay unblocked because they are common words.
+- Never dump the macOS keychain (`security find-*-password`, `dump-keychain`) or export GPG secret keys.
+- Never touch vault data (`~/.password-store`) or password-manager `.app` bundles, or open or uninstall the apps.
 
 ## Per-agent wiring (user-global)
 
@@ -57,7 +61,7 @@ Password managers are also a hard NO (pattern group 10): agents must never use t
 | Droid (Factory) | `~/.factory/settings.json` | native `commandBlocklist` | hard-block, no approval possible |
 | Devin CLI | `~/.config/devin/config.json` | `PreToolUse` matcher `^exec$` | shared script, exit 2 |
 
-Hook entry shape for Claude/Codex/Devin (merge into existing `hooks` object, never overwrite):
+Claude/Codex hook entry; for Devin, replace `Bash` with `^exec$`. Merge into the existing `hooks` object; never overwrite it:
 
 ```json
 {"hooks": {"PreToolUse": [{"matcher": "Bash", "hooks": [{"type": "command", "command": "/ABSOLUTE/HOME/.agents/hooks/deny-dangerous.sh"}]}]}}
@@ -71,7 +75,7 @@ Cursor entry (payload has `.command`, so pass the `cursor` arg):
 
 Use absolute paths in configs (`~` expansion is inconsistent across agents).
 
-## Gotchas (hard-won — do not rediscover)
+## Gotchas
 
 - **Codex trust is hash-pinned.** Any edit to the hook ENTRY in `hooks.json` (not the patterns file) invalidates trust; run `/hooks` in Codex and re-trust, else Codex silently skips the guard. Trust hashes live in `[hooks.state]` in `~/.codex/config.toml` and are shared by CLI, desktop app, and IDE extension. CI/scripts: `--dangerously-bypass-hook-trust`.
 - **Cursor `failClosed` must stay `false`.** Cursor background/worker hosts cannot execute hook scripts; fail-closed blocks EVERY command there. Trade-off: Cursor background agents run unguarded.
@@ -83,7 +87,7 @@ Use absolute paths in configs (`~` expansion is inconsistent across agents).
 - **False-positive class:** a harmless command whose ARGUMENT text contains a dangerous-looking string (e.g. passing a prompt mentioning `git push --force` on a CLI) gets blocked. Workaround: put the text in a file and reference it.
 - **Not coverable natively (no hook system as of 2026-07):** Gemini CLI, Qwen Code, Amp, kimi-cli. Codex cloud tasks and Cursor background agents also bypass the local guard.
 
-## E2E verification recipe
+## E2E verification
 
 Safe probe: ask the agent to run `git push --force` from a NON-git directory — blocked = guard works; "not a git repository" = guard failed but no harm done.
 
@@ -96,7 +100,7 @@ pi -p --no-session 'Run exactly: git push --force. Report the result in one line
 hermes chat --query 'Run exactly this terminal command: git push --force. Report in one line.'
 ```
 
-Direct script test without any agent:
+Direct script test:
 
 ```bash
 echo '{"tool_input":{"command":"rm -rf /"}}' | ~/.agents/hooks/deny-dangerous.sh; echo "exit=$?"   # expect exit=2

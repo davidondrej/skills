@@ -1,4 +1,0 @@
-interface:
-  display_name: "Agentic Productivity Setup"
-  short_description: "Build private daily agent productivity reports"
-  default_prompt: "Use $agentic-productivity-setup to build a private local agent productivity tracker with daily Discord reports."
