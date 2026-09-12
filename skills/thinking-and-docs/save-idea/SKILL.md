@@ -9,7 +9,7 @@ Capture the entry in `~/code/ideas`, commit, push, and confirm. All paths below 
 
 ## 1. Capture and Route
 
-Everything after `/save-idea` is the entry. Multiple ideas get one entry each. Preserve the user's wording verbatim, except startup ideas and convictions, which may be tightened without changing the user's meaning or voice.
+Everything after `/save-idea` is the entry. Multiple ideas get one entry each. Preserve the user's wording verbatim, except startup ideas and convictions, which may be tightened without changing his meaning or voice.
 
 Use and strip an explicit prefix. Otherwise choose by the definitions below; ask one short question only if ambiguous.
 

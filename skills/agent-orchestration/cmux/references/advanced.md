@@ -34,7 +34,7 @@ cmux reload-config      # reloads cmux and Ghostty settings
 - Terminal rendering (font, cursor, theme, scrollback, opacity, blur): `~/.config/ghostty/config`.
 - Schema: `https://raw.githubusercontent.com/manaflow-ai/cmux/main/web/data/cmux.schema.json`.
 
-Keep both sidebar text previews off:
+Keep both sidebar text previews off. Preserve these settings:
 
 ```jsonc
 "sidebar": {

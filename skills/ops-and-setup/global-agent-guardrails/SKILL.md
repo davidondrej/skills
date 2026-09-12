@@ -25,7 +25,7 @@ ls ~/.agents/hooks/deny-dangerous.sh ~/.agents/hooks/dangerous-patterns.txt
 ~/.agents/hooks/test-guard.sh   # must end "failed: 0"
 ```
 
-If missing, rebuild from the wiring table (history: DeepAPI research notes).
+If missing, rebuild from the wiring table (history: DeepAPI internal research doc).
 
 ## Add or tune a pattern
 

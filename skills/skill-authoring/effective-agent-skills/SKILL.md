@@ -91,7 +91,7 @@ Frontmatter constraints:
 - `name` is lowercase, hyphens only, 1–64 chars, **exactly matches the parent folder name**
 - Avoid `<` and `>` in frontmatter (they can inject into the system prompt)
 - Invalid YAML silently prevents loading
-- **Never put `: ` (colon + space) inside an unquoted `description`** — strict YAML parsers (e.g. Pi's) reject it as a nested mapping ("Nested mappings are not allowed in compact mappings"), even though lenient parsers (Claude Code) accept it. If the text needs a mid-sentence colon, single-quote the whole value and double any inner apostrophes: `description: 'Differentiator: finds gaps in the user''s knowledge.'`
+- **Never put `: ` (colon + space) inside an unquoted `description`** — strict YAML parsers (e.g. Pi's) reject it as a nested mapping ("Nested mappings are not allowed in compact mappings"), even though lenient parsers (Claude Code) accept it. If the text needs a mid-sentence colon, single-quote the whole value and double any inner apostrophes: `description: 'Differentiator: finds gaps in David''s knowledge.'`
 
 ### Manual-only invocation is client-specific
 
