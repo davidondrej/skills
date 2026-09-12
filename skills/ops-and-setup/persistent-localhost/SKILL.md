@@ -1,6 +1,6 @@
 ---
 name: persistent-localhost
-description: Start, stop, restart, and inspect durable localhost dev servers on macOS as user LaunchAgents, so they outlive the agent's shell and auto-restart on crash. Use whenever an agent must run a dev server, API, or any long-lived local process on a port: "start the dev server", "run it on localhost", "keep the server running", "the server keeps dying", "restart the app on port 5111". Never start servers with nohup, &, disown, setsid, or run_in_background; those die with the shell or become unfindable orphans.
+description: "Manage persistent dev servers, APIs, and other local processes on a port using macOS LaunchAgents. Use when starting, stopping, restarting, inspecting, or troubleshooting local servers that should survive shell exit and restart after crashes."
 ---
 
 # Persistent localhost servers (macOS launchd)
@@ -46,4 +46,4 @@ Prefer the framework's own reloader in `--cmd` (`flask run --debug`, `vite`, `uv
 
 ## Fallback
 
-If `launchctl bootstrap` fails, say so and stop. Do not fall back to `nohup` or `&`.
+Never start servers with `nohup`, `&`, `disown`, `setsid`, or `run_in_background`. If `launchctl bootstrap` fails, report the failure and stop.
