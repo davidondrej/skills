@@ -1,6 +1,6 @@
 # Manage Agent State — DeepAPI Endpoint Reference
 
-Generated endpoint reference for the `manage-agent-state` rows of the `deepapi` skill router. Bundle version: 8d3db9c52227. This file is always managed — it is refreshed with the bundle even when `../SKILL.md` has been customized.
+Generated endpoint reference for the `manage-agent-state` rows of the `deepapi` skill router. Bundle version: 1320a0ca895c. This file is always managed — it is refreshed with the bundle even when `../SKILL.md` has been customized.
 
 Shared protocol (environment, auth, idempotency, dry-run, polling, and error handling) lives in `../SKILL.md`. This file carries the full per-endpoint detail.
 

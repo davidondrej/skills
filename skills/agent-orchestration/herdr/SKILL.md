@@ -108,7 +108,7 @@ NEVER verify a launch with `sleep N && pane read` — that is a non-herdr antipa
 
 ### Cursor CLI specifics
 
-The real binary is `cursor-agent` (`agent` is an alias/new docs name — don't rely on it in scripts). The user's shorthand `cur` = `cursor-agent --yolo`: fine to type into an interactive pane, but use the full binary in scripts — aliases don't expand there. Launch into an existing pane:
+The real binary is `cursor-agent` (`agent` is an alias/new docs name — don't rely on it in scripts). David's shorthand `cur` = `cursor-agent --yolo`: fine to type into an interactive pane, but use the full binary in scripts — aliases don't expand there. Launch into an existing pane:
 
 ```bash
 herdr pane run <pane-id> "cd <worktree> && cursor-agent --model gpt-5.3-codex-high --yolo 'fix the failing tests'"

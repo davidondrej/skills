@@ -16,16 +16,16 @@ The body of the ADR is the user's words, pasted exactly as given. Not one word a
 ```markdown
 # 0042 — short title
 
-Status: accepted (user, YYYY-MM-DD)
+Status: accepted (the user, YYYY-MM-DD)
 
-<user's words, verbatim>
+<the user's words, verbatim>
 ```
 
 4. Show the user the full file in a code block.
 
 ## Rules
 
-- Body = the user's words only. Keep the user's typos and grammar.
+- Body = the user's words only. Keep their typos and grammar.
 - No Context / Decision / Consequences sections unless the user wrote them.
 - No bullet lists, no summaries, no "why this matters", no alternatives.
 - Title and status line are the only text you write. Keep them under ten words.
