@@ -96,13 +96,31 @@ Hard-won facts from driving herdr in production. Trust these over intuition.
 
 ## Launching agents in new panes (when the user asks)
 
-ALWAYS launch agents with auto-approval — a worker in an unattended pane stalls forever on a y/n prompt nobody answers:
+Use each agent's normal approval and sandbox defaults unless the user has
+explicitly authorized unattended execution for this specific pane. A worker
+that waits for approval is safer than silently granting a prompt permission to
+run arbitrary commands. The `global-agent-guardrails` deny-list is defense in
+depth, not a permission boundary: it only matches known patterns and can miss
+obfuscated commands or harmful changes that are not on the list.
+
+For the normal, approval-aware launch, omit the bypass flags:
+
+- Cursor CLI: `cursor-agent "task"`
+- Codex CLI: `codex "task"`
+- Claude Code: `claude "task"`
+
+Only when the user has explicitly approved unattended execution, the worktree
+is isolated, and the output is reviewable, use the corresponding force flag:
 
 - Cursor CLI: `cursor-agent --yolo "task"` (alias for `--force`)
 - Codex CLI: `codex --yolo "task"`
 - Claude Code: `claude --dangerously-skip-permissions "task"`
 
-This is safe only because the user's `global-agent-guardrails` deny-list hook is installed across all agents. First-run trust dialogs may still appear despite these flags — peek the pane after launch. `herdr integration install <cursor|codex|claude>` (once each) enables native agent-status detection.
+Before using a force flag, confirm that the prompt is trusted, no credentials
+are in scope, and the task does not include publishing, deleting, purchasing,
+or changing account/security settings. First-run trust dialogs may still appear
+despite these flags — peek the pane after launch. `herdr integration install
+<cursor|codex|claude>` (once each) enables native agent-status detection.
 
 NEVER verify a launch with `sleep N && pane read` — that is a non-herdr antipattern. Use the native waits: `herdr agent wait <pane> --status working --timeout MS` (agent picked up the task) or `herdr wait output <pane> --match <text>`, then read the pane.
 
