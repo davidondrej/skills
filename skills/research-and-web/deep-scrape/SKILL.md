@@ -35,14 +35,14 @@ For unclear schema, pricing, scope, or availability, fetch
 
 ## Start and preserve request identity
 
-Requires `curl`, `jq`, and `uuidgen`. Adapt the body. Load `~/.deepapi/env` only
-when setup variables are missing; never source `~/.zshrc` or print the key.
+Requires `curl`, `jq`, and `uuidgen`. Adapt the body. Load the documented credential
+setup file only when setup variables are missing; never source `~/.zshrc` or print the key.
 
 ```bash
-if [ -z "${DEEPAPI_API_KEY:-}" ] || [ -z "${DEEPAPI_API_BASE_URL:-}" ]; then
-  . "$HOME/.deepapi/env"
+if [ -z "${API_KEY:-}" ] || [ -z "${DEEPAPI_API_BASE_URL:-}" ]; then
+  . "$CREDENTIALS_FILE"
 fi
-: "${DEEPAPI_API_KEY:?DeepAPI setup is required}"
+: "${API_KEY:?DeepAPI setup is required}"
 : "${DEEPAPI_API_BASE_URL:?DeepAPI setup is required}"
 DEEP_SCRAPE_BASE="${DEEPAPI_API_BASE_URL%/}"
 DEEP_SCRAPE_VERSION=$(cat "$HOME/.agents/skills/deepapi/VERSION.txt")
@@ -58,7 +58,7 @@ cat > "$DEEP_SCRAPE_DIR/body.json" <<'JSON'
 JSON
 curl --silent --show-error --connect-timeout 10 --max-time 90 \
   "$DEEP_SCRAPE_BASE/v1/scrape/deep" \
-  -H "Authorization: Bearer $DEEPAPI_API_KEY" \
+  -H "Authorization: Bearer $API_KEY" \
   -H "Content-Type: application/json" \
   -H "X-DeepAPI-Skill-Version: $DEEP_SCRAPE_VERSION" \
   -H "Idempotency-Key: $(cat "$DEEP_SCRAPE_DIR/idempotency.txt")" \
@@ -68,7 +68,7 @@ jq '{requestId, status, next, error}' "$DEEP_SCRAPE_DIR/start.json"
 ```
 
 Keep the run directory, body, idempotency key, and `requestId`. On Windows,
-load `~/.deepapi/env.ps1` and send the same headers/JSON through PowerShell.
+load the documented credential setup file and send the same headers/JSON through PowerShell.
 Adjust the `deepapi` skill path if installed elsewhere.
 
 ## Poll until the result is final

@@ -2,6 +2,7 @@
 name: stop-overthinking
 description: Manually-invoked skill that stops overthinking and forces a short, practical decision. Use only when the user explicitly invokes stop-overthinking.
 disable-model-invocation: true
+triggers: [user, model]
 ---
 
 Stop overthinking and be practical.

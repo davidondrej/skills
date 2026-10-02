@@ -1,5 +1,14 @@
 # Images, other media, and tools
 
+## Image generation and aspect ratios
+
+- As of 2026-09-09, `openai/gpt-image-2.5-sunburst` is OpenAI's latest and best model for image creation and editing when quality is the priority. Prefer it for polished YouTube thumbnails and precise edits; Flare prioritizes speed. [OpenAI comparison](https://openai.com/index/introducing-chatgpt-images-2-5/#images-25-in-the-api), [OpenRouter model](https://openrouter.ai/openai/gpt-image-2.5-sunburst). Recheck live availability and capabilities before use.
+- `openai/gpt-image-2.5-flare` is the faster OpenRouter API alternative to `openai/gpt-image-2.5-sunburst` for image creation and editing. Prefer Flare for quick iterations; prefer Sunburst when quality and precise editing matter most. [OpenRouter model](https://openrouter.ai/openai/gpt-image-2.5-flare), [OpenAI comparison](https://openai.com/index/introducing-chatgpt-images-2-5/#images-25-in-the-api).
+- Check the image model's `/api/v1/images/models/{author}/{slug}/endpoints` record for `supported_parameters.aspect_ratio.values`. The general API ratio list is not a promise that every model supports every ratio.
+- Verified 2026-09-07: `openai/gpt-5.4-image-2` lists `1:1`, `3:2`, `2:3`, `4:3`, `3:4`, `16:9`, `9:16`, `21:9`, plus `auto`. Recheck the [live model settings](https://openrouter.ai/api/v1/images/models/openai/gpt-5.4-image-2/endpoints) before use.
+- `5:2` is not listed; `21:9` is the closest listed ratio. Do not assume custom pixel dimensions bypass the model's limits.
+- In Chat Completions, use `"modalities": ["image", "text"]` and `"image_config": {"aspect_ratio": "21:9"}`. The dedicated Image API (`POST /api/v1/images`) uses top-level `"aspect_ratio": "21:9"`. A prompt suffix such as `--ar 5:2` is not an OpenRouter API setting. [Chat schema](https://openrouter.ai/docs/api/api-reference/chat/create-a-chat-completion#body-image-config), [Image API docs](https://openrouter.ai/docs/guides/overview/multimodal/image-generation#resolution-and-aspect-ratio).
+
 ## Image attachments in Chat Completions
 
 Use a `content` array, with text first and one part per image. A URL must be accessible to the service. For local/private files use a complete data URL with the correct MIME type, rather than publishing a private attachment just to obtain a URL.

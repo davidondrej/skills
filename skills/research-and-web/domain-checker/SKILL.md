@@ -1,35 +1,35 @@
 ---
 name: domain-checker
-description: Check domain registration in batches through public registry RDAP APIs, without API keys or login. Use for domain availability checks, checking candidate domains, or keyless domain lookup from a CLI. Screens registration status, not brand conflicts, trademark clearance, or guaranteed purchase availability.
+description: Check domain registration in batches using public RDAP APIs, without keys or login. Use only when the user explicitly invokes /domain-checker.
+disable-model-invocation: true
 ---
 
 # Domain checker
 
-Run the bundled Python 3 checker. No packages, credentials or browser needed.
-Resolve `scripts/check_domains.py` relative to this SKILL.md, regardless of the current working directory.
+Run the bundled Python 3 checker without packages, credentials or a browser. Resolve `scripts/check_domains.py` relative to this SKILL.md, regardless of the working directory.
 
 ```sh
 python3 <skill-dir>/scripts/check_domains.py example.com example.dev example.ai --json
 ```
 
-Pass complete domains, not bare brand names or URLs. For a name across several extensions, expand them into explicit domains. The helper supports domains directly under a TLD, including `.com`, `.dev`, `.ai` and `.cloud`; multi-label suffixes such as `.co.uk` are outside its scope.
+Use complete domains, not bare brand names or URLs; expand each name/TLD combination. Only domains directly under a TLD are supported (e.g. `.com`, `.dev`, `.ai`, `.cloud`), not multi-label suffixes such as `.co.uk`.
 
-The script discovers registry endpoints from IANA and runs up to 4 requests concurrently. Use small batches. It sends domain queries to public registries, not registrar shopping carts.
+The script discovers endpoints through IANA and queries public registries, not registrar shopping carts. Use small batches; concurrency is capped at 4 requests.
 
 ## Read the results
 
 JSON output is an array of `{domain, status, detail}` objects. Without `--json`, output is a short list and elapsed time.
 
 - `REGISTERED`: matching registration record found.
-- `NOT_FOUND`: registry reports no record. **Do not call this confirmed available.** Reserved names, registration rules and premium pricing may still prevent purchase.
+- `NOT_FOUND`: registry reports no record. **Not confirmed available:** reservations, registration rules or premium pricing may prevent purchase.
 - `UNAVAILABLE`: registry explicitly reports a reservation or registration restriction.
-- `UNKNOWN`: unsupported registry, malformed response, timeout or HTTP error. Never convert this to available.
-- `INVALID`: malformed name or input outside the helper’s supported scope.
+- `UNKNOWN`: unsupported registry, malformed response, timeout or HTTP error. Never treat as available.
+- `INVALID`: malformed name or input outside the helper’s scope.
 
-Report results briefly, noting they are a live snapshot. Keep exact domains with their statuses. For `UNKNOWN`, explain the returned reason; on rate limits, wait before retrying rather than increasing concurrency. Bootstrap failure exits nonzero and means no checks completed.
+Report briefly as a live snapshot, preserving exact domains and statuses. Explain `UNKNOWN` reasons. On rate limits, wait before retrying; do not increase concurrency. Bootstrap failure exits nonzero: no checks completed.
 
-Read registry error bodies. A 404 can contain an explicit reservation; Verisign may return an empty RDAP 404. The helper handles both. It detects some explicit reservation messages, not every registry’s wording. DNS absence and RDAP redirect-service errors are not evidence of availability.
+Read registry error bodies: a 404 may report a reservation, while Verisign may return an empty RDAP 404. The helper handles both but detects only some reservation wording. Neither DNS absence nor RDAP redirect-service errors prove availability.
 
-For final purchase availability or a premium quote, use a registrar check. Domain registration status does not establish whether another company uses the name.
+Use a registrar for final purchase availability or premium quotes. Registration checks do not establish whether another company uses the name or provide trademark clearance.
 
 Sources: [IANA registry discovery](https://data.iana.org/rdap/dns.json), [RDAP HTTP semantics](https://www.rfc-editor.org/rfc/rfc7480.html), [RDAP.org status and rate-limit distinctions](https://about.rdap.org/).

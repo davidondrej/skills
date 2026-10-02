@@ -78,7 +78,7 @@ Frontmatter constraints:
 - `name` is lowercase, hyphens only, 1–64 chars, **exactly matches the parent folder name**
 - Avoid `<` and `>` in frontmatter (they can inject into the system prompt)
 - Invalid YAML silently prevents loading
-- **Never put `: ` (colon + space) inside an unquoted `description`** — strict YAML parsers (e.g. Pi's) reject it as a nested mapping ("Nested mappings are not allowed in compact mappings"), even though lenient parsers (Claude Code) accept it. If the text needs a mid-sentence colon, single-quote the whole value and double any inner apostrophes: `description: 'Differentiator: finds gaps in David''s knowledge.'`
+- **Never put `: ` (colon + space) inside an unquoted `description`** — strict YAML parsers (e.g. Pi's) reject it as a nested mapping ("Nested mappings are not allowed in compact mappings"), even though lenient parsers (Claude Code) accept it. If the text needs a mid-sentence colon, single-quote the whole value and double any inner apostrophes: `description: 'Differentiator: finds gaps in the user''s knowledge.'`
 
 ### Manual-only invocation is client-specific
 
@@ -116,17 +116,18 @@ The skill encodes a methodology the agent should follow. Pure prompt engineering
 
 ## 6. How to write effective skills — do this
 
-### Description as routing contract
-The description is the only thing the agent sees before deciding to load the skill. If your skill doesn't trigger, the description is wrong 95% of the time, not the body.
+### Write descriptions for skill selection
+The agent sees the name and description before loading the body. Describe **what the skill does + concrete tasks that should trigger it**.
 
-Include three elements:
-1. **What** the skill does (one phrase)
-2. **When** to use it (trigger phrases, situations)
-3. **Differentiator** vs related skills (prevents routing conflicts)
+- Aim for one or two short sentences. The 1,024-character limit is a ceiling, not a target.
+- Put the main use case and important terms first; hosts may shorten descriptions.
+- Name tasks, inputs, or file types users actually mention. Match intent, not just keywords.
+- Add a boundary only when it prevents confusion with related skills.
+- Keep workflow steps in the body. Avoid vague claims, catchalls, and lists of synonyms.
 
-Pattern: `"X via Y. Use for [situations]. [Differentiator: no Z required / faster than W / handles edge case V]."`
+Pattern: `"[Capability]. Use when [specific tasks or situations]."`
 
-**Never summarize the full workflow in the description.** If the description contains a step-by-step summary of *how* the skill works, the agent tends to follow that summary and skip loading the body. Describe *what* and *when*, never *how*. The description answers "should I open this skill now?" — not "what are the steps?"
+Sources: [Agent Skills](https://agentskills.io/skill-creation/optimizing-descriptions) · [OpenAI](https://developers.openai.com/codex/build-skills).
 
 ### Keep SKILL.md lean
 - Beyond a certain length, you're usually encoding logic that should be in a script or referenced file
@@ -228,10 +229,10 @@ Skills can run code, steer behavior, and leak data. Audit scripts, references, n
 
 1. **Identify the gap.** Run your agent on real tasks. Where does it consistently fail or need re-prompting? That's a skill candidate.
 2. **Decide the pattern.** Capability primitive (need new tools) or process primitive (need better methodology)?
-3. **Draft the description first.** What + when + differentiator. Read it back: would the agent know when to fire it?
+3. **Draft the description first.** What + when; add a boundary only if it prevents likely confusion.
 4. **Write the smallest body that works.** Add only when testing reveals gaps.
 5. **Move detail to references/ once SKILL.md grows too long.**
-6. **Test triggering.** Ask the agent something the skill should handle without invoking it explicitly. If it doesn't fire, fix the description.
+6. **Test triggering.** Use realistic requests and near-misses without naming the skill. Verify that its body actually loads.
 7. **Test execution.** Invoke explicitly. If output is wrong, fix the body.
 8. **Adversarial test.** Have another LLM ask: "What edge cases break this skill?" Patch the gaps.
 9. **Version control.** Treat skills as code. Tag, branch, review.
@@ -240,12 +241,12 @@ Skills can run code, steer behavior, and leak data. Audit scripts, references, n
 
 ## 9. Testing and debugging
 
-- **"Which skill did you use?"** — ask the agent post-task. Fastest routing debug.
-- **Routing fails → description problem.** Add specific trigger phrases.
+- **Verify actual activation.** Inspect whether the runtime loaded `SKILL.md`; valid YAML or an agent's self-report is not proof.
+- **Wrong or missed activation.** Check discovery and invocation settings, then adjust description scope and trigger wording.
 - **Execution fails → body problem.** Add explicit steps, examples, or validation.
-- **Skills snapshot at session start.** Edits during a session require a restart.
+- **Use fresh sessions for trigger tests.** Some clients snapshot skills at startup.
 - **Test against the weakest model you'll deploy on.** Stronger models forgive vague skills; weaker models expose them.
-- **Run an eval suite.** A handful of representative prompts that should and shouldn't trigger the skill, with expected outputs.
+- **Test both directions.** Include realistic requests and near-misses sharing keywords that should not activate the skill. Repeat ambiguous cases and test new prompts to avoid overfitting.
 
 ---
 
@@ -278,8 +279,8 @@ Before installing any third-party skill:
 Before publishing a skill:
 
 - [ ] Frontmatter `name` matches folder name
-- [ ] Description includes what + when + differentiator
-- [ ] Description includes likely user trigger phrases
+- [ ] Description is concise, with capability and concrete triggers first
+- [ ] Boundaries distinguish related skills where needed
 - [ ] No human-facing docs inside the skill folder
 - [ ] No time-sensitive information
 - [ ] Relative paths only

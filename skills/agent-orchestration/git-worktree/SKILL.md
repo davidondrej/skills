@@ -2,6 +2,7 @@
 name: git-worktree
 description: Use Git worktrees to isolate parallel coding tasks. Use when setting up a task checkout, working in a shared repo, or managing existing worktrees.
 disable-model-invocation: true
+triggers: [user, model]
 ---
 
 # Git Worktrees for Parallel Agents

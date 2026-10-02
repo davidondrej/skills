@@ -1,6 +1,7 @@
 ---
 name: anti-sleep
-description: Keep the user's MacBook awake reliably with macOS caffeinate for a set duration or while a process runs. Use for "don't let my Mac sleep", "keep the screen on", "anti-sleep", "caffeinate", overnight work, or long builds. Unlike a normal background job, it survives temporary agent-shell cleanup.
+description: Keep a Mac awake for a set duration or while a process runs. Use only when the user explicitly invokes /anti-sleep.
+disable-model-invocation: true
 ---
 
 # Anti-Sleep (macOS caffeinate)

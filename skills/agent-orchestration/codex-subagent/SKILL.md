@@ -2,6 +2,7 @@
 name: codex-subagent
 description: Launch OpenAI Codex CLI as a subagent (ChatGPT subscription auth, no API key). Use when delegating a self-contained coding task to Codex from another agent — parallel implementation work, a second opinion, or an independent verification pass.
 disable-model-invocation: true
+triggers: [user, model]
 ---
 
 # Codex CLI as a Subagent

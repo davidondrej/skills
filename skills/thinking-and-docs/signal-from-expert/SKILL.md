@@ -19,7 +19,7 @@ Read every named file in full with `cat -n`. Do not read other files for context
 
 ### 2. Choose sources
 
-Check `<repo>/essays/<expert-slug>/` for saved pieces. Load the `deepapi` skill; if the key is unset, run `source ~/.deepapi/env`. Make 5+ separate `POST /v1/search/web` calls, varying `<expert> <topic>` queries across essays, talks, interviews, and specific sub-questions. Pick the 5–8 most relevant pieces and merge with the user's URLs and saved sources.
+Check `<repo>/essays/<expert-slug>/` for saved pieces. Load the `deepapi` skill; if the key is unset, load the DeepAPI credential using your configured method. Make 5+ separate `POST /v1/search/web` calls, varying `<expert> <topic>` queries across essays, talks, interviews, and specific sub-questions. Pick the 5–8 most relevant pieces and merge with the user's URLs and saved sources.
 
 Show titles and URLs, one per line, and ask "go?". Wait for approval before scraping.
 
@@ -34,7 +34,7 @@ python3 scripts/fetch-sources.py --expert "Paul Graham" --out <repo>/essays/paul
 
 The helper saves each page as `NN-slug.md` with a header and verbatim text. Check every head/tail preview for the real first and last lines. Remove leftover layout junk without changing the prose.
 
-If `<repo>/essays/AGENTS.md` is missing, copy `assets/essays-AGENTS.md` there and add the `CLAUDE.md` symlink.
+If `<repo>/essays/AGENTS.md` is missing, copy `assets/essays-AGENTS.md` there.
 
 ### 4. Read all sources
 

@@ -3,7 +3,7 @@
 ## MacBook installation
 
 - Binary: `~/.local/bin/cua-driver`; app: `/Applications/CuaDriver.app`.
-- Operator notes: refer to your local operator documentation. Use normal `standard` mode; no custom capability manifest or agent-added session timeouts.
+- Operator notes: operator notes. Use normal `standard` mode; no custom capability manifest or agent-added session timeouts.
 - Configuration: `~/.cua-driver/config.json`. Keep telemetry off and recording/history opt-in.
 - Other hosts must be checked independently; installing this skill does not install the driver.
 

@@ -11,11 +11,10 @@ Use DeepAPI (`POST /v1/research/deep`) for all deep research.
 
 ## API key
 
-Read `DEEPAPI_API_KEY` from the environment, falling back to `~/.deepapi/env`. Never source `~/.zshrc`; it breaks the shell (exit 126).
+Read the API key from the environment or your configured secret store. Never source `~/.zshrc`; it breaks the shell (exit 126).
 
 ```bash
-[ -n "$DEEPAPI_API_KEY" ] || . ~/.deepapi/env
-KEY=$DEEPAPI_API_KEY
+KEY=${API_KEY:?Set API_KEY in the environment}
 BASE=${DEEPAPI_API_BASE_URL:-https://deepapi.co}
 ```
 

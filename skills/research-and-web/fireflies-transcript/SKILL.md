@@ -10,22 +10,20 @@ Fetch any meeting transcript from Fireflies.ai as raw text via GraphQL. Read-onl
 
 ## Auth (state-check first)
 
-The API key lives in `~/.fireflies/env` (mode 600, never commit or print it):
+Configure your Fireflies API credential using the documented method (never commit or print it):
 
 ```bash
-source ~/.fireflies/env   # exports FIREFLIES_API_KEY
-[ -n "$FIREFLIES_API_KEY" ] || echo "MISSING KEY - stop and tell the user"
+source "<credential-file>"   # exports API_KEY
+[ -n "$API_KEY" ] || echo "MISSING KEY - stop and tell the user"
 ```
 
-Every call is a POST to `https://api.fireflies.ai/graphql` with
-`Authorization: Bearer $FIREFLIES_API_KEY` and a JSON body `{"query": "..."}`.
+Every call is a POST to `https://api.fireflies.ai/graphql` with authentication configured according to Fireflies' API documentation and a JSON body `{"query": "..."}`.
 
 ## Step 1 - find the meeting id
 
 ```bash
 curl -sS -X POST https://api.fireflies.ai/graphql \
   -H "Content-Type: application/json" \
-  -H "Authorization: Bearer $FIREFLIES_API_KEY" \
   -d '{"query":"{ transcripts(limit: 25) { id title date duration } }"}' \
   | jq -r '.data.transcripts[] | "\(.id) | \(.title) | \(.date)"'
 ```
@@ -43,7 +41,6 @@ curl -sS -X POST https://api.fireflies.ai/graphql \
 QUERY='{ transcript(id: "MEETING_ID") { title sentences { speaker_name text } } }'
 curl -sS -X POST https://api.fireflies.ai/graphql \
   -H "Content-Type: application/json" \
-  -H "Authorization: Bearer $FIREFLIES_API_KEY" \
   -d "$(jq -nc --arg query "$QUERY" '{query: $query}')" \
   > /tmp/ff.json
 
@@ -64,7 +61,7 @@ Optional extras on the same `transcript(id:)` query: `summary { overview short_s
 - `sentences: null` — recording still processing or no audio captured; nothing to pull.
 - `errors[]` in the response instead of `data` — usually a bad field name; fix the query.
 - 401/invalid key — key was rotated; ask the user for a new one (Fireflies dashboard:
-  Settings -> Developer settings), update `~/.fireflies/env`.
+  Settings -> Developer settings), update the configured credential file.
 
 ## Verify before reporting done
 

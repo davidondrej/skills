@@ -1,6 +1,6 @@
 ---
 name: setup-help
-description: 'Walk the user through setting up anything step by step. Use when the user asks for help setting up, configuring, installing, or getting something working — "help me set up X", "walk me through this", "setup-help". Differentiator: gives one current step at a time, then always lists every remaining setup step after each response.'
+description: Guide setup one step at a time and show what remains. Use only when the user explicitly invokes /setup-help.
 disable-model-invocation: true
 ---
 

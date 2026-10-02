@@ -1,23 +1,26 @@
 ---
 name: gpt-review
-description: Launch a GPT 5.6 Sol Max code reviewer and return its findings verbatim. Use only when the user explicitly invokes /gpt-review.
+description: Launch an independent GPT code review and return it verbatim. Use only when the user explicitly invokes /gpt-review.
 disable-model-invocation: true
+triggers: [user, model]
 ---
 
 # GPT Review
 
-Launch a GPT 5.6 Sol Max reviewer to review everything fully and carefully, as if it was a senior developer reviewing the work of a junior.
+Use **GPT-6 Astra Extra High** through Codex, orchestrated by the configured review harness.
 
-**Default harness is bb.** Read `/nagent` and `/bb-cli` first. Spawn a bb thread with Codex **GPT 5.6 Sol Max** (use the Codex mapping in `/nagent`). Reuse this thread's environment so the reviewer sees the same files. Use `--parent-self` when this thread is coordinating the review. Then `bb thread wait` and show the exact `bb thread output`.
+## Run
 
-If the user names another harness (Cursor Task, cmux, Codex CLI, etc.), use that instead.
+Read the configured review harness instructions and follow its launch checks. Discover provider/model/effort IDs rather than guessing. Reuse the current environment, including uncommitted work, and use the harness's documented coordination options when coordinating.
 
-Give it the necessary context, but make sure to stay neutral and unbiased. Do not nudge it towards any one specific solution. The goal here is to do great work. So be as objective and neutral as possible in writing the prompt for the subagent.
+If the user names another harness, read its skill and use it with the same model, effort, workspace, brief, and output requirements. Report unavailable model/effort as blockers; never silently downgrade.
 
-Tell it what to review, but don't be overly specific — let it find its own bugs and shortcomings. Just tell it to work extremely hard, to go deep in the review, and to surface any critical or serious issues found in the review.
+## Review brief
 
-And when the subagent finishes, show the user its exact response in full. Do not rewrite it. Do not update it.
+Give neutral context: scope, paths, intended behavior, and diff/base revision. Ask for a thorough senior-developer review, including related code and tests, without steering toward suspected bugs, solutions, or verdicts. Review only; do not change files. Request a concise plain-English report of serious or critical issues, fixes, and production merge readiness. Distinguish verified findings from uncertainty and identify validation gaps.
 
-Again, the goal here is to write great software. It's to build amazing software, and in order to do that you need to let the subagent do its work: tell it what to review in a broad way, be as unbiased as possible, don't influence it in any way, and tell it to output a detailed report — telling us whether the code is good and safe to be merged into production, or whether there are any serious or critical issues with it, and if so, how to fix them.
+## Result
 
-Also tell it to make the final report concise, written in plain English.
+Use the selected harness's documented wait and output mechanisms. Verify this review actually completed; idle status, timeouts, and queued retries are not completion. Report blockers rather than presenting partial output as a finished review.
+
+Return the completed reviewer's full final response verbatim.

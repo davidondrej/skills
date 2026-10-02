@@ -1,22 +1,22 @@
 ---
 name: herdr
-description: Operate and coordinate AI agents running inside Herdr in Ghostty. Use when the user says "Use the Herdr skill," mentions Herdr, or asks to inspect, message, wait for, or coordinate agents in a Herdr workspace. Herdr-specific; do not use for cmux or ordinary terminal sessions.
+description: Operate and coordinate AI agents in Herdr workspaces in Ghostty. Use when the user mentions Herdr or asks to inspect, message, wait for, or coordinate its agents. Excludes cmux and ordinary terminal sessions.
 ---
 
 # Herdr
 
-Herdr is terminal orchestration, not native agent-to-agent communication or shared memory. Agents call the `herdr` CLI, which controls panes through Herdr's local socket. This works across Pi, Codex, Claude Code, Cursor CLI, and other terminal agents. Native integrations only improve detection, status accuracy, and session restoration.
+Herdr's CLI controls terminal panes through a local socket; it provides neither native agent-to-agent communication nor shared memory. It works with Pi, Codex, Claude Code, Cursor CLI, and other terminal agents. Native integrations improve detection, status accuracy, and session restoration.
 
 ## Preconditions
 
-The controlling agent must run inside Herdr in Ghostty. Verify access and workspace scope:
+Run the controlling agent inside Herdr in Ghostty. Verify access and workspace scope:
 
 ```bash
 test "${HERDR_ENV:-}" = "1"
 test -n "${HERDR_WORKSPACE_ID:-}"
 ```
 
-If either fails, do not pretend to access other agents; tell the user the agent must be launched inside Herdr.
+If either fails, tell the user this agent must be launched inside Herdr; do not claim access to other agents.
 
 One-time installation:
 
@@ -24,77 +24,72 @@ One-time installation:
 npx skills add ogulcancelik/herdr --skill herdr -g
 ```
 
-## CLI workflow
+## Inspect, message, wait, read
+
+Append `--session <name>` to every Herdr command. `HERDR_SESSION` alone can silently select an already-running server. Discover pane IDs; never guess them.
 
 ```bash
-# Discover pane IDs in this workspace; never guess them
-herdr pane list --workspace "$HERDR_WORKSPACE_ID"
+herdr pane list --workspace "$HERDR_WORKSPACE_ID" --session <name>
+herdr pane read <pane-id> --source recent-unwrapped --lines 200 --session <name>
 
-# Read the target's recent context
-herdr pane read <pane-id> --source recent-unwrapped --lines 120
+# For TUI agent composers, separate text from Enter
+herdr pane send-text <pane-id> "Check the failing tests and report back." --session <name>
+sleep 1
+herdr pane send-keys <pane-id> enter --session <name>
 
-# Send a prompt and press Enter
-herdr pane run <pane-id> "Check the failing tests and report back."
-
-# Wait for completion; use idle instead if that integration reports idle
-herdr wait agent-status <pane-id> --status done --timeout 120000
-
-# Read the result
-herdr pane read <pane-id> --source recent-unwrapped --lines 120
+# Confirm submission, then wait for completion (idle if the integration uses it)
+herdr agent wait <pane-id> --status working --timeout 120000 --session <name>
+herdr agent wait <pane-id> --status done --timeout 120000 --session <name>
+herdr pane read <pane-id> --source recent-unwrapped --lines 200 --session <name>
 ```
 
-Stay inside the current workspace. Read before messaging; for inspection-only requests, send nothing. After messaging, wait for `done`, `idle`, or `blocked`, then read the output again. Never assume the prompt was acted on.
+Stay in the current workspace. Read before messaging; send nothing for inspection-only requests. Confirm submission through a native status transition to `working`/`blocked` after Enter, never merely changed pane content. Wait for `done`, `idle`, or `blocked`, then read again; do not assume the prompt was acted on. Corroborate `idle` with pane text as described below.
 
-Do not close, rename, move, resize, or reconfigure panes you did not create. Do not create or close panes unless the user explicitly asks. “Use the Herdr skill” means execute these CLI operations, not merely explain them.
+When coordinating agents, share missing context, prevent duplicate work, and return one combined summary.
 
-## Sharp edges (empirically verified)
+Do not close, rename, move, resize, or reconfigure panes you did not create. Create or close panes only when the user explicitly asks. “Use the Herdr skill” means execute the CLI workflow, not merely explain it.
 
-Hard-won facts from driving herdr in production. Trust these over intuition.
+## Operational details
 
-### Sessions & targeting
+### Sessions and targeting
 
-- Always append `--session <name>` to every command. The `HERDR_SESSION` env var alone silently falls back to whatever server is already running.
-- Destructive ops only via `herdr session stop <name>` / `herdr session delete <name>` (explicit positional name). Never `herdr server stop` — it acts on whatever server is ambient.
-- Target shape is `<session>:<pane-id>`; the pane id itself contains a colon (`w1:p2`). Split on the FIRST colon only.
-- A bare CLI call does not auto-start a server. Start headless with `herdr server --session <name>`.
-- Every herdr-managed process gets `HERDR_ENV=1` and `HERDR_PANE_ID`. Inside nested tmux, `$TMUX` wins — treat that pane as tmux.
+- Use named `herdr session stop <name>` / `herdr session delete <name>` for destructive operations. Never use `herdr server stop`; it targets the ambient server.
+- Targets are `<session>:<pane-id>`. Pane IDs contain a colon (`w1:p2`); split on the **first** colon only.
+- CLI calls do not auto-start a server. Start headless with `herdr server --session <name>`.
+- Managed processes receive `HERDR_ENV=1` and `HERDR_PANE_ID`. Inside nested tmux, `$TMUX` wins: treat the pane as tmux.
+- Use an isolated named session, never `default`, for risky experiments. Re-check `herdr session list --json --session <name>` immediately before stopping or deleting.
 
-### Sending input
+### Input
 
-- `pane send-text` types but does NOT submit — follow with `pane send-keys <pane> enter`. `pane run` = text + Enter in one call.
-- `pane run` is reliable into a shell prompt, but TUI agent composers (Claude Code, Cursor CLI) treat its text+Enter burst as a paste and swallow the Enter — text sits typed but unsubmitted. To message a TUI agent: `send-text`, sleep ~1s, then a separate `send-keys <pane> enter`.
-- C0 control bytes (e.g. ASCII 0x1f) are consumed as terminal control actions and can erase already-typed text. For invisible markers use U+2063 INVISIBLE SEPARATOR — it travels as text.
-- Slash commands open an autocomplete popup; the first Enter may only close the popup or fill an argument placeholder, not submit. `escape` dismisses the popup and keeps the text.
-- Never verify a submit by "pane content changed". Confirm via native agent status flipping to `working`/`blocked` after Enter.
+- `pane send-text` types without submitting. `pane run` sends text + Enter and works at shell prompts, but TUI composers (Claude Code, Cursor CLI) may swallow Enter as part of a paste. Use separate `send-text`, ~1s pause, then `send-keys <pane> enter` calls for TUIs.
+- C0 control bytes (e.g. ASCII 0x1f) trigger terminal actions and can erase typed text. Use U+2063 INVISIBLE SEPARATOR for invisible text markers.
+- Slash-command autocomplete may consume the first Enter to close the popup or fill an argument placeholder. `escape` dismisses the popup while preserving text.
 
-### Reading panes
+### Reading and status
 
-- `pane read --lines N` returns COMPLETELY EMPTY output when N is smaller than the pane's viewport height. Always request >=200 lines and trim locally (`tail -n N`).
-- `pane get` `.cwd` is frozen at pane creation. Use `.foreground_cwd` for the live working directory.
-- `pane read --format ansi` preserves styling. Ghost/placeholder composer text (rotating suggestions, hints) renders dim (SGR-2) or dark truecolor; real typed input renders normal. This is the only reliable way to tell an empty composer from a human draft.
+- `pane read --lines N` returns empty output if N is below viewport height. Request at least 200 lines and at least the viewport height; trim locally with `tail -n N`.
+- `pane get` `.cwd` is fixed at creation; `.foreground_cwd` is live.
+- Use `pane read --format ansi` to distinguish placeholder text from human drafts: suggestions are dim (SGR-2) or dark truecolor; typed input renders normally. Plain text cannot reliably distinguish them.
+- `herdr agent get <pane>` reports native `working`/`idle`/`done`/`blocked`/`unknown` status; prefer it to regex guesses. Long-running foreground tools may still report `idle`; check busy banners such as "esc to interrupt" before treating the pane as free or stale.
+- Native waits: `herdr agent wait <pane> --status <s> --timeout MS`, `herdr wait agent-status <pane> --status <s> --timeout MS`, and `herdr wait output <pane> --match <text>`.
+- Socket protocol >=16 offers `pane.agent_status_changed` and `pane.output_matched` events. Prefer events, with polling as a backstop.
+- Scripts can register via `pane report-agent` and report idle/working/blocked.
 
-### Agent state
+### Workspace and tab lifecycle
 
-- `herdr agent get <pane>` reports `working`/`idle`/`done`/`blocked`/`unknown` — native detection, better than regex-guessing.
-- Known gap: status reads `idle` during a long-running foreground tool call (the model finished its turn; the tool is still grinding). Corroborate an `idle` verdict with pane text (busy banners like "esc to interrupt") before treating a pane as free or stale.
-- Blocking waits exist: `herdr agent wait <pane> --status <s> --timeout MS` and `herdr wait output <pane> --match <text>`.
-- Push events over the socket (protocol >=16): `pane.agent_status_changed`, `pane.output_matched`. Use as the fast path; keep polling as the backstop.
-- Any script can register itself as an agent via `pane report-agent` and report idle/working/blocked.
+- Labels are not unique. Check duplicates yourself; find-by-label adopts the first match. Unlabeled workspaces display their cwd basename, which can collide with an explicit label.
+- `workspace create` seeds tab `1`. Closing the last tab deletes the workspace; closing a tab's only pane closes the tab.
+- Workspace/tab creation respects `--no-focus`, except the first workspace in an empty session. `pane split --no-focus` still shrinks the host viewport: focus and geometry are separate.
+- Named-session restarts preserve IDs and labels, but not processes or agent registrations. Restored panes are fresh shells (`agent_not_found`), not live duplicates; close and replace them only within the pane permissions above.
 
-### Workspace / tab lifecycle
+### Other details
 
-- NO label uniqueness anywhere: workspaces and tabs can share labels. Do your own duplicate checks; find-by-label adopts the first match. An unlabeled workspace displays its cwd basename as its label — a real collision hazard (once caused an adapter to kill a live agent pane it wrongly adopted).
-- `workspace create` seeds one default tab labeled `1`. Closing a workspace's LAST tab deletes the workspace. Closing a tab's only pane closes the tab.
-- `--no-focus` is respected on workspace/tab create, except the very first workspace in an empty session (always focuses). `pane split --no-focus` still shrinks the host tab's viewport — the flag governs focus, not geometry.
-- Workspace/tab/pane IDs and labels survive a server restart within a named session. The processes and agent registrations do NOT — panes return as husks (fresh shell, `agent get` reports `agent_not_found`). Close-and-replace husks; don't treat them as live duplicates.
+- Do not use `tput cols` for layout in scripts launched through `pane run`; it can report a stale default of 80.
+- `herdr integration install <harness>` (claude, codex, cursor, pi, ...) enables native status detection. `herdr notification show <title>` displays an alert.
 
-### Misc
+## Launch agents only when the user asks
 
-- `tput cols` inside a script launched via `pane run` reports a stale default (80). Never trust it for layout math.
-- For risky experiments use an isolated named session (never `default`), and re-check `herdr session list --json` immediately before any stop/delete.
-- `herdr integration install <harness>` (claude, codex, cursor, pi, ...) enables native status detection per agent. `herdr notification show <title>` fires a desktop-style alert.
-
-## Launching agents in new panes (when the user asks)
+### Launching agents in new panes
 
 Use each agent's normal approval and sandbox defaults unless the user has
 explicitly authorized unattended execution for this specific pane. A worker
@@ -121,33 +116,32 @@ are in scope, and the task does not include publishing, deleting, purchasing,
 or changing account/security settings. First-run trust dialogs may still appear
 despite these flags — peek the pane after launch. `herdr integration install
 <cursor|codex|claude>` (once each) enables native agent-status detection.
+The deny-list hook is defense in depth, not a permission boundary. First-run
+trust dialogs may still appear; inspect the pane after launch. Install each
+integration once for native status detection.
 
-NEVER verify a launch with `sleep N && pane read` — that is a non-herdr antipattern. Use the native waits: `herdr agent wait <pane> --status working --timeout MS` (agent picked up the task) or `herdr wait output <pane> --match <text>`, then read the pane.
+Verify launch with `herdr agent wait <pane> --status working --timeout MS` or `herdr wait output <pane> --match <text>`, then read. Never use `sleep N && pane read` as launch verification; the short input-submission pause above serves a different purpose.
 
-### Cursor CLI specifics
+### Cursor CLI
 
-The real binary is `cursor-agent` (`agent` is an alias/new docs name — don't rely on it in scripts). The user's shorthand `cur` = `cursor-agent --yolo`: fine to type into an interactive pane, but use the full binary in scripts — aliases don't expand there. Launch into an existing pane:
+Use `cursor-agent` in scripts. `agent` is an alias/new docs name; the user's interactive `cur` shorthand expands to `cursor-agent --yolo`, but aliases do not expand in scripts.
+
+Discover available model slugs with `cursor-agent --list-models` before launching into an existing shell pane:
 
 ```bash
-herdr pane run <pane-id> "cd <worktree> && cursor-agent --model gpt-5.3-codex-high --yolo 'fix the failing tests'"
+herdr pane run <pane-id> "cd <worktree> && cursor-agent --model <verified-model-slug> --yolo 'fix the failing tests'" --session <name>
 ```
 
-- **Interactive:** `cursor-agent "task"` (or no arg for empty session). **Headless:** `cursor-agent -p "task" --output-format text|json|stream-json`.
-- **Permissions:** `--force` runs commands without per-command approval (alias `--yolo`); `--sandbox enabled|disabled`. Auth for scripts: `CURSOR_API_KEY` env var.
-- **Model:** `--model <slug>` at launch, `/model` in-session. Enumerate with `cursor-agent --list-models` — slugs are version/account-dependent, never hardcode from memory.
-- **Reasoning effort:** there is NO `--effort` flag — effort is baked into the slug suffix: `-low` / `-medium` / `-high` / `-xhigh` (e.g. `gpt-5.3-codex-xhigh`, `claude-opus-4-8-thinking-high`). `-fast` is speed, not effort. Bracket syntax `model[effort=high]` shown in `--help` is NOT actually supported — always use full slugs.
-- **Known bug (mid-2026):** some CLI builds silently drop the reasoning suffix passed via `--model` and fall back to default effort. Verify with `/model` after launch; `--disable-auto-update` keeps a working build stable.
-- **Resume:** `cursor-agent resume` (latest), `--resume <chatId>`, `cursor-agent ls` to list.
-
-## Prompt patterns
-
-- **Inspect:** “Use the Herdr skill. Inspect every agent in this workspace, read its recent output, and summarize its task and status. Do not send anything.”
-- **Ask:** “Use Herdr to find the testing agent, read its context, ask whether the test suite passes, wait for its response, and report back.”
-- **Coordinate:** “Act as lead agent. Inspect all agents, share missing context, prevent duplicate work, wait for results, and give me one combined summary.”
+- **Interactive:** `cursor-agent "task"`, or no argument for an empty session. **Headless:** `cursor-agent -p "task" --output-format text|json|stream-json`.
+- **Permissions:** `--force` / `--yolo` skips per-command approval; `--sandbox enabled|disabled` controls sandboxing. Script auth: `CURSOR_API_KEY`.
+- **Model:** `--model <slug>` at launch, `/model` in-session. Slugs vary by version/account; never invent them from memory.
+- **Effort:** no `--effort` flag. Use full slugs ending in `-low`, `-medium`, `-high`, or `-xhigh` (e.g. `gpt-5.3-codex-xhigh`, `claude-opus-4-8-thinking-high`). `-fast` controls speed, not effort. Despite `--help`, `model[effort=high]` is unsupported.
+- Some builds silently drop `--model` reasoning suffixes. Verify with `/model` after launch; `--disable-auto-update` preserves a working build.
+- **Resume:** `cursor-agent resume` (latest), `--resume <chatId>`, or `cursor-agent ls` to list.
 
 ## Direct shortcuts
 
-Most defaults use the `Ctrl+B` prefix. Prefer direct `Ctrl+Alt` shortcuts, which rarely conflict. Add to `~/.config/herdr/config.toml`:
+Most defaults use `Ctrl+B`. Direct `Ctrl+Alt` shortcuts rarely conflict. Add to `~/.config/herdr/config.toml`:
 
 ```toml
 [keys]
@@ -157,10 +151,10 @@ goto = "ctrl+alt+g"
 new_tab = "ctrl+alt+c"
 ```
 
-Apply changes:
+Apply with:
 
 ```bash
-herdr server reload-config
+herdr server reload-config --session <name>
 ```
 
-To keep prefixed shortcuts but change the prefix, set `prefix = "ctrl+a"` under `[keys]`.
+To keep prefixed shortcuts with a different prefix, set `prefix = "ctrl+a"` under `[keys]`.

@@ -29,7 +29,7 @@ Make model behavior explicit. Preserve the user's quality, cost, privacy, and re
 
 - [Reasoning and output](references/reasoning-and-output.md): effort selection, token budgets, schemas, empty answers, adaptive retries, Python request example.
 - [Routing, cost, and speed](references/routing-cost-speed.md): model fallbacks, provider filters, suffixes, tiers, performance thresholds, caching.
-- [Images, other media, and tools](references/media-and-tools.md): URL/base64 attachments, PDFs/audio/video, tool loops, reasoning preservation.
+- [Images, other media, and tools](references/media-and-tools.md): image generation and aspect ratios, URL/base64 attachments, PDFs/audio/video, tool loops, reasoning preservation.
 - [Reliability and observability](references/reliability.md): error handling, SSE, deadlines, billing, telemetry, privacy, deployment checks.
 - [API field map and sources](references/api-field-map.md): endpoint selection, request parameter families, SDK passthrough, live schemas and authoritative sources.
 

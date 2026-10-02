@@ -1,11 +1,11 @@
 ---
 name: save-idea
-description: Save ideas, observations, content topics, projects, and convictions in ~/code/ideas. Use when the user asks to capture an idea or insight. Adds to idea backlogs, not reminders or tasks.
+description: Save ideas, observations, content topics, projects, and convictions in the ideas repo. Use when the user asks to capture an idea or insight. Adds to idea backlogs, not reminders or tasks.
 ---
 
 # save-idea
 
-Capture the entry in `~/code/ideas`, commit, push, and confirm. All paths below are relative to that repo.
+Capture the entry in the ideas repo, commit, push, and confirm. All paths below are relative to that repo.
 
 ## 1. Capture and Route
 
@@ -46,9 +46,8 @@ Source format: `<repo>, <agent and chat/session>, <YYYY-MM-DD>`.
 
 ```text
 N. Idea exactly as the user said it
-
-\tsource: <repo>, <agent and chat/session>, <date>
-\tany extra links or notes the user gave
+	source: <repo>, <agent and chat/session>, <date>
+	any extra links or notes the user gave
 ```
 
 **Startups, convictions, and mini projects:** indent all source and context lines with four spaces; use `- source:` and a blank line between entries:
@@ -64,16 +63,16 @@ N. Title — one-line explanation.
 
 ## 4. Commit and Push
 
-**The user has pre-authorized and requires commits and pushes for captures in the eight files listed above.** This is an explicit exception to the global no-push-without-asking rule. It covers only those backlogs, including the startup symlink's target, not other repo changes.
+Commit and push captures only when the user has authorized it. This applies only to the listed backlog files, including the startup symlink's target, not other repo changes.
 
 Run Git yourself using `git -C`; do not change cwd or delegate this step:
 
 ```bash
-git -C ~/code/ideas pull --rebase --autostash origin main
+git -C <ideas-repo> pull --rebase --autostash <remote> <branch>
 # Stage only this capture's files; example:
-git -C ~/code/ideas add OBSERVATIONS.md
-git -C ~/code/ideas commit -m "Add observation 1 on local agents"
-git -C ~/code/ideas push origin main
+git -C <ideas-repo> add OBSERVATIONS.md
+git -C <ideas-repo> commit -m "Add observation 1 on local agents"
+git -C <ideas-repo> push <remote> <branch>
 ```
 
 - Stage only the captured idea files; never `git add -A`. For the startup symlink, stage `startup/STARTUP-IDEAS.md`. Keep unrelated staged changes or edits out of the commit.
@@ -86,5 +85,5 @@ Report the exact saved entry text, number, file, and successful push.
 
 ## Protected Locations
 
-- Never write or push to the old `~/code/next-startup` repo. Startup support material belongs in `~/code/ideas/startup/`.
-- Never write to `startup/review/DISCARDED.md`; only the user moves ideas there.
+- Never write or push to the legacy startup repo. Startup support material belongs in the startup support directory.
+- Never write to the discarded-ideas file; only the user moves ideas there.

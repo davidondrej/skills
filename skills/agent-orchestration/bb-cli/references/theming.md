@@ -238,8 +238,9 @@ and semantics:
 ## Applying a theme
 
 1. `bb theme dir` — print the custom-theme directory (e.g. `~/.bb/theme`).
-2. Write your stylesheet to `<that-dir>/<name>/theme.css` (create the folder;
-   `<name>` is the theme id — lowercase/hyphenated, not a built-in id).
+2. Write your stylesheet to `<that-dir>/<name>/theme.css`. Start the name with
+   a letter or digit. Use at most 64 letters, digits, dots, underscores, or
+   hyphens.
 3. `bb theme set <name>` — activate it. To edit later, change the file in place
    and re-run `bb theme set <name>`.
 
@@ -274,18 +275,5 @@ with `{ name, type, colors, tokenColors }`. See https://diffs.com/theme.
 
 There is no separate code-theme setting. `bb theme show` prints the resolved
 Pierre names for the active palette.
-
-Other commands:
-
-- `bb theme set <id> [--favicon-color <color>]` — switch to a built-in
-  (`default`, `nord`, `dracula`, `solarized`, `gruvbox`, `catppuccin`), custom,
-  or plugin-contributed theme. Omitting the flag preserves the favicon color.
-- `bb theme show --css` — dump the active theme's CSS; `bb theme list` shows the
-  active palette and all discovered themes; `bb theme reset` returns to
-  `default` without changing the favicon color.
-- `bb theme favicon set <color>` / `bb theme favicon reset` — update or reset
-  the favicon tint without changing the active theme. Valid colors are
-  `default`, `red`, `orange`, `yellow`, `green`, `teal`, `blue`, `purple`, and
-  `pink`.
 
 Changes apply live to every open window — no reload needed.

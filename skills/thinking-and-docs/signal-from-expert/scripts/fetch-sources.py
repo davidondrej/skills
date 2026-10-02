@@ -8,22 +8,22 @@ Uses curl (not urllib) because the sandbox proxy truncates chunked responses to 
 import argparse, datetime, json, os, re, subprocess, sys, time, uuid
 
 def load_env():
-    if os.environ.get("DEEPAPI_API_KEY") and os.environ.get("DEEPAPI_API_BASE_URL"):
+    if os.environ.get("API_KEY") and os.environ.get("API_BASE_URL"):
         return
-    p = os.path.expanduser("~/.deepapi/env")
+    p = os.path.expanduser("~/.config/api-client/env")
     if os.path.exists(p):
         for line in open(p):
             line = line.strip()
             if line.startswith("export "): line = line[7:]
             if "=" in line and not line.startswith("#"):
-                k, v = line.split("=", 1); os.environ.setdefault(k, v.strip().strip('"').strip("'"))
-    if not os.environ.get("DEEPAPI_API_KEY"):
-        sys.exit("DEEPAPI_API_KEY not set. Run: source ~/.deepapi/env")
+                k, v = line.split("=", 1); os.environ.setdefault(k, v.strip().strip('\"').strip("'"))
+    if not os.environ.get("API_KEY"):
+        sys.exit("API_KEY not set. Run: source ~/.config/api-client/env")
 
 def curl(method, path, body=None):
-    base = os.environ["DEEPAPI_API_BASE_URL"].rstrip("/")
+    base = os.environ["API_BASE_URL"].rstrip("/")
     cmd = ["curl", "-s", "-m", "180", "-X", method, path if path.startswith("http") else base + path,
-           "-H", f"Authorization: Bearer {os.environ['DEEPAPI_API_KEY']}", "-H", f"Idempotency-Key: {uuid.uuid4()}"]
+           "-H", f"Authorization: Bearer {os.environ['API_KEY']}", "-H", f"Idempotency-Key: {uuid.uuid4()}"]
     if body is not None:
         cmd += ["-H", "Content-Type: application/json", "-d", json.dumps(body)]
     out = subprocess.run(cmd, capture_output=True, text=True).stdout

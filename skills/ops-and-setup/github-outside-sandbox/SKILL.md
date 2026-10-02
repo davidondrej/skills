@@ -1,6 +1,6 @@
 ---
 name: github-outside-sandbox
-description: Run Git and GitHub CLI commands through the host context when sandboxing blocks Keychain authentication, network access, or .git writes. Use for gh auth, repository or PR operations, and git index.lock or permission failures. Handles execution context only, not GitHub workflow design.
+description: Run Git and GitHub CLI commands on the host when sandboxing blocks Keychain auth, network access, or .git writes. Use for gh auth, repo/PR operations, index.lock, or permission errors; covers execution context only.
 ---
 
 # GitHub Outside Sandbox

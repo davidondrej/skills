@@ -2,6 +2,7 @@
 name: who-is-this
 description: 'Research a person''s public track record and give a short credibility assessment. Use only when the user explicitly invokes /who-is-this.'
 disable-model-invocation: true
+triggers: [user, model]
 ---
 
 # who-is-this
