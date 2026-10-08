@@ -89,13 +89,36 @@ Do not close, rename, move, resize, or reconfigure panes you did not create. Cre
 
 ## Launch agents only when the user asks
 
-ALWAYS launch agents with auto-approval — an unattended worker can otherwise stall on an unanswered prompt:
+### Launching agents in new panes
+
+Use each agent's normal approval and sandbox defaults unless the user has
+explicitly authorized unattended execution for this specific pane. A worker
+that waits for approval is safer than silently granting a prompt permission to
+run arbitrary commands. The `global-agent-guardrails` deny-list is defense in
+depth, not a permission boundary: it only matches known patterns and can miss
+obfuscated commands or harmful changes that are not on the list.
+
+For the normal, approval-aware launch, omit the bypass flags:
+
+- Cursor CLI: `cursor-agent "task"`
+- Codex CLI: `codex "task"`
+- Claude Code: `claude "task"`
+
+Only when the user has explicitly approved unattended execution, the worktree
+is isolated, and the output is reviewable, use the corresponding force flag:
 
 - Cursor CLI: `cursor-agent --yolo "task"` (alias for `--force`)
 - Codex CLI: `codex --yolo "task"`
 - Claude Code: `claude --dangerously-skip-permissions "task"`
 
-This relies on an agent guardrail deny-list hook being installed across agents. First-run trust dialogs may still appear; inspect the pane after launch. Install each integration once for native status detection.
+Before using a force flag, confirm that the prompt is trusted, no credentials
+are in scope, and the task does not include publishing, deleting, purchasing,
+or changing account/security settings. First-run trust dialogs may still appear
+despite these flags — peek the pane after launch. `herdr integration install
+<cursor|codex|claude>` (once each) enables native agent-status detection.
+The deny-list hook is defense in depth, not a permission boundary. First-run
+trust dialogs may still appear; inspect the pane after launch. Install each
+integration once for native status detection.
 
 Verify launch with `herdr agent wait <pane> --status working --timeout MS` or `herdr wait output <pane> --match <text>`, then read. Never use `sleep N && pane read` as launch verification; the short input-submission pause above serves a different purpose.
 
