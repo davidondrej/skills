@@ -1,6 +1,6 @@
 ---
 name: decisions
-description: Ask the agent to list all choices it made during the current work that it is not confident of. Manual-only; invoke with /decisions.
+description: Ask the agent to list all choices it made during the current work that it is not confident of. Manual-only; the user must ask for it by name.
 disable-model-invocation: true
 triggers: [user, model]
 ---

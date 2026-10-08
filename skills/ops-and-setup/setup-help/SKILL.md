@@ -1,6 +1,6 @@
 ---
 name: setup-help
-description: Guide setup one step at a time and show what remains. Use only when the user explicitly invokes /setup-help.
+description: Guide setup one step at a time and show what remains. Use only when the user explicitly asks for it by name.
 disable-model-invocation: true
 ---
 
