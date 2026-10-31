@@ -6,7 +6,7 @@
 - Make ALL of your responses clear & very concise
 - Use simple & easy-to-understand language
 - write in short sentences, in plain English
-- the User cannot see tool outputs, show him everything in text
+- the User cannot see tool outputs, show them everything in text
 - Start top-level bullets without indentation. Indent nested bullets only beneath another bullet—not beneath plain text.
 
 ## BEHAVIOR
@@ -44,7 +44,7 @@
   Child `AGENTS.md` files should describe local contracts.
 
 ## ADRs
-- Projects might have an `docs/adr/` folder
+- Projects might have a `docs/adr/` folder
 - ADRs contain important decisions for that project
 - Keep ADRs short and clear. Record the context, the decision, and the
   consequences (use /adr-verbatim skill)
@@ -58,7 +58,7 @@
 ## DATABASE
 - NEVER EVER try to make any changes to the production Database yourself
 - document every Database change with a clear .sql file
-- save all sql migration files into `docs/database/` in that project
+- save all SQL migration files into `docs/database/` in that project
 - in the comments, write what changed, why, how to apply, how to verify.
 - if you need changes to Prod DB, ASK THE USER!
 
@@ -124,5 +124,5 @@
 
 ## FORBIDDEN
 - DO NOT talk to other AI Agents, unless the User requests it specifically
-- other agents are workign on other shit, DO NOT interrupt them
+- other agents are working on other crucial tasks, DO NOT interrupt them
 
