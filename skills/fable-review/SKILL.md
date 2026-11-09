@@ -7,7 +7,7 @@ triggers: [user, model]
 
 # Fable Review
 
-Use **Fable 5.1 Extra High** through Claude Code, orchestrated by [Cloudroom](https://www.cloudroom.dev).
+Use **Fable 5.2 Extra High** through the Cursor CLI harness, orchestrated by [Cloudroom](https://www.cloudroom.dev).
 
 ## Run
 
