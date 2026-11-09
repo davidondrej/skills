@@ -6,7 +6,7 @@
 - Make ALL of your responses clear & very concise
 - Use simple & easy-to-understand language
 - write in short sentences, in plain English
-- the User cannot see tool outputs, show him everything in text
+- the User cannot see tool outputs, show the User everything in text
 - Start top-level bullets without indentation. Indent nested bullets only beneath another bullet—not beneath plain text.
 
 ## BEHAVIOR
@@ -66,7 +66,7 @@
 ## OTHER CONTRIBUTORS
 - many other Humans/Agents are working in this repo
 - so DO NOT delete, revert or overwrite changes YOU did not make.
-- be aware that the User may also be working on this computer
+- be aware that the User is also working on this computer
 - DO NOT open random browser tabs, or applications, without the User's explicit approval
 - If unrelated changes appear, assume other actors made them
 - When writing commit messages, NEVER EVER auto-add your agent name as co-author!
@@ -75,7 +75,7 @@
 - the production branch is the "main" branch
 - do not push to github by yourself
 - when the User says “push to github”, do all the steps required to do so (no overthinking!)
-- if you are in a worktree, follow the project's documented setup process for environment files
+- if you are in a worktree, you should copy the `.env` files from the Primary Checkout into the worktree
 - On macOS, search with `rg`, `git grep -I`, or `LC_ALL=C git grep`.
 
 ## SECRETS
