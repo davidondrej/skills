@@ -5,7 +5,7 @@ description: Distribute global skills across Codex, Claude Code, Pi, Hermes, and
 
 # Distribute a Skill Across All Agents
 
-A global skill must exist at all five locations on the user's Mac, directly or via symlink, for every agent to discover it.
+A global skill must exist at all five locations on the user's MacBook, directly or via symlink, for every agent to discover it.
 
 ## Skill locations
 
@@ -23,7 +23,7 @@ A global skill must exist at all five locations on the user's Mac, directly or v
    ls -la ~/.claude/skills
    # Expect: ~/.claude/skills -> ~/.agents/skills
    ```
-   If it is a real directory, copies have diverged — ask the user before touching.
+   If it is a real directory, copies have diverged — ask before touching.
 3. **Copy to Hermes**; Claude and Pi are covered by symlinks:
    ```bash
    SKILL=<skill-name>

@@ -91,7 +91,7 @@ Claude Code cmux note: after Claude finishes, it may prefill a predicted next us
 
 ### Self-goal setting
 
-Use a supported goal-creation tool such as `create_goal` only when the user explicitly asks to set a goal. The user can give high-level intent: "Inspect this repo, then write yourself a `/goal` with a verifiable stop condition and pursue it." Supply files to read, constraints, and the validation command. If intent is underspecified, ask clarifying questions before setting the goal.
+Use a supported goal-creation tool such as `create_goal` only when the user explicitly asks to set a goal. They can give high-level intent: "Inspect this repo, then write yourself a `/goal` with a verifiable stop condition and pursue it." Supply files to read, constraints, and the validation command. If intent is underspecified, ask clarifying questions before setting the goal.
 
 ## Launching and controlling a goal
 

@@ -1,29 +1,41 @@
 ---
 name: reset-cursor-acp
-description: 'Reset a stuck Cursor ACP thread in a thread manager and reload its configuration. Use only when the user explicitly invokes /reset-cursor-acp.'
+description: 'Reset a stuck Cursor ACP thread in bb and reload its configuration. Use only when the user explicitly invokes /reset-cursor-acp.'
 disable-model-invocation: true
 ---
 
-# Reset Cursor ACP in a thread manager
+# Reset Cursor ACP in bb
 
-For terminal sessions use `cursor-cli`; for general thread-manager control, use its documented CLI.
+For terminal sessions use `cursor-cli`; for general bb control use `bb-cli`.
 
 ## How resets work
 
-- A thread manager may start one `cursor-agent acp` subprocess per thread, on demand.
-- Do not assume there is a global Cursor ACP server or create one with a watchdog.
+- bb's `provider-acp` plugin starts one `cursor-agent acp` subprocess **per thread, on demand**, owned by a `bb-provider-bridge-worker`.
+- **There is no global Cursor ACP server.** Do not create one or keep it alive with a watchdog.
 - Rules, skills, and `.cursor/mcp.json` reload when a new subprocess starts.
-- Stop the selected thread using the thread manager's documented procedure to release its runtime while preserving history. The next message starts a fresh agent.
+- `bb thread stop <id>` releases the runtime and stops its subprocess, preserving history. The next message starts a fresh agent.
 
 ## Quick reset
 
-Use the reset utility documented for your thread manager to reset the selected thread, the current thread, or perform a dry run. Only stop other threads if explicitly needed.
+Resolve `scripts/reset-cursor-acp.sh` relative to this `SKILL.md`. Run:
 
-Find thread ids using the thread manager's status or thread-list command.
+```bash
+scripts/reset-cursor-acp.sh <thread-id>      # reset one Cursor thread
+scripts/reset-cursor-acp.sh --self           # reset the current thread (BB_THREAD_ID)
+scripts/reset-cursor-acp.sh                  # no thread: orphan cleanup + health check only
+scripts/reset-cursor-acp.sh --dry-run        # show what would happen
+scripts/reset-cursor-acp.sh <id> --kill-all  # also kill live agents of OTHER Cursor threads
+```
 
-Use the utility's documented behavior to stop the selected thread, clean up orphaned `cursor-agent acp` processes, check CLI version/login/update status, and prompt for the next message. Avoid affecting other threads unless explicitly requested.
+Find Cursor thread ids with `bb status` (current thread) or:
 
-If sandboxing blocks process inspection, rerun the utility outside the sandbox.
+```bash
+bb thread list --json | python3 -c 'import json,sys; [print(t["id"], t["status"], t["title"]) for t in json.load(sys.stdin) if t.get("providerId")=="acp-cursor"]'
+```
+
+The script stops the selected thread, removes orphaned `cursor-agent acp` processes (parent gone or not a bb bridge worker), reports CLI version/login/update status, and asks for the next message. Other threads stay running unless `--kill-all`.
+
+If sandboxing blocks `ps` with "operation not permitted", rerun the script outside the sandbox.
 
 ## Verify
 
@@ -31,16 +43,16 @@ Send one short message to verify a fresh agent responds. If it hangs again, chec
 
 ## Known causes
 
-- **Old Cursor CLI.** If the health check shows an update, update the thread manager and reset.
+- **Old Cursor CLI.** If the health check shows an update, run `bb updates apply`, then reset.
 - **Expired login.** Symptom "Failed to initialize session services". Fix: `cursor-agent login`, then reset.
 - **Pending permission.** Cursor waits for `session/request_permission`. Check and resolve the thread's pending approval before resetting.
-- **Resume failure.** For `session/load` → "Session not found", use a fresh session after stopping the thread rather than retrying the load.
+- **Resume failure.** For `session/load` → "Session not found", use a fresh session after `bb thread stop` rather than retrying the load.
 - **Team-level MCP servers** from the Cursor dashboard do not work in ACP mode. Only project or user `.cursor/mcp.json`.
-- **Rate limits.** Enable retries using the thread manager's documented settings.
+- **Rate limits.** Enable retries with `bb plugin enable provider-retry`.
 
 ## Do not
 
 - No launchd KeepAlive, cron, or watchdog for `cursor-agent acp`.
-- Never blindly run `pkill -f cursor-agent`; it kills all Cursor threads and the interactive TUI. Use the documented reset utility, which should target orphans by default.
-- Do not restart the thread manager for one stuck thread; stop only the affected thread.
-- Do not compact the thread; Cursor does not support it.
+- Never blindly run `pkill -f cursor-agent`; it kills all Cursor threads and the interactive TUI. Use the script, which targets orphans by default.
+- Do not restart bb for one stuck thread; use `bb thread stop`.
+- Do not use `bb thread compact`; Cursor does not support it.

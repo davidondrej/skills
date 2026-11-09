@@ -9,12 +9,12 @@ Manage machines through the API or CLI; use SSH or the command API inside a VM. 
 
 ## Box to Boat migration
 
-Use `boat`, `https://boat.dev/api/v1`, `/sandboxes`, and `API_KEY` for current examples. Docs live at `https://docs.boat.dev`. Existing projects may still use Box names; inspect their configuration before migrating. Renaming this skill does not authorize changing installed tools, deployed applications, or credentials. See [migration notes](references/operations.md#box-to-boat-migration).
+Use `boat`, `https://boat.dev/api/v1`, `/sandboxes`, and `BOAT_API_KEY` for current examples. Docs live at `https://docs.boat.dev`. Existing projects may still use Box names; inspect their configuration before migrating. Renaming this skill does not authorize changing installed tools, deployed applications, or credentials. See [migration notes](references/operations.md#box-to-boat-migration).
 
 ## Identify the account and target
 
 1. Read project instructions and operational notes. Verify the account, organization, sandbox, and repository; reuse existing mappings instead of provisioning duplicates.
-2. Load `API_KEY` from the environment or the project's documented, gitignored credentials file. Do not assume a universal path, search unrelated credential stores, or print credentials. Use the secrets skill for a new key.
+2. Load `BOAT_API_KEY` from the environment or the project's documented, gitignored credentials file. Do not assume a universal path, search unrelated credential stores, or print credentials. Use the secrets skill for a new key.
 3. Check authentication and state with `GET /me`, `/limits`, and `/sandboxes`, or CLI `boat status`, `boat list`, and relevant `--help`. Filter output to needed fields.
 4. Check installed tools. API calls need no Boat CLI or SDK. If installation is needed, read official instructions; never execute a remote installer blindly.
 
@@ -41,12 +41,12 @@ Installation does not sign in. If signed out, send an existing approved project 
 
 ## API access
 
-- Base: `https://boat.dev/api/v1`; bearer header: `Authorization: Bearer $API_KEY`. JSON bodies use `Content-Type: application/json`.
+- Base: `https://boat.dev/api/v1`; bearer header: `Authorization: Bearer $BOAT_API_KEY`. JSON bodies use `Content-Type: application/json`.
 - Account-wide operations require an account key; machine-scoped keys cover only their sandbox.
 - Creating scoped keys requires browser sign-in or an admin-scoped token; rotating and revoking remain session-gated. Read [API keys](https://docs.boat.dev/api-keys) before credential changes.
 - Do not assume provider onboarding has an API. Boat-managed provider login uses the Agents page; injecting existing agent credentials is a separate environment setting.
 
-## Preserve the user's scope
+## Preserve the user’s scope
 
 - Write a focused assignment preserving intent, constraints, and corrections. Never invent requirements, deliverables, permissions, or approval.
 - Model, machine, repository, and thread placement guide the launcher. Give each worker only its task and necessary context.

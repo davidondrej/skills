@@ -95,13 +95,13 @@ ALWAYS launch agents with auto-approval — an unattended worker can otherwise s
 - Codex CLI: `codex --yolo "task"`
 - Claude Code: `claude --dangerously-skip-permissions "task"`
 
-Use auto-approval only when an appropriate deny-list hook is installed across agents. First-run trust dialogs may still appear; inspect the pane after launch. Install each integration once for native status detection.
+First-run trust dialogs may still appear; inspect the pane after launch. Install each integration once for native status detection.
 
 Verify launch with `herdr agent wait <pane> --status working --timeout MS` or `herdr wait output <pane> --match <text>`, then read. Never use `sleep N && pane read` as launch verification; the short input-submission pause above serves a different purpose.
 
 ### Cursor CLI
 
-Use `cursor-agent` in scripts. `agent` is an alias/new docs name; the user's interactive `cur` shorthand expands to `cursor-agent --yolo`, but aliases do not expand in scripts.
+Use `cursor-agent` in scripts. `agent` is an alias/new docs name; the user's interactive `cur` shorthand may expand to `cursor-agent --yolo`, but aliases do not expand in scripts.
 
 Discover available model slugs with `cursor-agent --list-models` before launching into an existing shell pane:
 

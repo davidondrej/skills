@@ -5,13 +5,13 @@ description: Direct browser control via CDP. Use when the user wants to automate
 
 # browser-harness
 
-Direct browser control via CDP. For task-specific edits, use `workspace/agent_helpers.py`. For setup, install, or connection problems, read install.md.
+Direct browser control via CDP. For task-specific edits, use `agent-workspace/agent_helpers.py`. For setup, install, or connection problems, read install.md.
 
 **Routing check first:** if the task needs no interaction (no clicks, logins, or forms) and you just want page content, use DeepAPI `POST /v1/scrape/website` instead of driving a browser — see the `deepapi` skill. Use browser-harness when the task needs a real browser: interaction, JS-heavy flows, logged-in sessions, or visual verification.
 
-Domain skills (community-contributed per-site playbooks under `workspace/domain-skills/`) are off by default. Set `BH_DOMAIN_SKILLS=1` to enable them; see the bottom section.
+Domain skills (community-contributed per-site playbooks under `agent-workspace/domain-skills/`) are off by default. Set `BH_DOMAIN_SKILLS=1` to enable them; see the bottom section.
 
-**If `BH_DOMAIN_SKILLS=1` and the task is site-specific, read every file in the matching `workspace/domain-skills/<site>/` directory before inventing an approach.**
+**If `BH_DOMAIN_SKILLS=1` and the task is site-specific, read every file in the matching `agent-workspace/domain-skills/<site>/` directory before inventing an approach.**
 
 ## Usage
 
@@ -103,12 +103,12 @@ If you start struggling with a specific mechanic while navigating, look in inter
 - Connect to the user's running Chrome. Don't launch your own browser.
 - cdp-use is only for CDPClient.send_raw. Prefer raw CDP strings over typed wrappers.
 - run.py stays tiny. No argparse, subcommands, or extra control layer.
-- Core helpers stay short. Put task-specific helper additions in `workspace/agent_helpers.py`; daemon/bootstrap and remote session admin live in the core package.
+- Core helpers stay short. Put task-specific helper additions in `agent-workspace/agent_helpers.py`; daemon/bootstrap and remote session admin live in the core package.
 - Don't add a manager layer. No retries framework, session manager, daemon supervisor, config system, or logging framework.
 
 ## Hermes Agent integration
 
-Installed at `~/Developer/browser-harness` as editable `uv tool install -e .`. Binary at `~/.local/bin/browser-harness`. Skill at `~/.hermes/skills/browser-harness/`.
+Installed as an editable `uv tool install -e .` from your local browser-harness checkout. Binary at `~/.local/bin/browser-harness`. Skill at `~/.hermes/skills/browser-harness/`.
 
 **Frontmatter pitfall:** The upstream SKILL.md ships with `name: browser` in frontmatter, which collides with Hermes's built-in `browser` toolset. When copying into `~/.hermes/skills/`, rename to `name: browser-harness` in the frontmatter or Hermes will shadow/conflict with its own browser tools.
 
@@ -143,7 +143,7 @@ print("Written", len(text), "chars")
 
 ## Hermes Agent integration
 
-Installed at `~/Developer/browser-harness` as editable `uv tool install -e .`. Binary at `~/.local/bin/browser-harness`. Skill at `~/.hermes/skills/browser-harness/`.
+Installed as an editable `uv tool install -e .` from your local browser-harness checkout. Binary at `~/.local/bin/browser-harness`. Skill at `~/.hermes/skills/browser-harness/`.
 
 **Frontmatter pitfall:** The upstream SKILL.md ships with `name: browser` in frontmatter, which collides with Hermes's built-in `browser` toolset. When copying into `~/.hermes/skills/`, rename to `name: browser-harness` in the frontmatter.
 
@@ -192,8 +192,8 @@ print("Written", len(text), "chars")
 
 ## Domain skills (opt-in)
 
-Only applies when `BH_DOMAIN_SKILLS=1`. Otherwise ignore — `workspace/domain-skills/` is dormant and `goto_url` won't surface skill files.
+Only applies when `BH_DOMAIN_SKILLS=1`. Otherwise ignore — `agent-workspace/domain-skills/` is dormant and `goto_url` won't surface skill files.
 
-When enabled, search `workspace/domain-skills/<host>/` before inventing an approach. `goto_url` returns up to 10 skill filenames for the navigated host.
+When enabled, search `agent-workspace/domain-skills/<host>/` before inventing an approach. `goto_url` returns up to 10 skill filenames for the navigated host.
 
-If you learn anything non-obvious — a private API, stable selector, framework quirk, URL pattern, hidden wait, or site-specific trap — open a PR to `workspace/domain-skills/<site>/`. Capture the durable shape of the site (the map, not the diary). Don't write pixel coordinates (break on layout), task narration, or secrets — the directory is public.
+If you learn anything non-obvious — a private API, stable selector, framework quirk, URL pattern, hidden wait, or site-specific trap — open a PR to `agent-workspace/domain-skills/<site>/`. Capture the durable shape of the site (the map, not the diary). Don't write pixel coordinates (break on layout), task narration, or secrets — the directory is public.

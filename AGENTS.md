@@ -6,16 +6,16 @@
 - Make ALL of your responses clear & very concise
 - Use simple & easy-to-understand language
 - write in short sentences, in plain English
-- the User cannot see tool outputs, show the User everything in text
+- the User cannot see tool outputs, show him everything in text
 - Start top-level bullets without indentation. Indent nested bullets only beneath another bullet—not beneath plain text.
 
 ## BEHAVIOR
 - For local previews, use localhost
 - for major product / architecture decisions, consult the User
 - DO NOT use the multi-choice question UI. Ask the User in plain text.
-- Never suggest that the User switch to Plan Mode, and never switch to it yourself
+- Never suggest that the user switch to Plan Mode, and never switch to it yourself
 - DO NOT add new dependencies without the User's explicit approval or request
-- Assume the User may have changed things since you last looked (files, apps, timelines). Re-check the live state before you answer or act.
+- Assume the user may have changed things since you last looked (files, apps, timelines). Re-check the live state before you answer or act.
 
 ## CODE QUALITY
 - NEVER mention development time (aka how long things will take)
@@ -37,7 +37,7 @@
 - Keep docs concise, operational, and source-backed.
 - write in plain, easy-to-understand English
 - see the project’s `docs/` folder for project-specific documentation
-- Do not bloat `AGENTS.md` or README files, only the User can add to them!!
+- Do not bloat `AGENTS.md` or README files, only the user can add to them!!
 - Ensure every important subfolder has its own `AGENTS.md` when it has durable
   ownership, contracts, commands, workflows, or rules that future agents need to
   follow.
@@ -59,15 +59,15 @@
 ## DATABASE
 - NEVER EVER try to make any changes to the production Database yourself
 - document every Database change with a clear .sql file
-- save all sql migration files into `docs/database/` in that project
+- save all sql migration files into the project's designated database docs folder
 - in the comments, write what changed, why, how to apply, how to verify.
 - if you need changes to Prod DB, ASK THE USER!
 
 ## OTHER CONTRIBUTORS
 - many other Humans/Agents are working in this repo
 - so DO NOT delete, revert or overwrite changes YOU did not make.
-- be aware that the User is also working on this computer
-- DO NOT open random browser tabs, or applications, without the User's explicit approval
+- be aware that the user is also working on this computer
+- DO NOT open random browser tabs, or applications, without the user's explicit approval
 - If unrelated changes appear, assume other actors made them
 - When writing commit messages, NEVER EVER auto-add your agent name as co-author!
 
@@ -95,7 +95,7 @@
 - every project should have an `AGENTS.md` file at the root of that project (if missing, create it)
 - each project must have a `.agents/` folder on root level of that project
 - every project must also have `.claude/skills/` folder, which is an exact symlink to `.agents/skills/`
-- for open-source repos, add a root level `private/` folder, which is gitignored, where we can save .md files and other context that should not be visible to the public
+- for open-source repos, keep private context out of the public repo (gitignored)
 
 ## SPEED
 - prioritize working fast & moving fast
@@ -105,13 +105,13 @@
   Independent work runs IN PARALLEL by default. Sequential is the exception and
   needs a reason.
 - if the next step is obvious, clear & safe -- JUST DO IT.
-- tell the User clearly when they are your Bottleneck! be honest.
+- tell the User clearly when he is your Bottleneck! be honest.
 
 ## DECISIONS vs EXECUTION
 - for important Software Design or Architecture decisions, slow down, think through
   multiple alternatives
 - use the "deepapi" skill to do multiple researches & scrapes, and work
-  closely with the User to ensure they have complete understanding
+  closely with the User to ensure he has complete understanding
 - Execution: when the next step is obvious, do it. Do not overthink this.
 - On complex topics, focus on educating & upskilling the User.
 

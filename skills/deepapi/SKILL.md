@@ -13,14 +13,14 @@ This file is a compact router. The `references/` files are organized by user wor
 
 ## Required Environment
 
-- Read the API base URL and API key from the environment.
-- If either is missing, load the platform-specific DeepAPI environment configuration using its documented setup instructions, then re-check.
+- Read `DEEPAPI_API_BASE_URL` and `DEEPAPI_API_KEY` from the environment.
+- If either is missing, load the platform file and re-check: PowerShell `. "$HOME/.deepapi/env.ps1"`; bash/zsh `source ~/.deepapi/env`.
 - If still missing, stop and ask the user to run the setup prompt from https://deepapi.co/docs.
-- Never commit, print, log, paste, or expose the API key.
+- Never commit, print, log, paste, or expose `DEEPAPI_API_KEY`.
 
 ## Request Rules
 
-- Send `Authorization: Bearer <API_KEY>` on every request.
+- Send `Authorization: Bearer $DEEPAPI_API_KEY` on every request.
 - Send `X-DeepAPI-Skill-Version` with the managed version from `VERSION.txt` in this skill folder on every request. If that file is missing, use this file's frontmatter `version`.
 - Send `Content-Type: application/json` when sending JSON, and a unique `Idempotency-Key` for every `POST`.
 - Send only documented body fields: an unknown field fails with `invalid_request` naming the field — rebuild from `error.fix` and retry.

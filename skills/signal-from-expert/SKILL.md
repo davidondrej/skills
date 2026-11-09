@@ -19,7 +19,7 @@ Read every named file in full with `cat -n`. Do not read other files for context
 
 ### 2. Choose sources
 
-Check `<repo>/essays/<expert-slug>/` for saved pieces. Load the `deepapi` skill; if the key is unset, ask the user to configure access. Make 5+ separate `POST /v1/search/web` calls, varying `<expert> <topic>` queries across essays, talks, interviews, and specific sub-questions. Pick the 5–8 most relevant pieces and merge with the user's URLs and saved sources.
+Check `<repo>/essays/<expert-slug>/` for saved pieces. Load the `deepapi` skill; if the key is unset, run `source ~/.deepapi/env`. Make 5+ separate `POST /v1/search/web` calls, varying `<expert> <topic>` queries across essays, talks, interviews, and specific sub-questions. Pick the 5–8 most relevant pieces and merge with the user's URLs and saved sources.
 
 Show titles and URLs, one per line, and ask "go?". Wait for approval before scraping.
 

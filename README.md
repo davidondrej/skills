@@ -57,7 +57,7 @@ hooks/                     shell safety hooks for agents
 - [`fireflies-transcript`](skills/fireflies-transcript/) — Fetch raw Fireflies.ai meeting transcripts.
 - [`git-worktree`](skills/git-worktree/) — Use Git worktrees to isolate parallel coding tasks.
 - [`github-outside-sandbox`](skills/github-outside-sandbox/) — Run Git and GitHub CLI commands on the host when sandboxing blocks Keychain auth, network access, or .git writes.
-- [`global-agent-guardrails`](skills/global-agent-guardrails/) — Configure a shared guard against catastrophic shell commands in local AI agents.
+- [`global-agent-guardrails`](skills/global-agent-guardrails/) — Configure the shared guard against catastrophic shell commands in local AI agents.
 - [`goal-loop`](skills/goal-loop/) — Draft /goal prompts and explain persistent agent loops.
 - [`gpt-review`](skills/gpt-review/) — Launch an independent GPT-6-Astra code review and return it verbatim.
 - [`handoff`](skills/handoff/) — Capture session context for a fresh agent.
@@ -74,15 +74,14 @@ hooks/                     shell safety hooks for agents
 - [`openrouter`](skills/openrouter/) — Design, build, debug, and optimize OpenRouter API integrations.
 - [`persistent-localhost`](skills/persistent-localhost/) — Manage persistent dev servers, APIs, and other local processes on a port using macOS LaunchAgents.
 - [`prompt-for-others`](skills/prompt-for-others/) — Write a prompt teammates can give their AI agents to apply a fix, upgrade, or setup change.
-- [`push-skills`](skills/push-skills/) — Push skills and global AGENTS.md to the private repo and verify the public mirror.
 - [`read-all-adrs`](skills/read-all-adrs/) — Read every ADR markdown file in the project's docs/adr/ folder so you have full context on past decisions.
 - [`remind`](skills/remind/) — Rewrite the last response simpler and shorter in plain English, prefixed with a 3-5 sentence TLDR of the conversation so far.
 - [`rename`](skills/rename/) — Manually-invoked skill that renames the current thread or session to 2-5 lowercase descriptive words.
 - [`rename-process`](skills/rename-process/) — Coordinate project or repository renames and moves involving Git, BB, services, or multiple machines.
 - [`repo-sync`](skills/repo-sync/) — Manage automatic Git syncing on macOS with repo-sync.
-- [`reset-cursor-acp`](skills/reset-cursor-acp/) — Reset a stuck Cursor ACP thread in a thread manager and reload its configuration.
+- [`reset-cursor-acp`](skills/reset-cursor-acp/) — Reset a stuck Cursor ACP thread in bb and reload its configuration.
 - [`risky-changes`](skills/risky-changes/) — Verify assumptions before implementing large or risky changes to APIs, provider data, billing, pricing, quotas, or defaults.
-- [`save-idea`](skills/save-idea/) — Save ideas, observations, content topics, projects, and convictions in the ideas repo.
+- [`save-idea`](skills/save-idea/) — Save ideas, observations, content topics, projects, and convictions in your ideas repo.
 - [`self-archive`](skills/self-archive/) — Archive the current Cloudroom thread and release its runtime.
 - [`setup-help`](skills/setup-help/) — Guide setup one step at a time and show what remains.
 - [`signal-from-expert`](skills/signal-from-expert/) — Compare the user's notes with an expert's work on a topic.

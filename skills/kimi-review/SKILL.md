@@ -19,7 +19,7 @@ Try these in order. Move to the next one only when the current one fails.
 4. `--provider pi --model openrouter/moonshotai/kimi-k3.1-pro --reasoning-level max`
 5. `--provider acp-opencode --model openrouter/moonshotai/kimi-k3.1-pro --reasoning-level max`
 
-Vercel comes first because it keeps no data and does not train on it. OpenRouter serves this model only through Moonshot itself. Vercel routes may incur usage charges.
+Vercel comes first because it keeps no data and does not train on it. OpenRouter serves this model only through Moonshot itself. Vercel routes bill the user's Vercel AI Gateway credits.
 
 ## Pi setup
 

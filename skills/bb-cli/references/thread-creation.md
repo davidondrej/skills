@@ -38,13 +38,18 @@
 - Stop a finished hidden worker with `bb thread stop <id>` to release its agent
   runtime promptly. Archive it first when it no longer belongs in active thread
   lists. Stop preserves the thread and supports a later resume.
-- Add remote execution machines from Settings → Machines. The one-line
-  installer enrolls the machine; revoke a lost machine from the app dashboard.
-  The installer can enable daemon auto-update. Newer protocol mismatches can
-  trigger an update retry before the daemon restarts. Auto-update never
-  downgrades. To bypass a transient backoff, use
-  `bb machine retry-update <id-or-name>`. To opt out, disable auto-update in
-  the service configuration.
+- Add remote execution machines from Settings → Machines. Its one-line
+  installer stores the account machine credential locally and configures
+  both the daemon protocol and agent-launched `bb` CLI to traverse the account
+  gate; revoke a lost machine from the getbb.app dashboard. The installer uses
+  the server's exact `/install/bb-app.tgz` artifact and uses the npm registry
+  only on a 404. It installs under the enrollment's bb data directory, without
+  `sudo` or a global npm configuration, and enables daemon `--auto-update`.
+  Newer protocol mismatches update that private install with a persisted
+  exponential retry backoff from 5 seconds to 5 minutes, then let
+  launchd/systemd restart the daemon. Auto-update never downgrades. To bypass a
+  transient backoff, use `bb machine retry-update <id-or-name>`. Remove
+  `--auto-update` from the service definition and reload it to opt out.
 - Run `bb machine list` to see machine names, IDs, connection status, and last
   seen time (`--json` returns the raw host list). Use `--machine <id-or-name>`
   (alias `--host`) on `bb thread spawn` to run in a personal or unmanaged
@@ -56,8 +61,9 @@
   The server resolves any higher request down to it, and refuses a provider
   that supports no mode under it. Only the owner can change it, on the machine
   page at Settings → Machines → the machine — there is no CLI, SDK, or API
-  surface that sets it, so read it from `bb machine list --json` or
-  `bb machine show` and ask the user to change it in the app.
+  surface that sets it, and machine credentials are refused — so read it from
+  `bb machine list --json` or `bb machine show` and ask the user to change it
+  in the app.
 - `bb machine show`, `join-code`, `rename`, `retry-update`, and `remove` cover
   the Settings → Machines lifecycle. Use `bb machine provider-cli
 status|install` to inspect or install provider CLIs on a selected machine.
@@ -85,14 +91,14 @@ status|install` to inspect or install provider CLIs on a selected machine.
 - Use `bb project attachment upload <project-id> --client-file <path>` when the
   bytes live on the CLI machine, including when the CLI and bb server are on
   different hosts. It reads locally and sends multipart bytes through the
-  configured server endpoint, returning the stable server attachment DTO.
-  Optional `--filename` and `--mime-type` override inferred metadata. Pass the
-  returned relative `path` to thread `--file` or `--image`; image MIME types
-  are capped at 10MB and other files at 25MB, and image/heic or image/heif
-  uploads are rejected (convert them to JPEG or PNG first). `bb project
-  attachment download <project-id> <attachment-path> --client-file <path>`
-  writes existing attachment bytes on the CLI machine. There is no
-  project-attachment list or per-file remove API.
+  configured `BB_SERVER_URL` (and its enrolled-machine authentication proxy),
+  returning the stable server attachment DTO. Optional `--filename` and
+  `--mime-type` override inferred metadata. Pass the returned relative `path`
+  to thread `--file` or `--image`; image MIME types are capped at 10MB and
+  other files at 25MB, and image/heic or image/heif uploads are rejected
+  (convert them to JPEG or PNG first). `bb project attachment download <project-id>
+<attachment-path> --client-file <path>` writes existing attachment bytes on
+  the CLI machine. There is no project-attachment list or per-file remove API.
 - `bb project history|reorder` exposes project prompt recall and sidebar order.
 - Use `bb project show|update|delete` for one project. Use `bb project source
 update|delete` for one source. Use `bb project branches` for branch data.

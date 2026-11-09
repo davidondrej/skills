@@ -35,13 +35,16 @@ For unclear schema, pricing, scope, or availability, fetch
 
 ## Start and preserve request identity
 
-Requires `curl`, `jq`, and `uuidgen`. Adapt the body. Obtain credentials using the
-documented DeepAPI setup guidance; never print the key.
+Requires `curl`, `jq`, and `uuidgen`. Adapt the body. Load `~/.deepapi/env` only
+when setup variables are missing; never source `~/.zshrc` or print the key.
 
 ```bash
-: "${API_KEY:?DeepAPI setup is required}"
-: "${API_BASE_URL:?DeepAPI setup is required}"
-DEEP_SCRAPE_BASE="${API_BASE_URL%/}"
+if [ -z "${DEEPAPI_API_KEY:-}" ] || [ -z "${DEEPAPI_API_BASE_URL:-}" ]; then
+  . "$HOME/.deepapi/env"
+fi
+: "${DEEPAPI_API_KEY:?DeepAPI setup is required}"
+: "${DEEPAPI_API_BASE_URL:?DeepAPI setup is required}"
+DEEP_SCRAPE_BASE="${DEEPAPI_API_BASE_URL%/}"
 DEEP_SCRAPE_VERSION=$(cat "$HOME/.agents/skills/deepapi/VERSION.txt")
 mkdir -p tmp
 DEEP_SCRAPE_DIR=$(mktemp -d tmp/deep-scrape.XXXXXX)
@@ -55,18 +58,18 @@ cat > "$DEEP_SCRAPE_DIR/body.json" <<'JSON'
 JSON
 curl --silent --show-error --connect-timeout 10 --max-time 90 \
   "$DEEP_SCRAPE_BASE/v1/scrape/deep" \
-  # Add authentication as documented by DeepAPI.
+  -H "Authorization: Bearer $DEEPAPI_API_KEY" \
   -H "Content-Type: application/json" \
   -H "X-DeepAPI-Skill-Version: $DEEP_SCRAPE_VERSION" \
   -H "Idempotency-Key: $(cat "$DEEP_SCRAPE_DIR/idempotency.txt")" \
   --data-binary @"$DEEP_SCRAPE_DIR/body.json" \
-  --output "$DEEP_SCRAPE_DIR/start.json" --write-out '%{http_code}\\n'
+  --output "$DEEP_SCRAPE_DIR/start.json" --write-out '%{http_code}\n'
 jq '{requestId, status, next, error}' "$DEEP_SCRAPE_DIR/start.json"
 ```
 
 Keep the run directory, body, idempotency key, and `requestId`. On Windows,
-obtain credentials using the documented DeepAPI setup guidance and send the
-same JSON and documented headers through PowerShell. Adjust the `deepapi` skill path if installed elsewhere.
+load `~/.deepapi/env.ps1` and send the same headers/JSON through PowerShell.
+Adjust the `deepapi` skill path if installed elsewhere.
 
 ## Poll until the result is final
 
@@ -75,7 +78,7 @@ Expect HTTP **202**, `status: "running"`, `output: null`, and a polling `next` a
 1. Read the saved response; handle errors before output.
 2. If `next.method` is `GET` and `next.path` starts with `/v1/requests/`, wait
    `next.afterSecs`, then GET that path on the **same API base** with the same
-   documented authentication. Preserve query parameters; allow at least 90 seconds per polling HTTP request.
+   bearer key. Preserve query parameters; allow at least 90 seconds per polling HTTP request.
 3. Save every response and follow that polling action even for `status: "succeeded"`
    with `output: null`. Stop on terminal failure or no remaining polling action.
 4. Never automatically follow a `POST` next action. For an already authorized

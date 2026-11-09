@@ -23,7 +23,7 @@ These are defaults. Adapt their names and focus to pull the most judgment and ta
 3. **Pick 4 questions per set.** Choose the 4 decisions with the biggest impact that only the user can make. Never ask what the code, docs, or common sense already answer. Skip anything already decided.
 4. **Show one set at a time.** Never preview or list the other sets. Stop and wait. Show the next set only after the user answers.
 5. **Adapt.** Rewrite later sets based on earlier answers.
-6. **Present the plan.** After set 4, give plain step-by-step instructions to execute the work properly, built from the user's answers. Chat only. Then stop. Don't build or write docs until the user says go.
+6. **Present the plan.** After set 4, give plain step-by-step instructions to execute the work properly, built from their answers. Chat only. Then stop. Don't build or write docs until the user says go.
 
 ## Message format
 
