@@ -41,7 +41,6 @@ hooks/                     shell safety hooks for agents
 - [`browser-use`](skills/browser-use/) — Direct browser control via CDP for web interaction: automation, scraping, testing, screenshots, and site/app work.
 - [`cmux`](skills/cmux/) — Control the cmux macOS terminal app: workspaces, panes, surfaces, browsers, notifications, settings, and hooks.
 - [`codex-subagent`](skills/codex-subagent/) — Launch OpenAI Codex CLI as a subagent (ChatGPT subscription auth, no API key).
-- [`create-readonly-db-role`](skills/create-readonly-db-role/) — Set up read-only PostgreSQL access for agents.
 - [`cua-driver`](skills/cua-driver/) — Use Cua Driver for desktop or browser tasks that are awkward or unavailable through Bash/APIs, or when the user explicitly wants GUI interaction: app testing, visual bug reproduction, form filling, calendar entry, screenshots, and demo recording.
 - [`decisions`](skills/decisions/) — Ask the agent to list all choices it made during the current work that it is not confident of.
 - [`deep-research`](skills/deep-research/) — Run deep research through DeepAPI and save a report with sources.
@@ -68,7 +67,6 @@ hooks/                     shell safety hooks for agents
 - [`larp-detector`](skills/larp-detector/) — Skeptical review of outside contributions to public repos.
 - [`muse-review`](skills/muse-review/) — Launch an independent Meta Muse Wonder Max code review through Pi and OpenRouter, and return it verbatim.
 - [`nagent`](skills/nagent/) — Launch a new bb worker thread with the right project, model, worktree, and task brief.
-- [`new-grok-bot`](skills/new-grok-bot/) — Design a Grok Bot role and create its setup prompt.
 - [`occams-razor`](skills/occams-razor/) — Stop overthinking and answer with what we actually know for sure, how you know, and a confidence %.
 - [`openrouter`](skills/openrouter/) — Design, build, debug, and optimize OpenRouter API integrations.
 - [`persistent-localhost`](skills/persistent-localhost/) — Manage persistent dev servers, APIs, and other local processes on a port using macOS LaunchAgents.
@@ -78,18 +76,14 @@ hooks/                     shell safety hooks for agents
 - [`rename`](skills/rename/) — Manually-invoked skill that renames the current thread or session to 2-5 lowercase descriptive words.
 - [`rename-process`](skills/rename-process/) — Coordinate project or repository renames and moves involving Git, BB, services, or multiple machines.
 - [`repo-sync`](skills/repo-sync/) — Manage automatic Git syncing on macOS with repo-sync.
-- [`reset-cursor-acp`](skills/reset-cursor-acp/) — Reset a stuck Cursor ACP thread in bb and reload its configuration.
 - [`risky-changes`](skills/risky-changes/) — Verify assumptions before implementing large or risky changes to APIs, provider data, billing, pricing, quotas, or defaults.
 - [`save-idea`](skills/save-idea/) — Save ideas, observations, content topics, projects, and convictions in your ideas repo.
 - [`self-archive`](skills/self-archive/) — Archive the current Cloudroom thread and release its runtime.
 - [`setup-help`](skills/setup-help/) — Guide setup one step at a time and show what remains.
-- [`signal-from-expert`](skills/signal-from-expert/) — Compare the user's notes with an expert's work on a topic.
 - [`state`](skills/state/) — Manually-invoked skill that recaps what the current thread is doing and how far along it is.
 - [`stop-overthinking`](skills/stop-overthinking/) — Manually-invoked skill that stops overthinking and forces a short, practical decision.
-- [`teach`](skills/teach/) — Teach the user a new skill or concept, within this workspace.
 - [`total-review`](skills/total-review/) — Run five independent max-effort reviews (Fable 5.1, Opus 5.5, GPT-6 Astra, GPT-6.1 Sol, Muse Wonder), merge their findings, and fix only what the user approves.
 - [`varied-search`](skills/varied-search/) — Research a topic across the web, GitHub, and X/Twitter with DeepAPI and produce a concise Markdown report.
-- [`who-is-this`](skills/who-is-this/) — Research a person's public track record and give a short credibility assessment.
 
 ## Contributing
 
