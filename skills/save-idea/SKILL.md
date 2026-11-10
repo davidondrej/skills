@@ -5,7 +5,7 @@ description: Save ideas, observations, content topics, projects, and convictions
 
 # save-idea
 
-Capture the entry in the ideas repo (`<ideas-repo>`), commit, push, and confirm. All paths below are relative to that repo.
+Capture the entry in the user's ideas repo, commit, push, and confirm. All paths below are relative to that repo.
 
 ## 1. Capture and Route
 
@@ -28,8 +28,8 @@ Tentative beliefs belong in observations. An observation is not a topic merely b
 
 Read the target file. Use its last entry number + 1; never reuse gaps, renumber, reorder, or edit existing entries.
 
-- Video numbering continues from the old document; do not restart it.
-- Startup numbering follows the last idea in the STARTUP IDEAS list. Ignore the separate discarded-ideas numbering.
+- Video numbering continues from the existing list; do not restart it.
+- Startup numbering follows the last idea in the startup ideas list. Ignore any separate discarded-ideas numbering.
 - Other files start at 1 and have independent numbering.
 
 If missing, create `TOPICS.md` or `MARKETING-IDEAS.md` with a one-line purpose header; `OBSERVATIONS.md` with `# OBSERVATIONS` and `Insights, hypotheses, and assumptions to test.`; or `mini-projects.md` with `# MINI PROJECTS` and `> Just cool shit we wanna build — small projects we think would be cool.` Then append entry 1.
@@ -38,7 +38,7 @@ If missing, create `TOPICS.md` or `MARKETING-IDEAS.md` with a one-line purpose h
 
 Source format: `<repo>, <agent and chat/session>, <YYYY-MM-DD>`.
 
-- Repo: where the skill was invoked, from `git rev-parse --show-toplevel`, or cwd outside a repo. Use a `~/...` path.
+- Repo: where the skill was invoked, from `git rev-parse --show-toplevel`, or cwd outside a repo.
 - Chat/session: agent name plus title or session ID if available; otherwise just the agent name.
 - Date: today. Preserve any extra links or notes the user supplied.
 
@@ -57,13 +57,13 @@ N. Title — one-line explanation.
     - source: <repo>, <agent and chat/session>, <date>
 ```
 
-- Startups: read the startup folder's `AGENTS.md`. Tighten the entry while keeping the user's voice. Insert after the last numbered idea, before the trailing `----` separator and discarded-ideas note. Preserve the root `STARTUP-IDEAS.md` symlink to the startup folder's copy.
+- Startups: read any startup guidance file in the repo. Tighten the entry while keeping the user's voice. Insert after the last numbered idea, before any trailing separator and discarded-ideas note.
 - Convictions: append `N. Punchy conviction — one-line why.`, tightened but faithful to the user's wording.
 - Mini projects: append `N. Idea exactly as the user said it`; do not rewrite or add an explanation.
 
 ## 4. Commit and Push
 
-**The user has pre-authorized and requires commits and pushes for captures in the eight files listed above.** This is an explicit exception to the global no-push-without-asking rule. It covers only those backlogs, including the startup symlink's target, not other repo changes.
+**The user has pre-authorized and requires commits and pushes for captures in the backlog files listed above.** This is an explicit exception to the global no-push-without-asking rule. It covers only those backlogs, not other repo changes.
 
 Run Git yourself using `git -C`; do not change cwd or delegate this step:
 
@@ -75,7 +75,7 @@ git -C <ideas-repo> commit -m "Add observation 1 on local agents"
 git -C <ideas-repo> push origin main
 ```
 
-- Stage only the captured idea files; never `git add -A`. For the startup symlink, stage the startup folder's `STARTUP-IDEAS.md`. Keep unrelated staged changes or edits out of the commit.
+- Stage only the captured idea files; never `git add -A`. Keep unrelated staged changes or edits out of the commit.
 - Commit message: `Add <entry type> <number> on <short description>`. List numbers for multiple entries.
 - If any Git step fails, report the exact error and stop. Never force-push.
 
@@ -85,5 +85,5 @@ Report the exact saved entry text, number, file, and successful push.
 
 ## Protected Locations
 
-- Never write or push to any old, deprecated startup repo. Startup support material belongs in the startup folder of the ideas repo.
+- Never write or push to any legacy or archived startup repo. Startup support material belongs in the ideas repo.
 - Never write to the discarded-ideas file; only the user moves ideas there.

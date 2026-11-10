@@ -46,7 +46,7 @@ Installation does not sign in. If signed out, send an existing approved project 
 - Creating scoped keys requires browser sign-in or an admin-scoped token; rotating and revoking remain session-gated. Read [API keys](https://docs.boat.dev/api-keys) before credential changes.
 - Do not assume provider onboarding has an API. Boat-managed provider login uses the Agents page; injecting existing agent credentials is a separate environment setting.
 
-## Preserve the user’s scope
+## Preserve the user's scope
 
 - Write a focused assignment preserving intent, constraints, and corrections. Never invent requirements, deliverables, permissions, or approval.
 - Model, machine, repository, and thread placement guide the launcher. Give each worker only its task and necessary context.

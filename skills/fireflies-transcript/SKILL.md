@@ -10,9 +10,10 @@ Fetch any meeting transcript from Fireflies.ai as raw text via GraphQL. Read-onl
 
 ## Auth (state-check first)
 
-The API key must be available as the `FIREFLIES_API_KEY` environment variable (never commit or print it):
+The API key lives in `~/.fireflies/env` (mode 600, never commit or print it):
 
 ```bash
+source ~/.fireflies/env   # exports FIREFLIES_API_KEY
 [ -n "$FIREFLIES_API_KEY" ] || echo "MISSING KEY - stop and tell the user"
 ```
 
@@ -63,7 +64,7 @@ Optional extras on the same `transcript(id:)` query: `summary { overview short_s
 - `sentences: null` — recording still processing or no audio captured; nothing to pull.
 - `errors[]` in the response instead of `data` — usually a bad field name; fix the query.
 - 401/invalid key — key was rotated; ask the user for a new one (Fireflies dashboard:
-  Settings -> Developer settings) and update the environment variable.
+  Settings -> Developer settings), update `~/.fireflies/env`.
 
 ## Verify before reporting done
 

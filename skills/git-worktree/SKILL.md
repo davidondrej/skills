@@ -9,7 +9,7 @@ triggers: [user, model]
 
 ## In Cloudroom (`$ROOM_THREAD_ID` is set)
 
-Never run `git worktree add` yourself. Cloudroom only deletes worktrees it made, so hand-made ones pile up forever.
+Never run `git worktree add` yourself. Cloudroom only deletes worktrees it made, so hand-made ones pile up in `~/code` forever.
 
 - **New task:** start the thread with **New worktree** instead.
 - **Move this thread to its own worktree:** fork it into a Cloudroom-managed worktree. Cloudroom makes the branch and deletes the folder once its last thread is archived (after the worktree retention setting, default 21 days).

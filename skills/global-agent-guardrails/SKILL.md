@@ -41,9 +41,13 @@ python3 -c 'import re,pathlib; [re.compile(l.strip().replace("[:space:]",r"\s"),
 
 4. Consumers re-read patterns for every command. Exception: Droid uses `commandBlocklist` in `~/.factory/settings.json` — mirror changes there manually.
 
-Block only catastrophic commands (irreversible data loss, disk wipes, repo deletion). Recoverable local commands (`git status`, `git clean -fdx`, `rm -rf node_modules`) stay allowed; avoid over-blocking.
+Block only catastrophic commands (irreversible data loss, disk wipes, repo deletion). Recoverable local commands (`git status`, `git clean -fdx`, `rm -rf node_modules`) stay allowed; avoid over-blocking. Never block logins or copying credentials between the Mac and cloud VMs: `gh auth token` and single keychain reads (`security find-*-password`) stay allowed.
 
-Optionally add a pattern group forbidding password-manager CLIs and bulk credential dumps, if you don't want agents touching them.
+Password managers are forbidden (pattern group 10):
+
+- Never use `bw`, `bws`, `lpass`, `keepassxc-cli`, `rbw`, or `nordpass`; `pass` with any argument at command position; or `op` with real subcommands. Bare `op`/`pass` stay unblocked because they are common words.
+- Never dump the whole macOS keychain (`dump-keychain`) or export GPG secret keys.
+- Never touch vault data (`~/.password-store`) or password-manager `.app` bundles, or open or uninstall the apps.
 
 ## Per-agent wiring (user-global)
 
@@ -75,14 +79,15 @@ Use absolute paths in configs (`~` expansion is inconsistent across agents).
 
 ## Gotchas
 
-- **Codex trust is hash-pinned.** Any edit to the hook ENTRY in `hooks.json` (not the patterns file) invalidates trust; run `/hooks` in Codex and re-trust, else Codex silently skips the guard. Trust hashes live in `[hooks.state]` in `~/.codex/config.toml` and are shared by CLI, desktop app, and IDE extension.
-- **Cursor `failClosed` must stay `false`.** Cursor background/worker hosts cannot execute hook scripts; fail-closed blocks EVERY command there.
+- **Codex trust is hash-pinned.** Any edit to the hook ENTRY in `hooks.json` (not the patterns file) invalidates trust; run `/hooks` in Codex and re-trust, else Codex silently skips the guard. Trust hashes live in `[hooks.state]` in `~/.codex/config.toml` and are shared by CLI, desktop app, and IDE extension. CI/scripts: `--dangerously-bypass-hook-trust`.
+- **Cursor `failClosed` must stay `false`.** Cursor background/worker hosts cannot execute hook scripts; fail-closed blocks EVERY command there. Trade-off: Cursor background agents run unguarded.
 - **Hermes plugin manifest key is `provides_hooks`** (not `hooks`). Plugin must be enabled: `plugins.enabled` list in `~/.hermes/config.yaml` (the `hermes plugins enable` CLI prompts interactively and hangs non-interactive shells). Hermes hooks are fail-open on exceptions — keep the plugin trivial. Shell tool name is `terminal`.
 - **Pi `tool_call` handler errors block the tool** (fail-safe) — adapter must catch its own errors and fail open, or a broken patterns file bricks every bash call.
-- **Droid semantics:** `commandDenylist` = ask for confirmation; `commandBlocklist` = never runs, even at full autonomy. Use blocklist for catastrophic entries.
+- **Droid semantics:** `commandDenylist` = ask for confirmation; `commandBlocklist` = never runs, even at full autonomy with `--skip-permissions-unsafe`. Use blocklist for catastrophic entries.
 - **Guard script payload detection:** command lives at `.tool_input.command` (Claude/Codex/Devin), `.toolInput.command` (Grok), `.command` (Cursor). Keep all three in the jq fallback chain.
 - **Adapter regexes require multiline mode.** Keep JavaScript's `m` flag and Python's `re.M` so `^` matches each shell line like `grep`.
 - **False-positive class:** a harmless command whose ARGUMENT text contains a dangerous-looking string (e.g. passing a prompt mentioning `git push --force` on a CLI) gets blocked. Workaround: put the text in a file and reference it.
+- **Not coverable natively (no hook system as of 2026-07):** Gemini CLI, Qwen Code, Amp, kimi-cli. Codex cloud tasks and Cursor background agents also bypass the local guard.
 
 ## E2E verification
 

@@ -22,7 +22,7 @@ Match the directory's filenames, such as `docs/adr/0042-short-slug.md` or `docs/
 ```markdown
 # <ID> — short title
 
-Status: accepted (<user name>, YYYY-MM-DD)
+Status: accepted (<user>, YYYY-MM-DD)
 
 <The decision in plain English.>
 ```

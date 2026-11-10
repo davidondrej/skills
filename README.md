@@ -70,7 +70,6 @@ hooks/                     shell safety hooks for agents
 - [`nagent`](skills/nagent/) — Launch a new bb worker thread with the right project, model, worktree, and task brief.
 - [`new-grok-bot`](skills/new-grok-bot/) — Design a Grok Bot role and create its setup prompt.
 - [`occams-razor`](skills/occams-razor/) — Stop overthinking and answer with what we actually know for sure, how you know, and a confidence %.
-- [`online-shopping`](skills/online-shopping/) — Research online purchases, prices, and shop trust.
 - [`openrouter`](skills/openrouter/) — Design, build, debug, and optimize OpenRouter API integrations.
 - [`persistent-localhost`](skills/persistent-localhost/) — Manage persistent dev servers, APIs, and other local processes on a port using macOS LaunchAgents.
 - [`prompt-for-others`](skills/prompt-for-others/) — Write a prompt teammates can give their AI agents to apply a fix, upgrade, or setup change.
