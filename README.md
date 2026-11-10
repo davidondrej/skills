@@ -55,6 +55,7 @@ AGENTS.md                  David's global agent instructions
 - [`gemini-review`](skills/gemini-review/) — Launch an independent Gemini 4 Carbon code review through Cursor at High reasoning and return it verbatim.
 - [`git-worktree`](skills/git-worktree/) — Use Git worktrees to isolate parallel coding tasks.
 - [`github-outside-sandbox`](skills/github-outside-sandbox/) — Run Git and GitHub CLI commands on the host when sandboxing blocks Keychain auth, network access, or .git writes.
+- [`global-agent-guardrails`](skills/global-agent-guardrails/) — Configure the shared guard against catastrophic shell commands in local AI agents.
 - [`goal-loop`](skills/goal-loop/) — Draft /goal prompts and explain persistent agent loops.
 - [`gpt-review`](skills/gpt-review/) — Launch an independent GPT-6-Astra code review and return it verbatim.
 - [`handoff`](skills/handoff/) — Capture session context for a fresh agent.
