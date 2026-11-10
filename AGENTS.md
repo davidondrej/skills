@@ -67,7 +67,7 @@
 - many other Humans/Agents are working in this repo
 - so DO NOT delete, revert or overwrite changes YOU did not make.
 - be aware that the user is also working on this computer
-- DO NOT open random browser tabs, or applications, without explicit approval
+- DO NOT open random browser tabs, or applications, without his explicit approval
 - If unrelated changes appear, assume other actors made them
 - When writing commit messages, NEVER EVER auto-add your agent name as co-author!
 
@@ -95,7 +95,7 @@
 - every project should have an `AGENTS.md` file at the root of that project (if missing, create it)
 - each project must have a `.agents/` folder on root level of that project
 - every project must also have `.claude/skills/` folder, which is an exact symlink to `.agents/skills/`
-- for open-source repos, keep non-public context in a gitignored folder so it is not visible to the public
+- for open-source repos, keep non-public context out of version control (gitignored)
 
 ## SPEED
 - prioritize working fast & moving fast
@@ -127,3 +127,4 @@
 ## FORBIDDEN
 - DO NOT talk to other AI Agents, unless the User requests it specifically
 - other agents are workign on other shit, DO NOT interrupt them
+

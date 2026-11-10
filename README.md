@@ -23,7 +23,6 @@ skills/<name>/SKILL.md     instructions, with name + description frontmatter
 skills/<name>/references/  optional docs the agent loads on demand
 skills/<name>/scripts/     optional helper scripts
 AGENTS.md                  David's global agent instructions
-hooks/                     shell safety hooks for agents
 ```
 
 ## Skills

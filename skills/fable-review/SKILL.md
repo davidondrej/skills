@@ -1,7 +1,6 @@
 ---
 name: fable-review
-description: Launch an independent Fable code review and return it verbatim. Use only when the user explicitly invokes /fable-review.
-disable-model-invocation: true
+description: Launch an independent Fable code review and return it verbatim. Use for /fable-review, or when the user or another agent asks for a Fable review.
 triggers: [user, model]
 ---
 
@@ -29,7 +28,7 @@ Use **Fable 5.2 High** through the Claude Code harness, orchestrated by [Cloudro
 
 ## Prove the model (if the user asks)
 
-From a Cloud thread, run the Mac's CLI. `R` is `ELECTRON_RUN_AS_NODE=1 /Applications/Cloudroom.app/Contents/MacOS/Cloudroom /Applications/Cloudroom.app/Contents/Resources/app.asar.unpacked/node_modules/bb-app/host-daemon/dist/room-cli`:
+From a Cloud thread, run the Mac's CLI. `R` is the path to the Cloudroom app's bundled `room-cli` run via the app binary with `ELECTRON_RUN_AS_NODE=1`:
 
 - `room-cli mac run "$R thread show CHILD_ID --json"` should show `.execution.model = claude-fable-5-2` and `.execution.reasoningLevel = high`.
 - `room-cli mac run "$R thread log CHILD_ID --json"`: the first `client/turn/requested` event records the model and effort sent to the harness.

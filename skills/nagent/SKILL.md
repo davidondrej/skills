@@ -99,7 +99,7 @@ Use `--new-environment worktree` for a bb-managed worktree. Do not create one ma
 
 ## Task Brief
 
-**Preserve the user's scope**
+**Preserve the user’s scope**
 
 - Write a focused assignment preserving intent, constraints, and corrections. Never invent requirements, deliverables, permissions, or approval.
 - Model, machine, repository, and thread placement guide the launcher. Give each worker only its task and necessary context.

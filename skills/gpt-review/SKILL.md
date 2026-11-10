@@ -1,7 +1,6 @@
 ---
 name: gpt-review
-description: Launch an independent GPT-6-Astra code review and return it verbatim. Use only when the user explicitly invokes /gpt-review.
-disable-model-invocation: true
+description: Launch an independent GPT-6-Astra code review and return it verbatim. Use for /gpt-review, or when the user or another agent asks for a GPT review.
 triggers: [user, model]
 ---
 

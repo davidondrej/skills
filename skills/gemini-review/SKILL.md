@@ -1,7 +1,6 @@
 ---
 name: gemini-review
-description: Launch an independent Gemini 4 Carbon code review through Cursor at High reasoning and return it verbatim. Use only when the user explicitly invokes /gemini-review.
-disable-model-invocation: true
+description: Launch an independent Gemini 4 Carbon code review through Cursor at High reasoning and return it verbatim. Use for /gemini-review, or when the user or another agent asks for a Gemini review.
 triggers: [user, model]
 ---
 

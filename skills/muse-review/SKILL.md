@@ -1,7 +1,6 @@
 ---
 name: muse-review
-description: Launch an independent Meta Muse Wonder Max code review through Pi and OpenRouter, and return it verbatim. Use only when the user explicitly invokes /muse-review.
-disable-model-invocation: true
+description: Launch an independent Meta Muse Wonder Max code review through Pi and OpenRouter, and return it verbatim. Use for /muse-review, or when the user or another agent asks for a Muse review.
 triggers: [user, model]
 ---
 

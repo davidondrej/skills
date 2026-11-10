@@ -1,7 +1,6 @@
 ---
 name: total-review
-description: 'Run five independent max-effort reviews (Fable 5.1, Opus 5.5, GPT-6 Astra, GPT-6.1 Sol, Muse Wonder), merge their findings, and fix only what the user approves. Manual only: run when a human types /total-review; agents must never invoke it on their own.'
-disable-model-invocation: true
+description: 'Run five independent max-effort reviews (Fable 5.1, Opus 5.5, GPT-6 Astra, GPT-6.1 Sol, Muse Wonder), merge their findings, and fix only what the user approves. Use for /total-review, or when the user or another agent asks for a total review.'
 ---
 
 # Total Review

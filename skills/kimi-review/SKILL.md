@@ -1,7 +1,6 @@
 ---
 name: kimi-review
-description: Launch an independent Kimi K3.1 Pro Max code review and return it verbatim, falling back across harnesses and routes until one works. Use only when the user explicitly invokes /kimi-review.
-disable-model-invocation: true
+description: Launch an independent Kimi K3.1 Pro Max code review and return it verbatim, falling back across harnesses and routes until one works. Use for /kimi-review, or when the user or another agent asks for a Kimi review.
 triggers: [user, model]
 ---
 
