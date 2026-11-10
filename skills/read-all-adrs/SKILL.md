@@ -5,7 +5,7 @@ disable-model-invocation: true
 triggers: [user, model]
 ---
 
-<!-- TODO(David): write the strong wording here -->
+<!-- TODO: write the strong wording here -->
 
 Read EVERY single ADR `.md` file in this project's `docs/adr/` folder, start to
 finish.

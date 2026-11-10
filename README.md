@@ -47,7 +47,6 @@ hooks/                     shell safety hooks for agents
 - [`deep-scrape`](skills/deep-scrape/) — Build sourced JSON dossiers on people, companies, or topics with DeepAPI.
 - [`deepapi`](skills/deepapi/) — Use DeepAPI for all web search, deep research, and web scraping (websites, LinkedIn, GitHub, X/Twitter, YouTube, Instagram) instead of built-in search, research, fetch, or browser tools.
 - [`designs`](skills/designs/) — Show 4 better, new design options as separate real image renders.
-- [`distribute-skill-to-all-agents`](skills/distribute-skill-to-all-agents/) — Distribute global skills across Codex, Claude Code, Pi, Hermes, and Cursor.
 - [`domain-checker`](skills/domain-checker/) — Check domain registration in batches using public RDAP APIs, without keys or login.
 - [`effective-agent-skills`](skills/effective-agent-skills/) — Write, review, and debug agent skills.
 - [`fable-review`](skills/fable-review/) — Launch an independent Fable code review and return it verbatim.
@@ -56,7 +55,6 @@ hooks/                     shell safety hooks for agents
 - [`fireflies-transcript`](skills/fireflies-transcript/) — Fetch raw Fireflies.ai meeting transcripts.
 - [`git-worktree`](skills/git-worktree/) — Use Git worktrees to isolate parallel coding tasks.
 - [`github-outside-sandbox`](skills/github-outside-sandbox/) — Run Git and GitHub CLI commands on the host when sandboxing blocks Keychain auth, network access, or .git writes.
-- [`global-agent-guardrails`](skills/global-agent-guardrails/) — Configure the shared guard against catastrophic shell commands in local AI agents.
 - [`goal-loop`](skills/goal-loop/) — Draft /goal prompts and explain persistent agent loops.
 - [`gpt-review`](skills/gpt-review/) — Launch an independent GPT-6-Astra code review and return it verbatim.
 - [`handoff`](skills/handoff/) — Capture session context for a fresh agent.
@@ -77,7 +75,6 @@ hooks/                     shell safety hooks for agents
 - [`rename-process`](skills/rename-process/) — Coordinate project or repository renames and moves involving Git, BB, services, or multiple machines.
 - [`repo-sync`](skills/repo-sync/) — Manage automatic Git syncing on macOS with repo-sync.
 - [`risky-changes`](skills/risky-changes/) — Verify assumptions before implementing large or risky changes to APIs, provider data, billing, pricing, quotas, or defaults.
-- [`save-idea`](skills/save-idea/) — Save ideas, observations, content topics, projects, and convictions in your ideas repo.
 - [`self-archive`](skills/self-archive/) — Archive the current Cloudroom thread and release its runtime.
 - [`setup-help`](skills/setup-help/) — Guide setup one step at a time and show what remains.
 - [`state`](skills/state/) — Manually-invoked skill that recaps what the current thread is doing and how far along it is.

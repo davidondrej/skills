@@ -41,7 +41,7 @@ Query Pi's catalog on the target `--machine` or `--environment`. `openai-codex` 
 
 ## Permission Checks
 
-Investigation/build workers default to `full`. A child cannot exceed the parent's permission mode, so verify the parent before requesting it and the child after spawning.
+The user's investigation/build workers default to `full`. A child cannot exceed the parent's permission mode, so verify the parent before requesting it and the child after spawning.
 
 Run the bundled script relative to this skill's directory:
 
