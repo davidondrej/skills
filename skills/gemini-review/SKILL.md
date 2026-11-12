@@ -18,7 +18,10 @@ Before spawning, confirm `room-cli provider models acp-cursor --selected-model g
 
 ## Run
 
-Read `/room-cli` and follow its launch checks. Reuse the current environment, including uncommitted work, and use `--parent-self`.
+Read `/room-cli` and follow its launch checks.
+
+- **Local thread:** reuse the current environment, including uncommitted work, and use `--parent-self`.
+- **Cloud thread:** the provider is `cursor`, not `acp-cursor`, in both the spawn and the `provider models` check. Start a plain child: never `--shared-sandbox` (Cursor can't share a sandbox) and never `--top-level` (you can't read or wait for it). The child gets a copy of your code, uncommitted work included. `thread show` hides the model there, so an accepted spawn is the proof.
 
 The route fails when the spawn errors, `room-cli thread show` reports a different model or effort, or the first turn errors (gateway errors, auth errors, an empty balance). Stop and archive the failed thread, then report the blocker with its error. Never switch to another model or route.
 
