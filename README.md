@@ -45,7 +45,7 @@ AGENTS.md                  David's global agent instructions
 - [`deep-research`](skills/deep-research/) — Run deep research through DeepAPI and save a report with sources.
 - [`deep-scrape`](skills/deep-scrape/) — Build sourced JSON dossiers on people, companies, or topics with DeepAPI.
 - [`deepapi`](skills/deepapi/) — Use DeepAPI for all web search, deep research, and web scraping (websites, LinkedIn, GitHub, X/Twitter, YouTube, Instagram) instead of built-in search, research, fetch, or browser tools.
-- [`designs`](skills/designs/) — Show 4 better, new design options as separate real image renders.
+- [`designs`](skills/designs/) — Show 4 better, new design options as separate real image renders of the actual app UI.
 - [`domain-checker`](skills/domain-checker/) — Check domain registration in batches using public RDAP APIs, without keys or login.
 - [`effective-agent-skills`](skills/effective-agent-skills/) — Write, review, and debug agent skills.
 - [`fable-review`](skills/fable-review/) — Launch an independent Fable code review and return it verbatim.
