@@ -27,3 +27,4 @@ Each one is a separate real image render.
 - If the project has a skill for rendering the real app, follow it. In Cloudroom that is `ui-change-preview`.
 - Otherwise run the app or its component stories, and screenshot the real page.
 - Revert temporary code when done.
+- Clean screenshots only: no red boxes, numbers, or notes on the images.
