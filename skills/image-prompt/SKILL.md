@@ -35,6 +35,7 @@ Describe a finished piece in clear, expressive, descriptive prose. Each paragrap
 - Make the 4 variations genuinely different — different style, composition, mood, or palette. Not rewordings of one idea.
 - No text inside the image unless the user asks; models render text badly.
 - No negative prompts and no model-specific parameters other than `--ar`.
+- Real products or companies: use their actual logo, never an invented one. Name the real brand, and if the image model can take a reference, say to attach the official logo file.
 - If the request is vague, still deliver 4 prompts. Pick sensible defaults, do not ask questions.
 
 ## Example
