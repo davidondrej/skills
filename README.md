@@ -57,7 +57,7 @@ AGENTS.md                  David's global agent instructions
 - [`github-outside-sandbox`](skills/github-outside-sandbox/) — Run Git and GitHub CLI commands on the host when sandboxing blocks Keychain auth, network access, or .git writes.
 - [`global-agent-guardrails`](skills/global-agent-guardrails/) — Configure the shared guard against catastrophic shell commands in local AI agents.
 - [`goal-loop`](skills/goal-loop/) — Draft /goal prompts and explain persistent agent loops.
-- [`gpt-review`](skills/gpt-review/) — Launch an independent GPT-6-Astra code review and return it verbatim.
+- [`gpt-review`](skills/gpt-review/) — Launch an independent GPT-6.2-Astra code review and return it verbatim.
 - [`handoff`](skills/handoff/) — Capture session context for a fresh agent.
 - [`herdr`](skills/herdr/) — Operate and coordinate AI agents in Herdr workspaces in Ghostty.
 - [`image-prompt`](skills/image-prompt/) — Write four distinct prompts for AI image models.
