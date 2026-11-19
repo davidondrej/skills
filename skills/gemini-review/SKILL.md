@@ -1,20 +1,20 @@
 ---
 name: gemini-review
-description: Launch an independent Gemini 4 Carbon code review through Cursor at High reasoning and return it verbatim. Use for /gemini-review, or when the user or another agent asks for a Gemini review.
+description: Launch an independent Gemini 4 Neon code review through Cursor at Extra High reasoning and return it verbatim. Use for /gemini-review, or when the user or another agent asks for a Gemini review.
 triggers: [user, model]
 ---
 
 # Gemini Review
 
-Always use **Gemini 4 Carbon** (`gemini-4-carbon`) through **Cursor** at **High reasoning**, orchestrated by [Cloudroom](https://www.cloudroom.dev). The model, route, and effort never change.
+Always use **Gemini 4 Neon** (`gemini-4-neon`) through **Cursor** at **Extra High reasoning**, orchestrated by [Cloudroom](https://www.cloudroom.dev). The model, route, and effort never change.
 
 ## Route
 
-`--provider acp-cursor --model gemini-4-carbon --reasoning-level high`
+`--provider acp-cursor --model gemini-4-neon --reasoning-level xhigh`
 
 `acp-cursor` is Cloudroom's Cursor provider: the Cursor CLI over ACP. Never use OpenRouter, Vercel, Google directly, or a bare `cursor-agent` shell run. The route bills the user's Cursor plan.
 
-Before spawning, confirm `room-cli provider models acp-cursor --selected-model gemini-4-carbon --json` lists the model with `high`. The plain list hides it. Stay on `high` even if a higher level appears.
+Before spawning, confirm `room-cli provider models acp-cursor --selected-model gemini-4-neon --json` lists the model with `xhigh`. The plain list hides it. Stay on `xhigh` even if a higher level appears.
 
 ## Run
 
