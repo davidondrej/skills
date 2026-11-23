@@ -1,8 +1,8 @@
 # Generate Image — DeepAPI Endpoint Reference
 
-Generated endpoint reference for the `generate-image` rows of the `deepapi` skill router. Bundle version: 2b2f7801435a. This file is always managed — it is refreshed with the bundle even when `../SKILL.md` has been customized.
+Generated endpoint reference for the `generate-image` rows of the `deepapi` skill router. Bundle version: 528f2c511503.
 
-Shared protocol (environment, auth, idempotency, dry-run, polling, and error handling) lives in `../SKILL.md`. This file carries the full per-endpoint detail.
+Shared protocol (auth, CLI, polling, dry-run, errors) lives in `../SKILL.md`. All responses use the standard DeepAPI JSON envelope (`requestId`, `status`, `output`, `next`, `error`, `balance`).
 
 ## Workflow Guidance
 
@@ -21,81 +21,10 @@ Use this reference to turn a visual brief into a generated image.
 
 ## Endpoint Details
 
-## Generate Image
-
-`POST /v1/generate/image`
-
-Generate an image from a text prompt.
-
-- Capability: `generate.image`
-- Scope: `generate:image`
-- Side effects: Runs a paid image generation request and debits credits when finished.
-- Cost: The default cap follows the model: maxCostUsd 0.15 for nano-banana-2 (the default), seedream-4.5, gpt-image-2.5-sunburst, and gpt-image-2.5-flare, 0.60 for nano-banana-pro and gpt-images-2. Pass maxCostUsd or maxCostMicrousd to choose a different customer spend cap. The final debit is capped and reported as debitMicrousd. Typical price: ~$0.01-$0.45 per image depending on the model.
-- Idempotency-Key: required
-- Polling: This route returns a terminal envelope directly.
-
-Safety:
+### Generate Image — `POST /v1/generate/image`
+Generate an image from a text prompt. (`generate.image` · scope `generate:image` · idempotency required · ~$0.01-$0.45 per image depending on the model, cap $0.15)
+- Body: `*prompt` (string), `model` (string=nano-banana-2|nano-banana-pro|gpt-images-2|seedream-4.5|gpt-image-2.5-sunburst|gpt-image-2.5-flare)
+- Example: `{"prompt":"A minimal flat illustration of a rocket launching from a laptop screen","maxCostUsd":"0.15"}`
 - Describe the image you want in prompt, including style and composition.
 - Omit model for the default; pick one only when you need its specific strength (premium models cost more per image).
 - output.images contains base64 data URLs; save them to files instead of printing them.
-
-Request body schema:
-```json
-{
-  "type": "object",
-  "required": [
-    "prompt"
-  ],
-  "properties": {
-    "prompt": {
-      "type": "string",
-      "description": "Text description of the image to generate."
-    },
-    "model": {
-      "type": "string",
-      "enum": [
-        "nano-banana-2",
-        "nano-banana-pro",
-        "gpt-images-2",
-        "seedream-4.5",
-        "gpt-image-2.5-sunburst",
-        "gpt-image-2.5-flare"
-      ],
-      "default": "nano-banana-2",
-      "description": "Optional image model. nano-banana-2 (default): fast, balanced quality. nano-banana-pro: highest fidelity for demanding work. gpt-images-2: strongest complex instruction following. seedream-4.5: budget generation. gpt-image-2.5-sunburst and gpt-image-2.5-flare: text-to-image generation."
-    },
-    "maxCostUsd": {
-      "type": "string",
-      "pattern": "^\\d+(\\.\\d{1,6})?$",
-      "default": "0.15",
-      "description": "Optional customer spend cap in USD. Defaults per model: 0.15 for nano-banana-2, seedream-4.5, gpt-image-2.5-sunburst, and gpt-image-2.5-flare, 0.60 for nano-banana-pro and gpt-images-2."
-    },
-    "maxCostMicrousd": {
-      "type": "integer",
-      "minimum": 1,
-      "description": "Optional customer spend cap in USD micro-dollars."
-    },
-    "dryRun": {
-      "type": "boolean",
-      "default": false,
-      "description": "Zero-spend preview: validate this request and return the exact credit hold it would place (status dry_run plus an estimate object) without reserving, charging, or running anything."
-    }
-  },
-  "additionalProperties": false
-}
-```
-
-Response schema:
-```json
-{
-  "$ref": "#/components/schemas/PublicEnvelope"
-}
-```
-
-Example request body:
-```json
-{
-  "prompt": "A minimal flat illustration of a rocket launching from a laptop screen",
-  "maxCostUsd": "0.15"
-}
-```

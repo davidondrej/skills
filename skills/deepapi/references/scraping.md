@@ -1,8 +1,8 @@
 # Scraping — DeepAPI Workflow Guide
 
-Managed workflow guide for the `scraping` rows of the `deepapi` skill router. Bundle version: 2b2f7801435a. This file is always managed — it is refreshed with the bundle even when `../SKILL.md` has been customized.
+Managed workflow guide for the `scraping` rows of the `deepapi` skill router. Bundle version: 528f2c511503.
 
-Shared protocol (environment, auth, idempotency, dry-run, polling, and error handling) lives in `../SKILL.md`.
+Shared protocol (auth, CLI, polling, dry-run, errors) lives in `../SKILL.md`. All responses use the standard DeepAPI JSON envelope (`requestId`, `status`, `output`, `next`, `error`, `balance`).
 
 ## Workflow Guidance
 
@@ -89,3 +89,21 @@ Per-item prices are cents or fractions of cents — depth is cheap and shallow r
 - `https://deepapi.co/docs/reference.md` is the complete agent-readable API reference.
 - `https://deepapi.co/docs/pricing.md` has current endpoint pricing.
 - `https://deepapi.co/openapi.json` is the machine-readable contract; `https://deepapi.co/llms.txt` indexes all public agent docs.
+
+### Top Scraper Signatures (`*` = required; shared `maxCostUsd`/`dryRun` omitted)
+
+- `POST /v1/scrape/website` (`scrape.website`): `maxItems` (integer), `*urls` (any), `maxPages` (integer), `maxDepth` (integer), `includeUrls` (any), `excludeUrls` (any), `contentFormat` (string=markdown|text), `maxChars` (integer=250000)
+- `POST /v1/scrape/github/repo` (`scrape.github.repo`): `*repository` (string)
+- `POST /v1/scrape/github/issues` (`scrape.github.issues`): `maxItems` (integer=30), `pageToken` (string), `*repository` (string), `state` (string=open|closed|all), `labels` (any), `assignee` (string), `creator` (string), `mentioned` (string), `milestone` (string), `since` (string), `sort` (string=created|updated|comments), `direction` (string=asc|desc)
+- `POST /v1/scrape/github/pulls` (`scrape.github.pulls`): `maxItems` (integer=10), `pageToken` (string), `*repository` (string), `state` (string=open|closed|all), `head` (string), `base` (string), `sort` (string=created|updated|popularity|long-running), `direction` (string=asc|desc)
+- `POST /v1/scrape/github/search` (`scrape.github.search`): `maxItems` (integer=30), `pageToken` (string), `*type` (string=repositories|issues|pulls|code), `*query` (string), `repository` (string), `language` (string), `sort` (string=stars|forks|help-wanted-issues|updated|comments|created|indexed), `direction` (string=asc|desc)
+- `POST /v1/scrape/github/contents` (`scrape.github.contents`): `maxItems` (integer=100), `pageToken` (string), `*repository` (string), `path` (string), `ref` (string)
+- `POST /v1/scrape/twitter/search` (`scrape.twitter.search`): `maxItems` (integer), `query` (string), `handles` (any), `urls` (any), `sort` (string=latest|top)
+- `POST /v1/scrape/twitter/user` (`scrape.twitter.user`): `maxItems` (integer), `*handles` (any), `includeFollowers` (boolean=false), `includeFollowing` (boolean=false)
+- `POST /v1/scrape/youtube/transcript` (`scrape.youtube.transcript`): `maxItems` (integer), `*url` (string), `language` (string="en"), `includeSegments` (boolean=true), `maxChars` (integer=250000)
+- `POST /v1/scrape/youtube/search` (`scrape.youtube.search`): `maxItems` (integer=5), `*query` (string), `sort` (string=relevance|date|views|rating), `since` (string=hour|24h|week|month|year)
+- `POST /v1/scrape/reddit/search` (`scrape.reddit.search`): `maxItems` (integer), `*query` (any), `subreddits` (any), `subreddit` (string), `sort` (string=relevance|hot|top|new|comments), `since` (string=hour|24h|week|month|year)
+- `POST /v1/scrape/reddit/posts` (`scrape.reddit.posts`): `maxItems` (integer), `*subreddits` (any), `sort` (string=hot|new|top), `since` (string=24h|week|month|year)
+- `POST /v1/scrape/reddit/comments` (`scrape.reddit.comments`): `maxItems` (integer), `*url` (string)
+- `POST /v1/scrape/deep` (`scrape.deep`): `*query` (string), `urls` (array), `sources` (array)
+- `POST /v1/scrape/pdf` (`scrape.pdf`): `*url` (string), `maxPages` (integer=1000), `maxChars` (integer=1000000)
