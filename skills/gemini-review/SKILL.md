@@ -20,7 +20,7 @@ Always use **Gemini 4 Neon** (`gemini-4-neon`) at **Extra High reasoning** (`xhi
 
 `--provider acp-cursor --model gemini-4-neon --reasoning-level xhigh`
 
-`acp-cursor` is Cloudroom's Cursor provider: the Cursor CLI over ACP. Use it only when Antigravity is unavailable or fails (including in Cloud threads, where Antigravity is not available). Before spawning, confirm `room-cli provider models acp-cursor --selected-model gemini-4-neon --json` lists `gemini-4-neon` with `xhigh` (the plain list hides it).
+`acp-cursor` is Cloudroom's Cursor provider: the Cursor CLI over ACP. Use it only when Antigravity is unavailable or fails. Before spawning, confirm `room-cli provider models acp-cursor --selected-model gemini-4-neon --json` lists `gemini-4-neon` with `xhigh` (the plain list hides it).
 
 Never use OpenRouter, Vercel, Google directly, or a bare `agy` or `cursor-agent` shell run.
 
@@ -29,7 +29,7 @@ Never use OpenRouter, Vercel, Google directly, or a bare `agy` or `cursor-agent`
 Read `/room-cli` and follow its launch checks.
 
 - **Local thread:** reuse the current environment, including uncommitted work, and use `--parent-self`. Start with `acp-antigravity`. If it is unavailable or fails, archive any failed thread and fall back to `acp-cursor`.
-- **Cloud thread:** Antigravity is not available in Cloud sandboxes, so use the Cursor backup directly with provider `cursor` (not `acp-cursor`) in both the spawn and the `provider models` check. Start a plain child: never `--shared-sandbox` (Cursor can't share a sandbox) and never `--top-level` (you can't read or wait for it). The child gets a copy of your code, uncommitted work included. `thread show` hides the model there, so an accepted spawn is the proof.
+- **Cloud thread:** provider IDs drop the `acp-` prefix: use `antigravity` and `cursor` in both the spawn and the `provider models` check. Start with `antigravity`. It works only if Antigravity is connected for Cloud (Google sign-in or Gemini API key), so if its check or first turn fails, archive it and fall back to `cursor`. Never start an Antigravity sign-in yourself. Start a plain child: never `--shared-sandbox` (Cursor can't share a sandbox) and never `--top-level` (you can't read or wait for it). The child gets a copy of your code, uncommitted work included. `thread show` hides the model there, so an accepted spawn is the proof.
 
 A route fails when the provider or model check fails, the spawn errors, `room-cli thread show` reports a different model or effort, or the first turn errors (gateway errors, auth errors, quota or balance limits). Archive the failed thread before moving on. If Antigravity fails, try the Cursor backup once. If Cursor also fails, stop, archive the failed thread, and report both errors. Never switch to another model, effort, or route.
 
