@@ -1,0 +1,20 @@
+{
+  "model": "fable[1m]",
+  "hooks": {
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/path/to/stop-hook.sh",
+            "timeout": 20
+          }
+        ]
+      }
+    ]
+  },
+  "fastMode": true,
+  "tui": "fullscreen",
+  "skipDangerousModePermissionPrompt": true,
+  "theme": "dark"
+}

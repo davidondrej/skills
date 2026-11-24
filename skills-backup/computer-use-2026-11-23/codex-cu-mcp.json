@@ -1,0 +1,28 @@
+{
+  "type": "stdio",
+  "command": "/Applications/ChatGPT.app/Contents/Resources/cua_node/bin/node",
+  "args": [
+    "/path/to/proxy.mjs",
+    "/Applications/ChatGPT.app/Contents/Resources/cua_node/bin/node",
+    "/Applications/ChatGPT.app/Contents/Resources/cua_node/lib/node_modules/@oai/cua-repl/bin/cua-repl.mjs"
+  ],
+  "env": {
+    "NODE_REPL_NATIVE_PIPE_CONNECT_TIMEOUT_MS": "1000",
+    "NODE_REPL_NODE_MODULE_DIRS": "/Applications/ChatGPT.app/Contents/Resources/cua_node/lib/node_modules",
+    "NODE_REPL_NODE_PATH": "/Applications/ChatGPT.app/Contents/Resources/cua_node/bin/node",
+    "NODE_REPL_TRUSTED_CODE_PATHS": "~/.codex:/Applications/ChatGPT.app/Contents/Resources/cua_node/lib/node_modules",
+    "CODEX_HOME": "~/.codex",
+    "BROWSER_USE_AVAILABLE_BACKENDS": "chrome,iab,mcpapps",
+    "BROWSER_USE_TINYSKY_ENABLED": "1",
+    "NODE_REPL_INSTRUCTIONS_USE_CASE_BROWSER": "Control the in-app browser in conjunction with the Browser Plugin.",
+    "NODE_REPL_INSTRUCTIONS_USE_CASE_CHROME": "Control the Chrome browser in conjunction with the Chrome Plugin. Prefer this method of controlling Chrome over alternatives (such as Computer Use) unless the user explicitly mentions an alternative.",
+    "NODE_REPL_INSTRUCTIONS_USE_CASE_COMPUTER_USE": "Control desktop apps on macOS through Computer Use.",
+    "BROWSER_USE_CODEX_APP_BUILD_FLAVOR": "prod",
+    "BROWSER_USE_CODEX_APP_VERSION": "26.930.51102",
+    "NODE_REPL_TRUSTED_SERVICES": "{\"browser\":\"@oai/browser-desktop/service\",\"sky\":\"@oai/sky/service\"}",
+    "SKY_CUA_SERVICE_PATH": "~/.codex/computer-use/Codex Computer Use.app",
+    "CODEX_CLI_PATH": "/Applications/ChatGPT.app/Contents/Resources/codex-cli/CodexCLI.app/Contents/MacOS/codex",
+    "CUA_REPL_NODE_REPL_PATH": "/Applications/ChatGPT.app/Contents/Resources/cua_node/bin/node_repl",
+    "CUA_REPL_ENABLED_SURFACES": "browser,computer"
+  }
+}
