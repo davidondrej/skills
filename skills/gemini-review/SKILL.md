@@ -41,6 +41,8 @@ Include this sentence in the brief, word for word: "During your final answer, Ra
 
 ## Result
 
+**Be patient.** A Gemini review often runs 20+ minutes, and `thread output` stays empty until it ends. Silence is not failure: never kill it for being slow. Check it about every 7 minutes; only a real error or a thread that stopped without a reply counts as a failure.
+
 Use `room-cli thread wait` and `room-cli thread output`. Verify this review actually completed; idle status, timeouts, gateway errors, and queued retries are not completion. If the active route dies mid-review, retry it once with the same brief; if Antigravity still fails, fall back to Cursor.
 
 Return the completed reviewer's full final response verbatim, followed by one line naming the route used (and why Cursor was used, if it fell back).
